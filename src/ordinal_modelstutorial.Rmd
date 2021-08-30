@@ -1,0 +1,92 @@
+---
+title: "Ordinal regression models"
+output: html_notebook
+---
+
+Eine kurze uebersicht ueber die verschiedenne ordinalen regressionsmodelle.
+wir haben mehrere ordinale outcome variablen in den analysen. manchmal sind praediktoren kategorisch, ordinal, oder metrisch.
+
+```{r}
+# examples with brms
+
+load("../data/df_crq.RData")
+library(brms)
+library(tidyverse)
+```
+
+## intercept only model
+
+```{r}
+fit <-
+  brm(data = df_crq,
+      family = cumulative(probit), #cumulative probit is one way to model ordinal outcomes
+      jcha_1_work ~ 1,
+      prior = c(prior(normal(0, 4), class = Intercept))) # example sets prior but i dont know the details..
+
+summary(fit)
+```
+given 5 CRQ response cateogies, we have 4 estimated thresholds. The latent distribution
+that is modelled has mu = 0, sigma = 1.
+```{r}
+pp_check(fit)
+
+```
+
+## metric predictor model
+
+```{r}
+
+# standardize X
+df_crq <-
+  df_crq %>% 
+  mutate(lear_s = scale(lear))
+
+# fit with metric predictor. Book reminds to think clearly about priors.
+fit23.9 <-
+  brm(data = df_crq,
+      family = cumulative(probit),
+      jcha_1_work ~ 1 + lear_s,
+      prior = c(prior(normal(0, 4), class = Intercept),
+                prior(normal(0, 4), class = b)),
+      iter = 3000, warmup = 1000, chains = 4, cores = 4,
+      seed = 23)
+
+summary(fit23.9)
+```
+
+0.26 is the estimate, which is here a standardized regression estimate (beta).
+
+## ordinal predictor
+
+see http://paul-buerkner.github.io/brms/articles/brms_monotonic.html
+Ordinal predictors can be seen as monotonic predictors with unequal distances between categories.
+To model this, brms uses two parameters: "b takes care of the direction and size of the effect similar to an ordinary regression parameter. If the monotonic effect is used in a linear model, b can be interpreted as the expected average difference between two adjacent categories of the ordinal predictor. An additional parameter vector, ζ (Zeta), estimates the normalized distances between consecutive predictor categories which thus defines the shape of the monotonic effect."
+Monotonous predicted are used with the `mo()` argument.
+
+```{r}
+df_crq <- df_crq %>%
+  mutate(edu = fct_collapse(education_de,
+                            low = c("Obligatorische Schulpflicht",
+                                     "Mittelschule (Gymnasium, Abitur, Handelsschule, Fachmittelschule)"),
+                            high = c("Master (Universität / Fachhochschule)", "Doktorat"))) %>% 
+  mutate(edu = as.ordered(edu))
+```
+
+
+```{r}
+fit_mo <-
+  brm(data = df_crq,
+      family = cumulative(probit),
+      jcha_1_work ~ 1 + mo(edu),
+      prior = c(prior(normal(0, 4), class = Intercept)),
+      iter = 2000, warmup = 1000, chains = 4, cores = 4,
+      seed = 23)
+
+summary(fit_mo)
+```
+
+Priors are complex for monotonous functions, see the linked article.
+The output lists b and the ζ is shown in the simplex parameters which delineates the thresholds between the categories of the predictor (summing up to 1).
+
+Extensions for random effect models are also given there.
+

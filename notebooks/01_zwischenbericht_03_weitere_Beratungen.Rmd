@@ -1,0 +1,219 @@
+---
+title: "Weitere Beratungen"
+output: html_notebook
+---
+
+```{r}
+library(ggthemes)
+theme_set(theme_few())
+source("https://raw.githubusercontent.com/alanthompsonch/AOP_uni/main/crq_00_palette.R")
+
+```
+
+
+## Inhalte und Methoden der weiteren Beratung
+
+•	Übergeordnetes Ziel ist die Klärung, welche inhaltlichen und methodischen Schwerpunkte in den weiteren Beratungen gesetzt wurden. Dazu werden die Aussagen der Beratungspersonen im Fragebogen  herangezogen. 
+
+1.Welche Beratungsinhalte wurden fokussiert?
+
+```{r beratungsinhalte-barplot}
+df_brm %>% select(B2_A1SQ001 :B2_A1SQ005) %>% 
+    set_label(c("Fachliche und überfachlichen Kompetenzen und Fähigkeiten", "Motivation/Persönlichkeit",
+                "Unterstützung im sozialen und/oder beruflichen Umfeld", "Aktivitäten zur Laufbahngestaltung",
+                "Psychische und physische gesundheitliche Voraussetzungen")) %>%
+    plot_stackfrq(show.total = FALSE, show.prc = FALSE, sort.frq = "last.desc") + 
+    geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+ggsave("plots/beratungsinhalte.png", width = 6.27, height = 5)
+```
+Aktivitäten zur Laufbahngestaltung am häufigsten (über die oberen beiden Kategorien) --> handlungsorientiert.
+Motivation am zweithaufigsten behandelt --> passt zum Fokus auf Klarheit erreichen.
+
+```{r beratungsmethoden-barplot}
+methoden_mutate <- function(x) {
+    as.numeric(x) %>% recode(`1` = 0, `2` = 1)
+}
+
+methoden_label <- c("Arbeitsheften, Tagebücher oder Ähnliches",
+                "Quantitative Testverfahren ",
+                "Qualitative Verfahren/vorgegebene Arbeitsmittel/Arbeitsblätter ",
+                "Werte geklärt",
+                "Interessen abgeklärt",
+                "Persönlichkeitseigenschaften abgeklärt",
+                "(kognitive) Leistungsfähigkeit abgeklärt",
+                "Kompetenzen erarbeitet",
+                "Rollenmodelle/Vorbilder besprochen",
+                "Kognitive Umstrukturierung",
+                "Psychologische Unterstützung",
+                "Berufs- und Aus-/Weiterbildungsinformationen vermittelt",
+                "Berufs- und Weiterbildungsoptionen erkundet",
+                "Konzepte etc. zur Laufbahngestaltung vermittelt",
+                "Berufsoptionen bewertet und bei der beruflichen Entscheidungsfindung geholfen",
+                "Bewerbungsunterlagen und -strategien besprochen",
+                "Rollenspiele durchgeführt",
+                "Aktivitäts- und Zeitplan für die konkreten nächsten Schritte erstellt",
+                "Mögliche Hindernisse identifiziert und Strategien zum Umgang besprochen",
+                "Hausaufgaben aufgegeben")
+methoden <- df_brm %>% select(starts_with("B2_A4")) %>% mutate(across(.fns = methoden_mutate)) %>% 
+    set_label(methoden_label)
+
+percentage_methoden <- function(x) {
+    sum(x, na.rm = TRUE) / sum(!is.na(x))
+}
+
+methoden <- methoden %>% summarise(across(.fns = percentage_methoden)) %>%
+    pivot_longer(everything()) %>%
+    mutate(name = methoden_label) %>% 
+  mutate(prc_label  = likert_labeller(value, supress_small_values = FALSE)) %>% 
+  mutate(value = value *100) %>% 
+    arrange(value)
+
+# plotten    
+methoden %>% ggplot(aes(y = factor(name, levels = name), x = value)) +
+    geom_col(position = position_dodge(15), fill = "steelblue") +
+    labs(x = "Methode in weiteren Beratungen eingesetzt", y = "Eingesetzte Beratungsmethoden") +
+    scale_y_discrete(labels = function(y) str_wrap(y, width = 50)) +
+    geom_text(aes(label = prc_label), hjust = -0.1, size = size_geom_text) +
+    scale_x_continuous(labels = function(x) paste0(x, '%'), limits = c(0,100)) +
+    theme(axis.text.y = element_text(size = 8))  
+
+ggsave("plots/beratungsmethoden.png", width = 6.27, height = 6)
+```
+
+```{r methoden_nach_inhalten}
+# inhalte - inhaltlicher fokus der beratung
+fokus <- df_brm %>% select(B2_A1SQ001 :B2_A1SQ005) %>% mutate(across(.fns = ~ifelse(.x == 4, 1, 0)))
+methoden_fokus <- df_brm %>% select(starts_with("B2_A4")) %>% mutate(across(.fns = methoden_mutate)) %>% 
+    set_label(methoden_label)
+
+
+methoden_fokus_percent <- map(names(fokus), function(f) {
+    methoden_fokus[fokus[f] == 1,] %>% summarise(across(.fns = percentage_methoden)) %>%
+    pivot_longer(everything()) %>%
+    mutate(name = methoden_label, value = round(value*100,1)) %>% 
+    arrange(value)
+})
+```
+
+```{r}
+library(gt)
+tablenames <- c("Fachliche und überfachlichen Kompetenzen und Fähigkeiten", "Motivation/Persönlichkeit",
+                "Unterstützung im sozialen und/oder beruflichen Umfeld", "Aktivitäten zur Laufbahngestaltung",
+                "Psychische und physische gesundheitliche Voraussetzungen")
+methoden_fokus_percent[[1]][16:20,]
+methoden_fokus_percent[[2]][16:20,]
+methoden_fokus_percent[[3]][16:20,]
+methoden_fokus_percent[[4]][16:20,]
+methoden_fokus_percent[[5]][16:20,]
+```
+Relativ ähnliche Tops in den Gruppen.
+
+
+Zudem ist von Interesse, wie stark kantonale Differenzen im Einsatz von Beratungsmethoden oder -inhalten ausgeprägt sind.
+
+```{r}
+ecoplan_0721 %>% group_by(Kanton) %>% summarise(sum_B2 = sum(B2_ausgefüllt, na.rm = TRUE))
+
+inhaltsvergleich <- cbind(df_brm %>% select(Kanton), fokus) %>% 
+    group_by(Kanton) %>% 
+    summarise(across(.fns = percentage_methoden)) %>% 
+    filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH")
+names(inhaltsvergleich) <- c("Kanton", "Fachliche und überfachlichen Kompetenzen und Fähigkeiten", "Motivation/Persönlichkeit",
+                "Unterstützung im sozialen und/oder beruflichen Umfeld", "Aktivitäten zur Laufbahngestaltung",
+                "Psychische und physische gesundheitliche Voraussetzungen")
+
+inhaltsvergleich <- inhaltsvergleich %>% pivot_longer(-Kanton) %>% 
+  mutate(prc_label  = likert_labeller(value, supress_small_values = FALSE)) %>% 
+  mutate(value = value *100)
+
+inhaltsvergleich %>% 
+    ggplot(aes(x = name, y = value, fill = Kanton)) +
+    geom_col(position = 'dodge') +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 20)) +
+  ggpubr::fill_palette(colors_viamia[c(1,2,3)]) +
+  labs(x = "Inhaltsbereich", y = "Bereich im Fokus (in %)") +
+  theme(axis.text.x = element_text(size = 8)) + 
+  scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,45))
+  
+ggsave("plots/inhaltsvergleich.png", width = 6.27, height = 5)
+```
+Angesichts der noch relativ überschaubaren Anzahl sind Vergleiche zwischen Kantonen nicht sehr aussagekräftig. Ggf. kann man die drei grossen Teilnehmer (ZH, VS, BE) vergleichen. Hier sieht man bei Inhalten Unterschiede in der Grössenordnung von bis zu ~15%. Inhalte müssen aber nicht zwangsläufig divergieren aufgrund kantonaler Differenzen im Beratungsprozess, es kann sich auch um Selbstselektion oder Selektion der weiteren Beratungen handeln (hier gab es z.T. erhebliche kantonale Differenzen, allerdings waren diese drei Kantone nahezu identisch). 
+
+```{r}
+tmp <- df_brm %>% select(Kanton, starts_with("B2_A4")) %>% mutate(across(starts_with("B2_A4"), .fns = methoden_mutate)) %>% 
+    set_label(methoden_label)
+
+percentage_methoden <- function(x) {
+    sum(x, na.rm = TRUE) / sum(!is.na(x))
+}
+
+methoden_kantone <- tmp %>% 
+  group_by(Kanton) %>% 
+  summarise(across(starts_with("B2_A4"), .fns = percentage_methoden)) %>%
+    pivot_longer(-Kanton) %>%
+  mutate(name = rep(methoden_label, 11)) %>% 
+  mutate(prc_label  = likert_labeller(value, supress_small_values = FALSE)) %>% 
+  mutate(value = value *100)
+
+glm_methoden_kanton <- map_dfr(names(tmp)[-1], function(method) {
+  glm(
+    as.formula(str_c(method, " ~ Kanton")),
+    family = "binomial",
+    data = df_brm  %>%
+      filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH")
+  ) %>% broom::tidy() %>% 
+    mutate(out = method)
+  })
+
+glm_methoden_kanton %>% filter(p.value < 0.05) %>% filter(term != "(Intercept)") %>% arrange(p.value)
+
+methoden_kantone %>% filter(name == "Hausaufgaben aufgegeben") %>%
+  filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH") %>% 
+  ggplot(aes(x = name, y = value, fill = Kanton)) +
+  geom_col(position = 'dodge')
+#     mutate(name = methoden_label) %>% 
+
+methoden_kantone %>% filter(name == "Konzepte etc. zur Laufbahngestaltung vermittelt") %>%
+  filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH") %>% 
+  ggplot(aes(x = name, y = value, fill = Kanton)) +
+  geom_col(position = 'dodge')
+
+methoden_kantone %>% filter(name == "Konzepte etc. zur Laufbahngestaltung vermittelt") %>%
+     filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH")
+methoden_kantone %>% filter(name == "Hausaufgaben aufgegeben") %>%
+     filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH")
+```
+
+
+### Unterschiede in Beratungsgründen in den drei Hauptkantonen
+
+```{r}
+gruende_mutate <- function(x) {
+    as.numeric(x) %>% recode(`1` = 0, `2` = 1)
+}
+gruende <- df %>% select(viamiaID, Kanton, starts_with("A1_Gruende")) %>% mutate(across(starts_with("A1_Gruende"), .fns = gruende_mutate))
+names(gruende) <- c("viamiaID", "Kanton", "Ausweg aus Arbeitslosigkeit",
+                    "Beruflicher Wiedereinstieg (nach freiwilliger Erwerbspause)",
+                    "Berufliche Weiterentwicklung",
+                    "Berufliche Umorientierung",
+                    "Erhöhung des Arbeitspensums",
+                    "Unsicherheiten in Bezug auf künftige Arbeitssituation",
+                    "Bessere gesellschaftliche Integration",
+                    "Finanzielle Besserstellung",
+                    "Grössere Zufriedenheit mit Arbeit",
+                    "Generelle Wunsch nach Veränderung",
+                    "Gesundheitliche Probleme")
+
+gruende_kanton <- gruende %>% group_by(Kanton) %>% 
+  summarise(across(where(is.numeric), ~mean(.x, na.rm = TRUE)))
+
+gruende_kanton %>% filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH") %>% 
+  pivot_longer(-Kanton, names_to = "Grund", values_to = "Prozent") %>% 
+  mutate(Prozent = proc_convert(Prozent*100)) %>% 
+  pivot_wider(Grund, names_from = Kanton, values_from = Prozent) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+```
+

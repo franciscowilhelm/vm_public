@@ -1,0 +1,137 @@
+---
+title: "Checking the unmatched IDs between CRQ and ecoplan"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+source('../src/ecoplan_01_read.R', encoding = 'utf-8')
+```
+
+
+Checking the number of unmatched cases per canton
+```{r}
+tbl_unmatched <- table(unmatched[,7])
+
+tbl_unmatched
+
+
+tbl_crq <- table(df_crq[,7])
+
+tbl_crq
+```
+a) Bern BSLB has ~19% unmatched IDs
+b) Vaud OCOSP has ~33% unmatched IDs
+c) Zürich BSLB has ~16% unmatched IDs
+
+The rest doesn't seem to have grave systematic missmatches
+
+
+Shaping the data frames for an easier overview and manual comparison.
+
+Adding an Index to the unmatched data frame for easier referencing
+
+```{r}
+vgl_unmatched <- unmatched[,c(68,1,2,7,3)]
+
+vgl_unmatched <- vgl_unmatched[order(vgl_unmatched$idmatch),] %>% mutate("index_alphabetic" = 1:200)
+
+vgl_eco <- ecoplan_0721[,c(1,2,4)]
+
+vgl_crq <- df_crq[,c(68,1,2,7,3)]
+
+vgl_df <- df[,c(1,2,4)]
+
+view(vgl_unmatched)
+view(vgl_df)
+view(vgl_eco)
+view(vgl_crq)
+```
+
+
+## Observations
+
+Numbers from here on out will refer to the newly created column 'index_alphabetic', which describes the index of each observation when the column 'idmatch' in the data frame 'vgl_unmatched' is organised alphabetically in ascending order (starting at BEXXXXXXXX and ending with ZHXXXXXX) 
+
+### Bern
+
+No observable systematic mistakes in the input of the IDs. Still, there is a surprisingly high number of IDs from the CRQ data frame that are missing in the Ecoplan data frame. The missing IDs seem to be correctly formatted; they simply aren't present in the ecoplan data frame.
+
+### Vaud
+
+Vaud has systematic mistakes in the input of the IDs which led to a vast number of mismatches. 
+
+1. observations with index_alphabetic 73 through 79 have a '0' (zero) instead of an 'o' (letter) at the 3rd position of the ID
+
+2. observations 80 through 92 are in the format of VD2021/n/XX. Basically all of these IDs are mismatched. It seems that this format was wrongfully used for making IDs. The Ecoplan data frame also holds 6 different observations of the same format.
+      I suspect there was some confusion about the correct ID generation.
+```{r}
+# Examples for Wrong format: VD2021/n/4  ---  VD2021/n/15
+```
+
+
+3. observations 93 through 98 and 112 through 128 are simply missing while adjacent IDs are present (similar to missing IDs from Bern). Some IDs found in the ecoplan data are one digit short --> a few typos?
+    
+```
+"VDc21-011"
+
+"VDc21-012"
+
+"VDc21-013"
+
+# VDc21-014 from the crq data frame is missing in the ecoplan data frame
+
+"VDc21-015"
+
+"VDc21-016"
+``` 
+
+
+4. observations 99 through 111 and 129 through 158 are missing a '-' between the 5th and 6th digit.
+`VDc21003 instead of VDc21-003``
+
+
+
+```{r}    
+    # VD021-043 (wrong) instead of VDo21-43 (correct)
+vgl_eco %>% filter(Kanton == "VD") %>% select(viamiaID)
+vgl_unmatched %>% as_tibble() %>% filter(kanton == "vd") %>% select("id")
+
+# replacemenet for case 1.
+old_vd <- vgl_unmatched %>% as_tibble() %>% filter(kanton == "vd") %>% select("id") %>%
+  deframe()
+vd_id <- old_vd %>%  str_replace_all("021-", "o21-")
+
+idx <- vd_id %>%  str_detect("[a-zA-Z]21\\d")
+
+vd_id %>% .[idx] #trifft die richtigen
+vd_id[idx]  <- vd_id[idx] %>% sub( '(?<=.{3})', '-', ., perl=TRUE) # the gods of stackoverflow are benign
+
+#df_crq[old_vd %in% df_crq$id]
+idx_crqdf <- map_dbl(old_vd, ~str_which(df_crq$id, fixed(.x)))
+df_crq$id[idx_crqdf] <- vd_id
+df_crq <- df_crq %>% mutate(idmatch = str_c(toupper(kanton), id))
+unmatched2 <- anti_join(df_crq, ecoplan_0721, by = c("idmatch" = "viamiaID"))
+```
+
+Reduced to 156 unmatched! :)
+
+
+### Zürich
+
+Inconsistent ID-generation:
+```{r}
+# ZHXXXXXXXXX (ZH + 9 digits)
+# ZHXXXXXX    (ZH + 6 digits)
+# ZHXXX/2021  (ZH + 3 digits + / + 2021)
+```
+
+
+1. 171 through 195 simply missing (see Bern and Vaud point 3)
+
+2. 196 through 198 additional lbz after ZH 
+```{r}
+# ZHlbz 202/2021 instead of ZH202/2021. The latter is found in the ecoplan data frame.
+```
+
+
+10. The last ~100 entries in the ecoplan data frame are disorganised with e-mails etc. instead of IDs

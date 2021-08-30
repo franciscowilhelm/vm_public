@@ -1,0 +1,1067 @@
+﻿ItemID: 1230
+Name: nationality_de
+Text: Was ist Ihre Nationalität?
+Values:
+1: Schweiz
+2: Deutschland
+3: Österreich
+4: Liechtenstein
+5: Luxemburg
+6: Belgien
+7: Anderes Land
+Format: Dropdown
+Datatype: DropdownChoice
+
+ItemID: 1270
+Name: education_de
+Text: Welches ist Ihre höchste abgeschlossene Ausbildung?
+Values:
+1: Obligatorische Schulpflicht
+2: Mittelschule (Gymnasium, Abitur, Handelsschule, Fachmittelschule)
+3: Berufslehre
+4: Höhere Fachschule
+5: Bachelor (Universität / Fachhochschule)
+6: Master (Universität / Fachhochschule)
+7: Doktorat
+Format: LikertVertical
+Datatype: LikertChoice
+
+ItemID: 1290
+Name: field
+Text: In welcher Branche sind Sie tätig?
+Values:
+1: Automobilindustrie
+2: Baugewerbe
+3: Bergbau, Energie- u. Wasserversorgung, Entsorgungswirtschaft
+4: Erziehung und Unterricht
+5: Finanz- und Versicherungsdienstleistungen
+6: Gastgewerbe
+7: Gesundheitswesen
+8: Handel, Verkauf, Instandhaltung und Reparatur von Kfz
+9: Heime und Sozialwesen
+10: Herstellung von überwiegend häuslich konsumierten Gütern (ohne Güter der Metall-, Elektro- und Chemieindustrie)
+11: Herstellung von Vorleistungsgütern, insbesondere von chemischen Erzeugnissen und Kunststoffwaren (ohne Güter der Metall- und Elektroindustrie)
+12: Immobilien, freiberufliche, wissenschaftliche und technische Dienstleistungen
+13: Information und Kommunikation
+14: Kultur/Messe/Kongresse/Touristik
+15: Land- und Forstwirtschaft und Fischerei
+16: Marktforschung/Werbung
+17: Metall- und Elektroindustrie sowie Stahlindustrie
+18: Pharma
+19: Sonstige Dienstleistungen, Private Haushalte
+20: Verkehr und Lagerei
+21: Andere Branche, nämlich:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 1400
+Name: oe1_work
+Text: Ich werde von anderen als Experte/Expertin in meinem Beruf angesehen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1401
+Name: oe2_work
+Text: Ich verfüge über fundiertes Wissen in meinem Beruf.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1402
+Name: oe3_work
+Text: Ich habe ein sehr hohes Niveau an Kenntnissen und Kompetenzen  in meinem Beruf.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1410
+Name: jmk1_work
+Text: Ich habe eine gute Kenntnis des Arbeitsmarktes.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1411
+Name: jmk2_work
+Text: Ich besitze viel Wissen über den derzeitigen Arbeitsmarkt.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1412
+Name: jmk3_work
+Text: Ich habe einen guten Überblick über Beschäftigungstrends auf dem Arbeitsmarkt.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1420
+Name: ssk1_work
+Text: Ich besitze viele Fähigkeiten, die ich in ganz verschiedenen Berufen anwenden könnte.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1421
+Name: ssk2_work
+Text: Ich besitze viele Kompetenzen, welche auch in vielen anderen Berufen hilfreich sind.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1422
+Name: ssk3_work
+Text: Neben reinem Fachwissen besitze ich viele Fähigkeiten und Kompetenzen, die in unterschiedlichen Jobs wichtig sind.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1430
+Name: inv1_work
+Text: Meine Arbeit ist ein zentraler Teil meiner Identität.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1431
+Name: inv2_work
+Text: Arbeit ist ein zentraler Bestandteil meines Lebens.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1432
+Name: inv3_work
+Text: Ich fühle mich mit meiner Arbeit stark verbunden.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1440
+Name: con1_work
+Text: Ich bin fähig meine Laufbahn erfolgreich zu gestalten.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1441
+Name: con2_work
+Text: Wenn ich mir Ziele für meine Laufbahn setze bin ich zuversichtlich, dass ich sie erreichen kann.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1442
+Name: con3_work
+Text: Ich glaube daran, dass ich Herausforderungen in meiner Laufbahn erfolgreich bewältigen kann.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1443
+Name: con4_work
+Text: Ich kann meine Laufbahn erfolgreich entwickeln.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1450
+Name: cl1_work
+Text: Ich habe eine klare Vorstellung davon, was ich in meiner Laufbahn erreichen möchte.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1451
+Name: cl2_work
+Text: Ich habe klare Laufbahnziele, die meine persönlichen Interessen und Werte reflektieren.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1452
+Name: cl3_work
+Text: Ich habe klare berufliche Ziele.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1470
+Name: cop1_work
+Text: Meine Organisation bietet interessante Karrieremöglichkeiten für mich.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1471
+Name: cop2_work
+Text: Mein Unternehmen verfügt über viele interessante Stellen für meine zukünftige Karriere.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1472
+Name: cop3_work
+Text: Mein Arbeitgeber bietet für mich interessante Aufstiegsmöglichkeiten an.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1480
+Name: os1_work
+Text: Mein Unternehmen unterstützt aktiv meine Karriereentwicklung.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1481
+Name: os2_work
+Text: Mein Arbeitgeber unterstützt meine angestrebte Karriere.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1482
+Name: os3_work
+Text: Ich fühle mich durch meinen Arbeitgeber in meiner Karriere optimal unterstützt.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1490
+Name: jcha_1_work
+Text: Meine Arbeit erlaubt es mir meine beruflichen Fähigkeiten voll einzusetzen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1491
+Name: jcha2_work
+Text: Mein derzeitiger Job fordert meine Fähigkeiten voll und ganz.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1492
+Name: jcha3_work
+Text: Durch meine Arbeit kann ich meine Fähigkeiten ausbauen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1500
+Name: scs1_work
+Text: Ich kenne viele Personen, die mich in meiner Laufbahnentwicklung unterstützen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1501
+Name: scs2_work
+Text: Meine Freunde unterstützen mich in meiner beruflichen Entwicklung.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1502
+Name: scs3_work
+Text: Ich erhalte ein hohes Mass an beruflicher Unterstützung durch mein privates Umfeld.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1503
+Name: scs4_work
+Text: Meine Arbeitskollegen/Arbeitskolleginnen unterstützen mich in meiner Laufbahnentwicklung.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1510
+Name: net1_work
+Text: Ich bemühe mich stets darum, in meinem Berufsfeld gut vernetzt zu sein.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1511
+Name: net2_work
+Text: Ich knüpfe häufig Kontakte zu anderen Personen, die für meine berufliche Entwicklung wichtig sind.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1512
+Name: net3_work
+Text: Ich nutze häufig Kontakte zu anderen Personen um beruflich weiter zu kommen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1520
+Name: cexpl1_work
+Text: Ich hole regelmässig Informationen über Karrieremöglichkeiten ein.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1521
+Name: cexpl2_work
+Text: Ich informiere mich regelmässig über Beschäftigungsmöglichkeiten auf dem Arbeitsmarkt.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1522
+Name: cexpl3_work
+Text: Ich informiere mich regelmässig über mögliche Arbeitsstellen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1530
+Name: lear1_work
+Text: Ich nutze jede Gelegenheit, um mein Fachwissen zu vergrössern.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1531
+Name: lear2_work
+Text: Ich bilde meine arbeitsrelevanten Fähigkeiten fortlaufend weiter aus.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1532
+Name: lear3_work
+Text: Ich stelle sicher, dass mein Wissen und meine Fähigkeiten für die Arbeit auf dem neusten Stand sind.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2230
+Name: nationality_de
+Text: Was ist Ihre Nationalität?
+Values:
+1: Schweiz
+2: Deutschland
+3: Österreich
+4: Liechtenstein
+5: Luxemburg
+6: Belgien
+7: Anderes Land
+Format: Dropdown
+Datatype: DropdownChoice
+
+ItemID: 2250
+Name: study
+Text: An welcher Art von Hochschule studieren Sie zur Zeit?
+Values:
+1: Fachhochschule
+2: Universität
+3: Andere akademische Institution
+4: Ich studiere an keiner Hochschule.
+Format: LikertVertical
+Datatype: LikertChoice
+
+ItemID: 2260
+Name: study_field
+Text: Was ist Ihr Studiengebiet?
+Values:
+1: Ingenieurwissenschaften, Technik
+2: Kultur, Politikwissenschaft, Gesellschaft
+3: Lehramt
+4: Mathematik und Computerwissenschaften
+5: Medien, Kommunikation, Information
+6: Musik, Tanz, Theater, Kunst, Film
+7: Psychologie
+8: Rechtswissenschaften
+9: Religion, Philosophie
+10: Soziales, Erziehungswissenschaften, Pädagogik
+11: Sport, Ernährung, Gesundheit
+12: Sprache, Literatur
+13: Umwelt, Ressourcen, Naturschutz, Klima
+14: Wirtschaft, Management, Ökonomie
+15: Andere, nämlich:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 2280
+Name: bachelor_master
+Text: Befinden Sie sich momentan im Bachelor- oder im Masterstudium?
+Values:
+1: Bachelor
+2: Master
+3: Anderes, nämlich:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 2290
+Name: study_year
+Text: Wie viele Jahre haben Sie bereits in Ihrem aktuellen Studiengang studiert?
+Format: Number
+Datatype: IntType
+
+ItemID: 2400
+Name: oe1_stud
+Text: Ich werde von anderen als Experte/Expertin für meinen angestrebten Beruf angesehen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2401
+Name: oe2_stud
+Text: Ich verfüge über fundiertes Wissen für meinen angestrebten Beruf.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2402
+Name: oe3_stud
+Text: Ich habe ein sehr hohes Niveau an Kenntnissen und Komptenzen für meinem angestrebten Beruf.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2410
+Name: jmk1_stud
+Text: Ich habe eine gute Kenntnis des Arbeitsmarktes.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2411
+Name: jmk2_stud
+Text: Ich besitze viel Wissen über den derzeitigen Arbeitsmarkt.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2412
+Name: jmk3_stud
+Text: Ich habe einen guten Überblick über Beschäftigungstrends auf dem Arbeitsmarkt.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2420
+Name: ssk1_stud
+Text: Ich besitze viele Fähigkeiten, die ich in ganz verschiedenen Berufen anwenden könnte.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2421
+Name: ssk2_stud
+Text: Ich besitze viele Kompetenzen, welche auch in vielen anderen Berufen hilfreich sind.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2422
+Name: ssk3_stud
+Text: Neben reinem Fachwissen besitze ich viele Fähigkeiten und Kompetenzen, die in unterschiedlichen Jobs wichtig sind.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2430
+Name: inv1_stud
+Text: Mein Studium ist ein zentraler Teil meiner Identität.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2431
+Name: inv2_stud
+Text: Mein Studium ist ein zentraler Bestandteil meines Lebens.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2432
+Name: inv3_stud
+Text: Ich fühle mich mit meinem Studium stark verbunden.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2440
+Name: con1_stud
+Text: Ich bin fähig meine zukünftige Laufbahn erfolreich zu gestalten.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2441
+Name: con2_stud
+Text: Wenn ich mir Ziele für meine Laufbahn setze bin ich zuversichtlich, dass ich sie erreichen kann.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2442
+Name: con3_stud
+Text: Ich glaube daran, dass ich Herausforderungen in meiner zukünftigen Laufbahn erfolgreich bewältigen kann.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2443
+Name: con4_stud
+Text: Ich kann meine zukünftige Laufbahn erfolgreich entwickeln.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2450
+Name: cl1_stud
+Text: Ich habe eine klare Vorstellung davon, was ich in meiner Laufbahn erreichen möchte.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2451
+Name: cl2_stud
+Text: Ich habe klare Laufbahnziele, die meine persönlichen Interessen und Werte reflektieren.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2452
+Name: cl3_stud
+Text: Ich habe klare berufliche Ziele.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2460
+Name: os1_stud
+Text: Meine Hochschule unterstützt aktiv meine Karriereentwicklung.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2461
+Name: os2_stud
+Text: Meine Hochschule unterstützt meine angestrebte Karriere
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2462
+Name: os3_stud
+Text: Ich fühle mich durch meine Hochschule in meiner Karriere optimal unterstützt.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2470
+Name: jcha1_stud
+Text: Mein Studium erlaubt es mir meine akademischen Fähigkeiten voll einzusetzen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2471
+Name: jcha2_stud
+Text: Mein derzeitiges Studium fordert meine Fähigkeiten voll und ganz.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2472
+Name: jcha3_stud
+Text: Durch mein Studium kann ich meine Fähigkeiten ausbauen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2480
+Name: scs1_stud
+Text: Ich kenne viele Personen, die mich in meiner Laufbahnentwicklung unterstützen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2481
+Name: scs2_stud
+Text: Meine Freunde unterstützen mich in meiner beruflichen Entwicklung.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2482
+Name: scs3_stud
+Text: Ich erhalte ein hohes Mass an beruflicher Unterstützung durch mein privates Umfeld.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2483
+Name: scs4_stud
+Text: Meine Studienkollegen/Studienkolleginnen unterstützen mich in der Laufbahnentwicklung.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2490
+Name: net1_stud
+Text: Ich bemühe mich stets darum, in meinem angestrebten Berufsfeld gut vernetzt zu sein.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2491
+Name: net2_stud
+Text: Ich knüpfe häufig Kontakte zu anderen Personen, die für meine berufliche Entwicklung wichtig sind.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2492
+Name: net3_stud
+Text: Ich nutze häufig Kontakte zu anderen Personen um beruflich weiter zu kommen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2500
+Name: cexpl1_stud
+Text: Ich hole regelmässig Informationen über Karrieremöglichkeiten ein.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2501
+Name: cexpl2_stud
+Text: Ich informiere mich regelmässig über Beschäftigungsmöglichkeiten auf dem Arbeitsmarkt.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2502
+Name: cexpl3_stud
+Text: Ich informiere mich regelmässig über mögliche Arbeitsstellen.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2510
+Name: lear1_stud
+Text: Ich nutze jede Gelegenheit, um mein Fachwissen zu vergrössern.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2511
+Name: lear2_stud
+Text: Ich bilde meine arbeitsrelevanten Fähigkeiten fortlaufend weiter aus.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2512
+Name: lear3_stud
+Text: Ich stelle sicher, dass mein Wissen und meine Fähigkeiten für die Arbeit auf dem neusten Stand sind.
+Values:
+1: trifft gar nicht zu
+2: trifft wenig zu
+3: trifft mittelmässig zu
+4: trifft überwiegend zu
+5: trifft völlig zu
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+

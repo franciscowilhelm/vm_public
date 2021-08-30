@@ -1,0 +1,75 @@
+---
+title: "Spezifische Zielgruppen"
+output: html_notebook
+---
+
+```{r}
+source("https://raw.githubusercontent.com/franciscowilhelm/r-collection/master/scoreItemsMulti.R")
+```
+
+Education Levels nach ecoplan Befragung (es gibt auch die OTP Version).
+
+```{r}
+scalenames <- c("oe", "jmk", "ssk", "inv", "con", "cl", "cop", "os", "jcha", "scs", "net", "cexpl", "lear")
+edlvls <- levels(df_brm$Ausb_recode)
+alpha_by_edu <- map_dfc(edlvls, function(edlvl) {
+  df_brm %>%
+    select(Ausb_recode, oe1_work:lear3_work) %>% 
+    filter(Ausb_recode == edlvl) %>% 
+    scoreItemsMulti(scalenames, ., exclude = TRUE) %>% 
+    .$alpha %>% .[1,] %>% enframe()
+}) 
+
+alpha_by_edu <- alpha_by_edu[,c(1,2,4,6,8,10)]
+names(alpha_by_edu) <- c("Skala", edlvls)
+alpha_by_edu$Skala <- c("Berufliche Expertise", "Arbeitsmarktwissen", "Allgemeine Fähigkeiten", "Wichtigkeit der Arbeit",
+                        "Zutrauen", "Klarheit", "Entwicklungsmöglichkeiten", "Organisationale Unterstützung",
+                        "Arbeitsherausforderung", "Soziale Unterstützung", "Netzwerken", "Informieren über Möglichkeiten",
+                        "Kontinuierliches Lernen")
+alpha_by_edu %>% map(~min(.x)) # alpha mins increase by education, but its still adequate with lower level.
+alpha_by_edu %>% map(~mean(.x)) 
+
+alpha_by_edu %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
+
+```
+Bildung Nach OTP:
+
+```{r}
+edlvls <- levels(df_crq$education_de)[-c(1,7)] #don't do it for obligatorisch and doktorat - not enough cases yet
+
+alpha_by_edu <- map(edlvls, function(edlvl) {
+  df_crq %>%
+    select(education_de, oe1_work:lear3_work) %>% 
+    filter(education_de == edlvl) %>% 
+    scoreItemsMulti(scalenames, ., exclude = TRUE) %>% 
+    .$alpha
+}) 
+
+
+
+alpha_by_edu %>% map(~min(.x)) # alpha mins increase by education, but its still adequate with lower level.
+alpha_by_edu %>% map(~mean(.x)) 
+```
+
+Korrelation mit B1_AMF
+```{r}
+edlvls <- levels(df_brm$Ausb_recode)
+tmp <- map_dfr(edlvls, function(lvl) {
+  df_brm %>% filter(Ausb_recode == lvl) %>% 
+        lm(B1_amf ~ oe  +  jmk  +  ssk  +  inv  +  con  +  cl  +  cop  +  os  +  jcha  +  scs  +  net  +  cexpl  +  lear,
+   .) %>% glance() %>% mutate(edu = lvl)
+  })
+
+tmp %>% mutate(mcorr = sqrt(r.squared)) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+```
+
+```{r}
+df_brm %>% filter(A1_GruendeSQ002 == "Ja") %>% 
+      lm(B1_amf ~ oe  +  jmk  +  ssk  +  inv  +  con  +  cl  +  cop  +  os  +  jcha  +  scs  +  net  +  cexpl  +  lear,
+ .) %>% glance()
+
+df_brm %>% filter(A1_GruendeSQ001 == "Ja") %>% 
+      lm(B1_amf ~ oe  +  jmk  +  ssk  +  inv  +  con  +  cl  +  cop  +  os  +  jcha  +  scs  +  net  +  cexpl  +  lear,
+ .) %>% glance()
+```

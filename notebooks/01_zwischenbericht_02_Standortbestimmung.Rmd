@@ -1,0 +1,452 @@
+---
+title: "Standortbestimmung Laufbahnressourcen"
+output: html_notebook
+---
+
+## Standortbestimmung Laufbahnressourcen
+
+
+Einschätzung durch Kunden
+
+```{r hilfreich_elemente}
+source("../lib/likert_labeller.R")
+# df %>% select(A1_FB1:`A1_FB2[SQ005]`) %>%  plot_likert() # centered stack bars are stupid
+
+
+plot_df2 <-  df %>% select(`A1_FB2[SQ001]`:`A1_FB2[SQ005]`) %>% 
+    set_label(c("CRQ-Fragebogen ausfüllen", "Besprechung des CRQ-Fragebogens",
+                "Besprechung des Lebenslaufs", "Besprechung der Arbeitsmarktinformationen",
+                "Gespräch mit Beratungsperson insg.")) %>%
+    plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "last.desc") +
+     geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+plot_df2
+
+ggsave("plots/check_hilfreich.png", width = 6.27, height = 5)
+
+```
+
+Gespräch wird insgesamt überwiegend als sehr hilfreich beschrieben. Am schwächsten wird der Nutzen des Online-Fragebogens eingestuft, allerdings wird dessen Besprechung von der Hälfte der Teilnehmenden als sehr hilfreich beurteilt. Von den Gesprächsinhalten schneidet die Besprechung der Arbeitsmarkttinformationen am schwächsten ab. Hier lohnt es sich zu schauen welche Gruppen besonders von profitieren und bei welchen sie wenig hilfreich sind und wie sie verbessert werden kann.
+
+```{r einschaetzung_plot}
+df %>% select(A1_FB1) %>%
+  set_label("Können Sie aufgrund des bisherigen Gesprächs Ihre Arbeitsmarktfähigkeit besser einschätzen?") %>% 
+  plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, geom.size = 0.5) + 
+       geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=1,byrow=TRUE))
+ggsave("plots/einschaetzung.png", width = 6.27, height = 2)
+```
+
+Bessere Beurteilung der AMF Fällt positiv aus.
+
+```{r}
+df %>% select(B1_A1:`B1_A2[SQ004]`) %>%
+     mutate(across(-B1_A1, .fns = fact_to_num)) %>% 
+    set_label(c("Standortbestimmung insgesamt", "CRQ-Fragebogen inkl. Besprechung", "Besprechung des Lebenslauf","Besprechung der Arbeitsmarktinformationen", "Allgemeines/Integratives Gespräch")) %>%
+    plot_stackfrq(show.total = FALSE, show.prc = FALSE, sort.frq = "last.desc") + 
+     geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+ggsave("plots/berater_hilfreich.png", width = 6.27, height = 5)
+```
+Das eher verhaltene Urteil über die Arbeitsmarktinformationen durch Kunden wird auch von Beratungspersonen geteilt und fällt sogar noch etwas negativer aus. Knapp die Hälfte der Personen beurteilt die AMI als wenig oder überhaupt nicht hilfreich. Knapp ein Drittel stuft den CRQ als wenig oder überhaupt nicht hilfreich ein.
+
+### Subjektiver Nutzen der einzelnen Komponenten der Standortbestimmung für Kunden
+
+Von Interesse ist ob bestimmte Komponenten der Standortbestimmung anders eingeschätzt werden in Abhängigkeit von deren Gründen viamia wahrzunehmen.
+
+```{r}
+library(lmerTest)
+fit_kundnutz_lm <- lmer(formula = A1_NutzenInsg ~ 1 + `A1_Gruende[SQ001]`  +
+                              + `A1_Gruende[SQ002]`  + `A1_Gruende[SQ003]` + `A1_Gruende[SQ004]` +
+                              `A1_Gruende[SQ005]`  + `A1_Gruende[SQ006]`  + `A1_Gruende[SQ007]` +
+                              `A1_Gruende[SQ008]` + `A1_Gruende[SQ009]`  + `A1_Gruende[SQ010]`
+                          + `A1_Gruende[SQ011]`  + (1 | Kanton),
+                               data = df)
+
+summary(fit_kundnutz_lm)
+```
+
+```{r fit_kundnutz_ami_brm}
+fit_kundnutz_ami_brm <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ004` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(A1_FB2SQ004 = as.ordered(A1_FB2SQ004)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_ami")
+```
+
+```{r}
+summary(fit_kundnutz_ami_brm)
+```
+
+
+
+```{r fit_kundnutz_crqb}
+fit_kundnutz_crqb <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ002` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(A1_FB2SQ002 = as.ordered(A1_FB2SQ002)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_crqb")
+```
+
+
+```{r fit_kundnutz_crq}
+fit_kundnutz_crq <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ001` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(A1_FB2SQ001 = as.ordered(A1_FB2SQ001)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_crq")
+```
+
+```{r fit_kundnutz_cv}
+fit_kundnutz_cv <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ003` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(A1_FB2SQ003 = as.ordered(A1_FB2SQ003)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_cv")
+```
+
+```{r fit_kundnutz_insg}
+fit_kundnutz_insg <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ005` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(A1_FB2SQ005 = as.ordered(A1_FB2SQ005)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_insg")
+```
+
+```{r read_fits}
+brm_fits <- list.files("models") %>% map(., function(f) readRDS(str_c("models/",f)))
+names(brm_fits) <- list.files("models")
+```
+
+
+```{r}
+summary(brm_fits$fit_kundnutz_crqb)
+summary(brm_fits$fit_kundnutz_crq)
+summary(brm_fits$fit_kundnutz_cv)
+summary(brm_fits$fit_kundnutz_insg)
+```
+
+Trendet zur Signifikanz bei beruflichem Wiedereinstieg. Diese profitieren womöglich besonders von einer Aufarbeitung des CV.
+
+Kompilation:
+
+```{r kompilation_kundnutz}
+library(broom)
+library(broom.mixed)
+
+hdi_nonzero <- function(x) {
+    # x needs to be tidyobject
+    nonzero_idx <- pmap_lgl(x, function(...) {
+        x <- tibble(...)
+        (x$conf.low > 0 & x$conf.high > 0) | (x$conf.low < 0 & x$conf.high < 0)})
+    return(x[nonzero_idx,])
+}
+
+kundnutz_table <- map_dfr(brm_fits[names(brm_fits) %>% str_detect(., "kundnutz")], function(fit) {
+    tidy(fit) %>% hdi_nonzero() %>% mutate(outcome = fit[["formula"]][["resp"]])
+}) %>% .[!str_detect(.$term, "Intercept"),]
+
+# rename columns term and outcome
+gruende_rn <- data.frame(old = str_c("A1_GruendeSQ",sprintf('%0.3d', 1:11),"Ja") ,
+                         new = c("Ausweg aus Arbeitslosigkeit",
+                    "Beruflicher Wiedereinstieg (nach freiwilliger Erwerbspause)",
+                    "Berufliche Weiterentwicklung",
+                    "Berufliche Umorientierung",
+                    "Erhöhung des Arbeitspensums",
+                    "Unsicherheiten in Bezug auf künftige Arbeitssituation",
+                    "Bessere gesellschaftliche Integration",
+                    "Finanzielle Besserstellung",
+                    "Grössere Zufriedenheit mit Arbeit",
+                    "Generelle Wunsch nach Veränderung",
+                    "Gesundheitliche Probleme"))
+
+outc_rn <- data.frame(old = str_c("A1FB2SQ", sprintf('%0.3d', 1:5)),
+                      new = c("Online-Fragebogen", "Besprechung des Online-Fragebogens",
+                "Besprechung des Lebenslaufs", "Besprechung der Arbeitsmarktinformationen",
+                "Gespräch mit Beratungsperson insg."))
+library(stringi)
+kundnutz_table <-
+  kundnutz_table %>% mutate(
+    term = stri_replace_all_regex(term, gruende_rn$old, gruende_rn$new, vectorize_all = FALSE),
+    outcome = stri_replace_all_regex(outcome, outc_rn$old, outc_rn$new, vectorize_all = FALSE)
+  ) %>%
+  mutate(across(is.numeric, round, 2)) %>% 
+  select(-c(effect, component, group, std.error))
+
+```
+
+Am stärksten sind die Unterschiede im CRQ. Beruflicher Wiedereinstieg, berufliche Umorientierung sowie Finanzielle Besserstellung wird der CRQ als weniger hilfreich gewertet. Positiv wird er dagegen gewertet von Personen die sich beruflich weiterentwickeln möchten oder generell grössere Zufriedenheit bei der Arbeit anstreben. Die Besprechung des CRQ wird dann als weniger hilfreich empfunden, wenn es sich beim Anliegen der Kunden um einen beruflichen Wiedereinstieg handelt, nützlicher wenn es sich um eine berufliche Weiterentwicklung handelt. --> wichtig für best practice?
+Dies deckt sich weitgehend mit den Befunden zur Besprechung des CRQ. Bei einer Weiterentwicklung hilft den Personen der Überblick über ihre Laufbahnressourcen. Man kann es auch so interpretieren dass manche Fragen wie Umfeldressourcen nicht gut zu den Anliegen von sich Umorienterenden oder Wiedereinsteigenden passen.
+Bei den Besprechungen der AMI gibt es keine Unterschiede in Abhängigkeit der Gruppen.
+Die Besprechung des CV wird als weniger nützlich empfunden von Personen, die sich beruflich umorientieren.
+Das Gespräch insgesamt wird als weniger nützlich empfunden von Personen, die Unsicherheiten in Bezufg auf ihre künftige Arbeitssituation empfinden.
+
+--> Evtl darstellen mit den gruppierten Antworten.
+
+
+### Subjektiver Nutzen der einzelnen Komponenten der Standortbestimmung aus Sicht der Beratungspersonen
+
+```{r}
+# fit_beratnutz_insg <- brm(
+#     family = cumulative(probit),
+#     formula = B1_A1 ~ 1 + `A1_GruendeSQ001`  +
+#                               + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+#                               `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+#                               `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+#                           + `A1_GruendeSQ011`  + (1 | Kanton),
+#                                data = df_brm %>% mutate(B1_A1 = as.ordered(B1_A1)),
+#     warmup = 500,
+#     iter = 1500,
+#     chains = 4,
+#     cores = 4,
+#     file = "models/beratnutz_insg")
+```
+```{r}
+fit_beratnutz_crq <- brm(
+    family = cumulative(probit),
+    formula = `B1_A2SQ001` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(B1_A2SQ001 = as.ordered(B1_A2SQ001)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/beratnutz_crq")
+```
+
+```{r}
+fit_beratnutz_cv <- brm(
+    family = cumulative(probit),
+    formula = `B1_A2SQ002` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(B1_A2SQ002 = as.ordered(B1_A2SQ002)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/beratnutz_cv")
+```
+
+```{r fit_beratnutz_ami}
+fit_beratnutz_ami <- brm(
+    family = cumulative(probit),
+    formula = `B1_A2SQ003` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(B1_A2SQ003 = as.ordered(B1_A2SQ003)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/beratnutz_ami")
+```
+
+```{r fit_beratnutz_gespraech}
+fit_beratnutz_gespraech <- brm(
+    family = cumulative(probit),
+    formula = `B1_A2SQ004` ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                        data = df_brm %>% mutate(B1_A2SQ004 = as.ordered(B1_A2SQ004)),
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/beratnutz_gespraech")
+```
+
+```{r kompilation_beratnutz}
+
+beratnutz_table <- map_dfr(brm_fits[names(brm_fits) %>% str_detect(., "beratnutz")], function(fit) {
+    tidy(fit) %>% hdi_nonzero() %>% mutate(outcome = fit[["formula"]][["resp"]])
+}) %>% .[!str_detect(.$term, "Intercept"),]
+
+outc_berat_rn <- data.frame(old = c("B1A1", str_c("B1A2SQ", sprintf('%0.3d', 1:4))),
+                      new = c("Insgesamt", "CRQ inkl. Besprechung", "Besprechung des CV","Besprechung der Arbeitsmarkttrends", "Allgemeines/Integratives Gespräch"))
+
+beratnutz_table <-
+  beratnutz_table %>% mutate(
+    term = stri_replace_all_regex(term, gruende_rn$old, gruende_rn$new, vectorize_all = FALSE),
+    outcome = stri_replace_all_regex(outcome, outc_berat_rn$old, outc_berat_rn$new, vectorize_all = FALSE)
+  ) %>%
+  mutate(across(is.numeric, round, 2)) %>% 
+  select(-c(effect, component, group, std.error))
+
+```
+Berater sehen weniger Nutzen bei der  Besprechung des Arbeitsmarktes für Personen mit gesundheitlichen problemen,
+mehr Nutzen beim CRQ für Personen mit beruflicher Weiterentwicklung.
+002: Lebenslauf: mehr bei Ausweg aus Arbeitslosigkeit, Finanzielle Besserstellung, weniger bei Berufliche Umorientierung.
+004: allgemeines Gespräch weniger hilfreich bei generellem Wunsch nach Veränderung.
+Insgesamt :weniger hilfreich insgesamt bei Beruflicher Umorientierung.
+
+--> Tabelle aus den beiden Nutzen machen. Welches Fazit ziehen? Wunsch nach beruflicher Weiterentwicklung ist der häufigste genannte Grund und bei diesem scheint der CRQ stärker geeignet zu sein. CRQ zeigt dagegen aus Kundensicht schwäche bei bestimmten Zielen...
+auch bei beruflicher Umorientierung scheinen bestimmte Aspekte wie CV, CRQ nicht so gut zu passen in der aktuellen Form.
+
+```{r table_export_nutzen}
+ImportExport::excel_export(x = list(beratnutz_table, kundnutz_table), file = "nutztables.xlsx")
+```
+
+
+
+### Fallspezifische Übereinstimmung zwischen den Urteilen der Kunden und Berater.
+
+```{r}
+fit_korrespondenz1 <- brm(data = df,
+    family = gaussian,
+    A1_NutzenInsg ~ 1  + mo(B1_A1) + (1 | Kanton),
+    warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/korrespondenz1")
+
+summary(fit_korrespondenz1)
+```
+```{r}
+fit_korrespondenz2 <- brm(data = df,
+    family = cumulative(probit),
+    A1_FB1 ~ 1  + mo(B1_A1) + (1 | Kanton),
+    warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/korrespondenz2")
+
+summary(fit_korrespondenz2)
+```
+A1/1 Unterteile ~ B1/2 (jeweilige Paare) - ggf nachholen.
+
+### Optional: Korrespondenz CRQ und AMF
+
+```{r}
+fit_korrespondenz3 <- brm(data = df,
+    family = cumulative(probit),
+    B1_amf ~ 1  + knsk + mot + act + env + (1 | Kanton),
+    warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/korrespondenz3")
+
+summary(fit_korrespondenz3)
+bayes_R2(fit_korrespondenz3) # rsquared probably invalid
+```
+R-Squared liegt um die 18, müsste man mit dem R squared vom Intercept only vergleichen. R-Squared ist problematisch weil ordinales outcome. ggf. nochmal als metrisch rechnen.
+
+Die Korrespondenz Sektion ist insg. wenig aussagekräftig... was ist eine hohe Korrespondenz und was macht die Korrespondenz  für einen Unterschied in Bezug aud die diagnostische Güte?
+
+
+
+### Nutzen nach Bildung
+
+```{r}
+fit_kundnutz_crq_bildung <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ001` ~ 1 + Ausb_recode  + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_crq_bildung")
+```
+
+```{r}
+fit_kundnutz_crqb_bildung <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ002` ~ 1 + Ausb_recode  + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_crqb_bildung")
+```
+
+```{r}
+fit_kundnutz_cv_bildung <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ003` ~ 1 + Ausb_recode  + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_cv_bildung")
+```
+
+```{r}
+fit_kundnutz_ami_bildung <- brm(
+    family = cumulative(probit),
+    formula = `A1_FB2SQ004` ~ 1 + Ausb_recode  + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/kundnutz_ami_bildung")
+```
+
+bei AMI Differenzen. bei CRQ schlechter bewertett mit bei Uni/höhere Berufsbildung, bei CV ebenfalls.
+
+```{r}
+summary(fit_kundnutz_ami_bildung)
+```
+

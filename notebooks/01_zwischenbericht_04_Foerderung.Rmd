@@ -1,0 +1,378 @@
+---
+title: "4	WIRKUNG DES BERATUNGSANGEBOT AUF DIE FÖRDERUNG DER LAUFBAHNRESSOURCEN"
+output: html_notebook
+---
+
+
+## Wirkung des Beratungsangebot auf die Förderung der Laufbahnressourcen
+
+```{r ressourcenfoerderung_likertplot}
+df_brm %>% select(A2_B3SQ001:A2_B3SQ004)  %>% 
+    set_label(c("Wissen über berufliche Möglichkeiten",
+                "persönliche berufliche Ziele und nächste Schritte kennen",
+                "Zutrauen, in meiner Laufbahn erfolgreich zu sein",
+                "Motivation zur aktiven Laufbahngestaltung")) %>%
+    plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "last.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+ggsave("plots/resourcenfoerderung.png")
+```
+Insb. Motivation zur aktiven Laufbahngestaltung fällt sehr positiv aus. Trotz des Fokus auf Weiterbildungen und Berfsoptionen ist die Bewertung der Erweiterung des Wissens über berufliche Möglichkeiten weniger positiv.
+
+
+```{r ressourcenfoerderung_fa}
+df_resourcenfoerd <- df_brm %>% select(A2_B3SQ001:A2_B3SQ004) %>% mutate(across(.fns = as.numeric))
+
+psych::alpha(x = df_resourcenfoerd,
+             keys = rep(1,4))
+resourcenfoerd_score <- psych::scoreItems(rep(1,4), df_resourcenfoerd, impute = "none")
+print(resourcenfoerd_score, short = FALSE)
+```
+Kann als ein Gesamtscore ausgewertet werden.
+
+```{r}
+df_brm <- df_brm %>% mutate(A2_B3_total = resourcenfoerd_score$scores) %>% as_tibble()
+```
+
+A2 Steigerung ~ CRQ + B1 Arbeitsmarktfähigkeit (fragt sich wie viele N wir haben wo CRQ auch vorhanden ist)
+
+```{r steigern_total}
+fit_steigern1 <- lm(A2_B3_total ~ B1_amf + knsk + mot + act + env,
+                    data = df_brm)
+summary(fit_steigern1)
+```
+R-Squared is negligible.
+
+```{r}
+fit_steigern_mot1 <- brm(
+    family = cumulative(probit),
+    formula = `A2_B3SQ004` ~ 1 + mo(B1_amf) + mo(B2_A1SQ004) + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/steigern_mot1")
+```
+
+```{r}
+fit_steigern_mot2 <- brm(
+    family = cumulative(probit),
+    formula = `A2_B3SQ004` ~ 1 + mo(B1_amf) + mo(B2_A1SQ001) + mo(B2_A1SQ002) +
+        mo(B2_A1SQ003) + mo(B2_A1SQ004) + mo(B2_A1SQ005) + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/steigern_mot2")
+```
+
+```{r}
+fit_steigern_wissen1 <- brm(
+    family = cumulative(probit),
+    formula = `A2_B3SQ001` ~ 1 + mo(B1_amf) + mo(B2_A1SQ001) + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/steigern_wissen1")
+```
+
+```{r}
+fit_steigern_wissen2 <- brm(
+    family = cumulative(probit),
+    formula = `A2_B3SQ001` ~ 1 + mo(B1_amf) + mo(B2_A1SQ001) + mo(B2_A1SQ002) +
+        mo(B2_A1SQ003) + mo(B2_A1SQ004) + mo(B2_A1SQ005) + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/steigern_wissen2")
+```
+
+
+```{r}
+fit_steigern_ziele1 <- brm(
+    family = cumulative(probit),
+    formula = `A2_B3SQ002` ~ 1 + mo(B1_amf) + mo(B2_A1SQ002) + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/steigern_ziele1")
+```
+
+```{r}
+fit_steigern_ziele2 <- brm(
+    family = cumulative(probit),
+    formula = `A2_B3SQ002` ~ 1 + mo(B1_amf) + mo(B2_A1SQ001) + mo(B2_A1SQ002) +
+        mo(B2_A1SQ003) + mo(B2_A1SQ004) + mo(B2_A1SQ005) + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/steigern_ziele2")
+```
+```{r}
+fit_steigern_zutrauen2 <- brm(
+    family = cumulative(probit),
+    formula = `A2_B3SQ003` ~ 1 + mo(B1_amf) + mo(B2_A1SQ001) + mo(B2_A1SQ002) +
+        mo(B2_A1SQ003) + mo(B2_A1SQ004) + mo(B2_A1SQ005) + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "models/steigern_zutrauen2")
+```
+
+
+```{r}
+# steigern_mot2 %>% tidy() # broken (does not detect the parameters :()) 
+fixef(steigern_mot2)
+fixef(steigern_wissen2) # nix
+fixef(steigern_ziele2)
+```
+
+
+Inhaltliche Schwerpunkte scheinen Steigerungen eher nicht vorherzusagen. Bei Aktivitäten findet sich ein Effekt von Aktivitäten zur Laufbahngestaltung. Bei Zielen ebf. 
+Bei Zutrauen scheinen insb. Personen zu profitieren die bereits eine höhere AMF haben.
+
+Methoden wären 20 Prädiktoren... problematisch.
+```{r}
+methoden_mutate <- function(x) {
+    as.numeric(x) %>% recode(`1` = 0, `2` = 1)
+}
+methoden <- df_brm %>% select(starts_with("B2_A4")) %>% mutate(across(.fns = methoden_mutate))
+psych::vss(methoden, cor = "poly")
+psych::fa(methoden, nfactors = 7, cor = "poly")
+
+```
+
+Bei grobem druberschauen keine klare Lösung.
+
+
+
+GLM für einzelne Methoden.
+```{r}
+source("../lib/numeric_conv.R")
+df_brm <- df_brm %>% mutate(across(c(starts_with("A2_B3SQ"), "B1_amf"), .fns = fact_to_num))
+```
+
+
+```{r}
+methodenvarnames <- df_brm %>% select(starts_with("B2_A4")) %>% names()
+outcomevarnames <- df_brm %>% select(starts_with("A2_B3SQ")) %>% names() %>% c(., "A2_B3_total")
+
+methoden_label <- c("Arbeitsheften, Tagebücher oder Ähnliches",
+                "Quantitative Testverfahren ",
+                "Qualitative Verfahren/vorgegebene Arbeitsmittel/Arbeitsblätter ",
+                "Werte geklärt",
+                "Interessen abgeklärt",
+                "Persönlichkeitseigenschaften abgeklärt",
+                "(kognitive) Leistungsfähigkeit abgeklärt",
+                "Kompetenzen erarbeitet",
+                "Rollenmodelle/Vorbilder besprochen",
+                "Kognitive Umstrukturierung",
+                "Psychologische Unterstützung",
+                "Berufs- und Aus-/Weiterbildungsinformationen vermittelt",
+                "Berufs- und Weiterbildungsoptionen erkundet",
+                "Konzepte etc. zur Laufbahngestaltung vermittelt",
+                "Berufsoptionen bewertet und bei der beruflichen Entscheidungsfindung geholfen",
+                "Bewerbungsunterlagen und -strategien besprochen",
+                "Rollenspiele durchgeführt",
+                "Aktivitäts- und Zeitplan für die konkreten nächsten Schritte erstellt",
+                "Mögliche Hindernisse identifiziert und Strategien zum Umgang besprochen",
+                "Hausaufgaben aufgegeben")
+
+outcome_methoden_pairs <- crossing(methodenvarnames, outcomevarnames)
+glm_outc_methoden <- map2_dfr(outcome_methoden_pairs$outcomevarnames, outcome_methoden_pairs$methodenvarnames, function(y,x) {
+  glm_formula <- str_c(y, " ~ ", x, "+ B1_amf") 
+  glm(glm_formula, family = gaussian(link = "identity"), data = df_brm) %>% tidy() %>% mutate(outcome = y)
+})
+
+# data.frame(old = "",
+#            new = c("(Intercept)", "Arbeitsmarktfähigkeit", methoden_label))
+
+glm_outc_methoden %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
+  filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+```
+
+```{r}
+gruendenames <- df_brm %>% select(starts_with("A1_GruendeSQ")) %>% names()
+outcome_gruende_pairs <- crossing(outcomevarnames, gruendenames)
+
+glm_outc_gruende <- map2_dfr(outcome_gruende_pairs$outcomevarnames, outcome_gruende_pairs$gruendenames, function(y,x) {
+  glm_formula <- str_c(y, " ~ ", x, "+ B1_amf") 
+  glm(glm_formula, family = gaussian(link = "identity"), data = df_brm) %>% tidy() %>% mutate(outcome = y)
+})
+
+glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
+  filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+```
+
+Abweichungen in Prozent vom Durchschnitt
+```{r}
+vgl1 <- df_brm %>% filter(A1_GruendeSQ006 != "Ja" & A1_GruendeSQ009 != "Ja") %>% 
+  select(A2_B3SQ001:A2_B3SQ004) %>%
+     mutate(across(.fns = fact_to_num)) %>% 
+    set_label(c("Wissen über berufliche Möglichkeiten",
+                "persönliche berufliche Ziele und nächste Schritte kennen",
+                "Zutrauen, in meiner Laufbahn erfolgreich zu sein",
+                "Motivation zur aktiven Laufbahngestaltung")) %>%
+    sjmisc::frq()
+
+vgl_unsicher <- df_brm %>% filter(A1_GruendeSQ006 == "Ja") %>% 
+  select(A2_B3SQ001:A2_B3SQ004) %>%
+     mutate(across(.fns = fact_to_num)) %>% 
+    set_label(c("Wissen über berufliche Möglichkeiten",
+                "persönliche berufliche Ziele und nächste Schritte kennen",
+                "Zutrauen, in meiner Laufbahn erfolgreich zu sein",
+                "Motivation zur aktiven Laufbahngestaltung")) %>%
+    sjmisc::frq()
+
+vgl_zufr <- df_brm %>% filter(A1_GruendeSQ009 == "Ja") %>% 
+  select(A2_B3SQ001:A2_B3SQ004) %>%
+     mutate(across(.fns = fact_to_num)) %>% 
+    set_label(c("Wissen über berufliche Möglichkeiten",
+                "persönliche berufliche Ziele und nächste Schritte kennen",
+                "Zutrauen, in meiner Laufbahn erfolgreich zu sein",
+                "Motivation zur aktiven Laufbahngestaltung")) %>%
+    sjmisc::frq()
+
+```
+
+## Zielerreichung
+
+```{r zielerreichung_plot}
+
+tmp <- map(levels(df$A1_Zielezuord1), function(ziel) {
+  z1 <- vector(mode = "numeric", nrow(df_brm))
+  z2 <- vector(mode = "numeric", nrow(df_brm))
+  z3 <- vector(mode = "numeric", nrow(df_brm))
+  z1[] <- NA 
+  z2[] <- NA 
+  z3[] <- NA 
+  
+  for (i in seq_along(z1)) {
+    
+    if(!is.na(df_brm$A1_Zielezuord1[i])) {
+      if(df_brm$A1_Zielezuord1[i] == ziel) {
+        z1[i] <- df_brm$A2_B2SQ001[i]
+    } }
+    if(!is.na(df_brm$A1_Zielezuord2[i])) {
+      if(df_brm$A1_Zielezuord2[i] == ziel) {
+        z2[i] <- df_brm$A2_B2SQ002[i]
+    } }
+    if(!is.na(df_brm$A1_Zielezuord3[i])) {
+      if(df_brm$A1_Zielezuord3[i] == ziel) {
+        z3[i] <- df_brm$A2_B2SQ003[i]
+    } }
+  }
+  
+  data.frame(z1 = z1, z2 = z2,z3 = z3) %>%
+    mutate(ziel = ziel) %>%
+    pivot_longer(-ziel, names_to = "zielnum")
+})
+
+ziele_erreicht <- map_dfc(tmp, function(x) {
+  out <- data.frame(x = x$value)
+  names(out) <- x$ziel[1]
+  out <- set_labels(out, labels = c("Überhaupt nicht hilfreich" = 1, "wenig hilfreich" = 2,
+                             "eher hilfreich" = 3, "hilfreich" = 4))
+  return(out)
+})
+
+
+names(ziele_erreicht) <- c("Allgemeine Fähigkeiten",
+                     "Arbeitseinsatz",
+                     "Arbeitsmarktwissen",
+                     "Berufliche Expertise",
+                     "Entwicklungsmöglichkeiten beim jetzigen Arbeitgeber",
+                     "Klarheit",
+                     "Netzwerken",
+                     "Sonstiges",
+                     "Unterstützung durch soziales Umfeld",
+                     "Zutrauen")
+
+
+ziele_erreicht %>% plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+
+ggsave("plots/ziele_erreicht.png", width = 6.27, height = 5)
+```
+
+```{r zielerreichung_A3}
+ # unfinished
+tmp <- map(levels(df$A1_Zielezuord1), function(ziel) {
+  z1 <- vector(mode = "numeric", nrow(df_brm))
+  z2 <- vector(mode = "numeric", nrow(df_brm))
+  z3 <- vector(mode = "numeric", nrow(df_brm))
+  z1[] <- NA 
+  z2[] <- NA 
+  z3[] <- NA 
+  
+  for (i in seq_along(z1)) {
+    
+    if(!is.na(df_brm$A1_Zielezuord1[i])) {
+      if(df_brm$A1_Zielezuord1[i] == ziel) {
+        z1[i] <- df_brm$A2_B2SQ001[i]
+    } }
+    if(!is.na(df_brm$A1_Zielezuord2[i])) {
+      if(df_brm$A1_Zielezuord2[i] == ziel) {
+        z2[i] <- df_brm$A2_B2SQ002[i]
+    } }
+    if(!is.na(df_brm$A1_Zielezuord3[i])) {
+      if(df_brm$A1_Zielezuord3[i] == ziel) {
+        z3[i] <- df_brm$A2_B2SQ003[i]
+    } }
+  }
+  
+  data.frame(z1 = z1, z2 = z2,z3 = z3) %>%
+    mutate(ziel = ziel) %>%
+    pivot_longer(-ziel, names_to = "zielnum")
+})
+
+ziele_erreicht <- map_dfc(tmp, function(x) {
+  out <- data.frame(x = x$value)
+  names(out) <- x$ziel[1]
+  out <- set_labels(out, labels = c("Überhaupt nicht hilfreich" = 1, "wenig hilfreich" = 2,
+                             "eher hilfreich" = 3, "hilfreich" = 4))
+  return(out)
+})
+
+
+names(ziele_erreicht) <- c("Allgemeine Fähigkeiten",
+                     "Arbeitseinsatz",
+                     "Arbeitsmarktwissen",
+                     "Berufliche Expertise",
+                     "Entwicklungsmöglichkeiten beim jetzigen Arbeitgeber",
+                     "Klarheit",
+                     "Netzwerken",
+                     "Sonstiges",
+                     "Unterstützung durch soziales Umfeld",
+                     "Zutrauen")
+
+
+ziele_erreicht %>% plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+
+ggsave("plots/ziele_erreicht_a3.png", width = 6.27, height = 5)
+```
+

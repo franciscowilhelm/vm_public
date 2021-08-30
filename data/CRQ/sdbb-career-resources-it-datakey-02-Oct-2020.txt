@@ -1,0 +1,1067 @@
+ItemID: 1230
+Name: nationality_de
+Text: Qual è la sua nazionalità?
+Values:
+1: Svizzera
+2: Germania
+3: Austria
+4: Liechtenstein
+5: Lussemburgo
+6: Belgio
+7: Altro paese
+Format: Dropdown
+Datatype: DropdownChoice
+
+ItemID: 1270
+Name: education_de
+Text: Qual è la formazione più alta che ha concluso?
+Values:
+1: Scuola dell'obbligo
+2: Insegnamento secondario II (liceo, scuola cantonale di commercio, maturità, scuole professionali e specializzate)
+3: Formazione professionale
+4: Scuola specializzata superiore
+5: Bachelor (università / scuola universitaria professionale)
+6: Master (università / scuola universitaria professionale)
+7: Dottorato
+Format: LikertVertical
+Datatype: LikertChoice
+
+ItemID: 1290
+Name: field
+Text: Qual è il suo settore di attività?
+Values:
+1: Industria automobilistica
+2: Costruzioni
+3: Estrazione mineraria, approvvigionamento idrico, gestione dei rifiuti
+4: Educazione
+5: Servizi finanziari e assicurativi
+6: Servizi alberghieri
+7: Sanità
+8: Commercio, vendita, manutenzione, riparazione di autoveicoli
+9: Servizi di assistenza residenziale e assistenza sociale
+10: Produzione di beni di consumo (esclusi i prodotti metallurgici, elettronici e chimici)
+11: Produzione di beni intermedi, in particolare prodotti chimici e materie plastiche (esclusi prodotti industriali metallurgici e elettronici)
+12: Servizi immobiliari, indipendenti, scientifici e tecnici
+13: Servizi di informazione e comunicazione
+14: Cultura, fiere, convegni e turismo
+15: Agricoltura, selvicoltura e pesca
+16: Pubblicità e ricerche di mercato
+17: Industria metallurgica, elettrica o siderurgica
+18: Farmacia
+19: Economia domestica, altri servizi a domicilio
+20: Trasporti e logistica
+21: Altro settore, ovvero:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 1400
+Name: oe1_work
+Text: Gli altri mi considerano un/a esperto/a nella mia professione.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1401
+Name: oe2_work
+Text: Ho solide conoscenze nella mia professione.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1402
+Name: oe3_work
+Text: Ho un livello di conoscenze e competenze molto elevato nella mia professione.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1410
+Name: jmk1_work
+Text: Ho una buona conoscenza del mercato del lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1411
+Name: jmk2_work
+Text: Ho molte conoscenze sul mercato del lavoro attuale.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1412
+Name: jmk3_work
+Text: Conosco bene l'andamento generale dell'occupazione nel mercato del lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1420
+Name: ssk1_work
+Text: Ho molte abilità che potrei usare in professioni del tutto diverse.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1421
+Name: ssk2_work
+Text: Ho molte competenze che possono essere utili anche in tante altre professioni.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1422
+Name: ssk3_work
+Text: Oltre a conoscenze prettamente specialistiche, ho molte capacità e competenze che si rivelano importanti in diverse professioni.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1430
+Name: inv1_work
+Text: Il mio lavoro è un aspetto fondamentale della mia identità.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1431
+Name: inv2_work
+Text: Il lavoro è un aspetto fondamentale della mia vita.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1432
+Name: inv3_work
+Text: Sento di avere un forte legame con il mio lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1440
+Name: con1_work
+Text: Sono in grado di pianificare la mia carriera in modo efficace.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1441
+Name: con2_work
+Text: Quando mi prefiggo degli obiettivi di carriera, confido nel fatto di raggiungerli.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1442
+Name: con3_work
+Text: Sono convinto/a di poter superare con successo le sfide che mi si presentano nel corso della carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1443
+Name: con4_work
+Text: Sono in grado di sviluppare la mia carriera con efficacia.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1450
+Name: cl1_work
+Text: Ho una chiara idea di ciò che voglio raggiungere nella mia carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1451
+Name: cl2_work
+Text: Ho chiari obiettivi di carriera che rispecchiano i miei interessi e i miei valori personali.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1452
+Name: cl3_work
+Text: Ho chiari obiettivi professionali.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1470
+Name: cop1_work
+Text: La mia azienda mi offre interessanti possibilità di carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1471
+Name: cop2_work
+Text: La mia azienda dispone di molti posti di lavoro interessanti per la mia futura carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1472
+Name: cop3_work
+Text: Il mio datore di lavoro mi offre interessanti possibilità di avanzamento professionale.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1480
+Name: os1_work
+Text: La mia azienda sostiene attivamente lo sviluppo della mia carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1481
+Name: os2_work
+Text: Il mio datore di lavoro mi sostiene nel raggiungimento dei miei obiettivi di carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1482
+Name: os3_work
+Text: Nella mia carriera mi sento sostenuto/a in modo ottimale dal mio datore di lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1490
+Name: jcha_1_work
+Text: Il mio lavoro mi permette di sfruttare pienamente le mie competenze professionali?
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1491
+Name: jcha2_work
+Text: Il mio attuale lavoro richiede tutte le mie competenze.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1492
+Name: jcha3_work
+Text: Grazie al mio lavoro posso sviluppare le mie capacità.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1500
+Name: scs1_work
+Text: Conosco molte persone che possono sostenermi nello sviluppo della mia carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1501
+Name: scs2_work
+Text: I miei amici mi sostengono nel mio sviluppo professionale.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1502
+Name: scs3_work
+Text: Ricevo un ampio sostegno professionale dalle persone della mia sfera privata.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1503
+Name: scs4_work
+Text: I miei colleghi di lavoro mi sostengono nello sviluppo della mia carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1510
+Name: net1_work
+Text: Curo costantemente la mia rete di contatti nel mio settore professionale.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1511
+Name: net2_work
+Text: Spesso mi metto in contatto con altre persone importanti per il mio sviluppo professionale
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1512
+Name: net3_work
+Text: Spesso utilizzo i miei contatti per avanzare professionalmente.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1520
+Name: cexpl1_work
+Text: Mi informo regolarmente sulle possibilità di carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1521
+Name: cexpl2_work
+Text: Mi informo regolarmente sulle possibilità di impiego nel mercato del lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1522
+Name: cexpl3_work
+Text: Mi informo regolarmente su possibili posti di lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1530
+Name: lear1_work
+Text: Colgo ogni occasione per ampliare le mie conoscenze professionali.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1531
+Name: lear2_work
+Text: Sviluppo costantemente le mie competenze professionali.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1532
+Name: lear3_work
+Text: Mantengo costantemente aggiornate le mie conoscenze e le mie competenze professionali.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2230
+Name: nationality_de
+Text: Qual è la sua nazionalità?
+Values:
+1: Svizzera
+2: Germania
+3: Austria
+4: Liechtenstein
+5: Lussemburgo
+6: Belgio
+7: Altro paese
+Format: Dropdown
+Datatype: DropdownChoice
+
+ItemID: 2250
+Name: study
+Text: Che tipo di scuola universitaria frequenta attualmente?
+Values:
+1: Scuola universitaria professionale
+2: Università
+3: Altro istituto accademico
+4: Non frequento nessuna scuola universitaria.
+Format: LikertVertical
+Datatype: LikertChoice
+
+ItemID: 2260
+Name: study_field
+Text: Qual è il suo campo di studio?
+Values:
+1: Ingegneria e tecnica
+2: Cultura, scienze politiche e società
+3: Insegnamento
+4: Matematica e scienze informatiche
+5: Media, comunicazione e informazione
+6: Musica, danza, teatro, arte, film
+7: Psicologia
+8: Diritto
+9: Religione, filosofia
+10: Scienze sociali, scienze dell'educazione, pedagogia
+11: Sport, alimentazione, salute
+12: Lingua, letteratura
+13: Ambiente, risorse, tutela della natura, clima
+14: Scienze economiche, management
+15: Altro, ovvero:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 2280
+Name: bachelor_master
+Text: Attualmente segue un ciclo di studio bachelor o master?
+Values:
+1: Bachelor
+2: Master
+3: Altro, ovvero:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 2290
+Name: study_year
+Text: Da quanti anni segue l'attuale ciclo di studio?
+Format: Number
+Datatype: IntType
+
+ItemID: 2400
+Name: oe1_stud
+Text: Gli altri mi considerano un/a esperto/a nella professione desiderata.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2401
+Name: oe2_stud
+Text: Ho solide conoscenze nella professione desiderata.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2402
+Name: oe3_stud
+Text: Ho un livello di conoscenze e competenze molto elevato nella professione desiderata.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2410
+Name: jmk1_stud
+Text: Ho una buona conoscenza del mercato del lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2411
+Name: jmk2_stud
+Text: Ho molte conoscenze sul mercato del lavoro attuale.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2412
+Name: jmk3_stud
+Text: Conosco bene l'andamento generale dell'occupazione nel mercato del lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2420
+Name: ssk1_stud
+Text: Ho molte abilità che potrei usare in professioni del tutto diverse.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2421
+Name: ssk2_stud
+Text: Ho molte competenze che possono essere utili anche in tante altre professioni.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2422
+Name: ssk3_stud
+Text: Oltre a conoscenze prettamente specialistiche, ho molte capacità e competenze che si rivelano importanti in diverse professioni.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2430
+Name: inv1_stud
+Text: Il mio studio è un aspetto fondamentale della mia identità.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2431
+Name: inv2_stud
+Text: Il mio studio è un aspetto fondamentale della mia vita.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2432
+Name: inv3_stud
+Text: Sento di avere un forte legame con gli studi intrapresi.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2440
+Name: con1_stud
+Text: Sono in grado di pianificare la mia futura carriera in modo efficace.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2441
+Name: con2_stud
+Text: Quando mi prefiggo degli obiettivi di carriera, confido nel fatto di raggiungerli.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2442
+Name: con3_stud
+Text: Sono convinto/a di poter superare con successo le sfide che mi si presenteranno nel corso della mia futura carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2443
+Name: con4_stud
+Text: Sono in grado di sviluppare la mia futura carriera con efficacia.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2450
+Name: cl1_stud
+Text: Ho una chiara idea di ciò che voglio raggiungere nella mia carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2451
+Name: cl2_stud
+Text: Ho chiari obiettivi di carriera che rispecchiano i miei interessi e i miei valori personali.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2452
+Name: cl3_stud
+Text: Ho chiari obiettivi professionali.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2460
+Name: os1_stud
+Text: La mia scuola universitaria sostiene attivamente lo sviluppo della mia carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2461
+Name: os2_stud
+Text: La mia scuola universitaria mi sostiene nel percorso professionale desiderato.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2462
+Name: os3_stud
+Text: Nella mia carriera mi sento sostenuto/a in modo ottimale dalla mia scuola universitaria.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2470
+Name: jcha1_stud
+Text: I miei studi mi permettono di impiegare a pieno le mie competenze accademiche.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2471
+Name: jcha2_stud
+Text: I miei attuali studi richiedono tutte le mie competenze.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2472
+Name: jcha3_stud
+Text: Grazie ai miei studi posso sviluppare le mie capacità.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2480
+Name: scs1_stud
+Text: Conosco molte persone che possono sostenermi nello sviluppo della mia carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2481
+Name: scs2_stud
+Text: I miei amici mi sostengono nel mio sviluppo professionale.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2482
+Name: scs3_stud
+Text: Ricevo un ampio sostegno professionale dalle persone della mia sfera privata.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2483
+Name: scs4_stud
+Text: I miei colleghi di studio mi sostengono nello sviluppo della mia carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2490
+Name: net1_stud
+Text: Curo costantemente la mia rete di contatti nel settore professionale desiderato.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2491
+Name: net2_stud
+Text: Spesso mi metto in contatto con altre persone importanti per il mio sviluppo professionale
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2492
+Name: net3_stud
+Text: Spesso utilizzo i miei contatti per avanzare professionalmente.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2500
+Name: cexpl1_stud
+Text: Mi informo regolarmente sulle possibilità di carriera.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2501
+Name: cexpl2_stud
+Text: Mi informo regolarmente sulle possibilità di impiego nel mercato del lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2502
+Name: cexpl3_stud
+Text: Mi informo regolarmente su possibili posti di lavoro.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2510
+Name: lear1_stud
+Text: Colgo ogni occasione per ampliare le mie conoscenze specialistiche.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2511
+Name: lear2_stud
+Text: Sviluppo costantemente le mie competenze specialistiche.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2512
+Name: lear3_stud
+Text: Mantengo le mie conoscenze e le mie competenze specialistiche costantemente aggiornate.
+Values:
+1: Per niente vero
+2: In minima parte vero
+3: In parte vero
+4: In gran parte vero
+5: Pienamente vero
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+

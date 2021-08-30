@@ -1,0 +1,1065 @@
+ItemID: 1230
+Name: nationality_de
+Text: Quelle est votre nationalité?
+Values:
+1: Suisse
+2: Allemagne
+3: Autriche
+4: Liechtenstein
+5: Luxembourg
+6: Belgique
+7: Autre pays
+Format: Dropdown
+Datatype: DropdownChoice
+
+ItemID: 1270
+Name: education_de
+Text: Quelle est la formation la plus élevée que vous ayez achevée?
+Values:
+1: École obligatoire
+2: Secondaire II (gymnase, école de commerce, école de culture générale)
+3: Apprentissage
+4: Ecole supérieure (ES)
+5: Bachelor (UNI / HES)
+6: Master (UNI / HES)
+7: Doctorat
+Format: LikertVertical
+Datatype: LikertChoice
+
+ItemID: 1290
+Name: field
+Text: Quelle est votre branche d’activité?
+Values:
+1: Secteur automobile
+2: Construction, bâtiment
+3: Environnement, énergie
+4: Éducation et enseignement
+5: Finance et assurances
+6: Hôtellerie et restauration
+7: Santé
+8: Travail social
+9: Industrie chimique
+10: Immobilier
+11: Médias et communication
+12: Tourisme, culture, événementiel
+13: Agriculture, sylviculture
+14: Marketing, publicité
+15: Industrie des machines
+16: Industrie pharmaceutique
+17: Autres prestations, ménages privés
+18: Transport et logistique
+19: Autre:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 1400
+Name: oe1_work
+Text: Les autres me considèrent comme une personne experte dans ma profession.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1401
+Name: oe2_work
+Text: Je dispose de connaissances approfondies dans ma profession.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1402
+Name: oe3_work
+Text: Je dispose d’un niveau très élevé de connaissances et compétences spécifiques à ma profession.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1410
+Name: jmk1_work
+Text: J’ai une bonne connaissance du marché du travail.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1411
+Name: jmk2_work
+Text: Je dispose de larges connaissances sur le marché du travail actuel.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1412
+Name: jmk3_work
+Text: J'ai une bonne vue d'ensemble des tendances en matière d'emploi.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1420
+Name: ssk1_work
+Text: Je dispose de nombreuses capacités, que je pourrais utiliser pour des professions très différentes.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1421
+Name: ssk2_work
+Text: Je dispose de multiples compétences, également utiles dans de nombreuses autres professions.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1422
+Name: ssk3_work
+Text: En plus de connaissances purement spécialisées, je dispose de nombreuses capacités et compétences importantes pour différents postes.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1430
+Name: inv1_work
+Text: Mon travail est un élément central de mon identité.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1431
+Name: inv2_work
+Text: Le travail est un élément central de ma vie.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1432
+Name: inv3_work
+Text: Je ressens un lien fort avec mon travail.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1440
+Name: con1_work
+Text: Je suis capable de façonner activement ma carrière avec succès.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1441
+Name: con2_work
+Text: Lorsque je me fixe des objectifs de carrière, j’ai la conviction de pouvoir les atteindre.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1442
+Name: con3_work
+Text: Je pense être capable de relever efficacement les défis de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1443
+Name: con4_work
+Text: Je suis capable de développer ma carrière avec succès.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1450
+Name: cl1_work
+Text: Je me représente clairement ce que je souhaite atteindre au cours de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1451
+Name: cl2_work
+Text: Je dispose d’objectifs de carrière bien définis, en accord avec mes intérêts et mes valeurs personnelles.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1452
+Name: cl3_work
+Text: Mes objectifs professionnels sont clairs.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1470
+Name: cop1_work
+Text: Mon entreprise offre d’intéressantes perspectives d’évolution de carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1471
+Name: cop2_work
+Text: Mon entreprise dispose de nombreux postes intéressants pour la suite de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1472
+Name: cop3_work
+Text: Mon employeur me propose d’intéressantes possibilités d’évolution professionnelle.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1480
+Name: os1_work
+Text: Mon entreprise me soutient activement dans le développement de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1481
+Name: os2_work
+Text: Mon employeur me soutient dans mes ambitions de carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1482
+Name: os3_work
+Text: Je me sens idéalement soutenu-e dans ma carrière par mon employeur.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1490
+Name: jcha_1_work
+Text: Mon travail me permet de mettre  pleinement à profit mes capacités.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1491
+Name: jcha2_work
+Text: Mon poste actuel me permet d’exploiter pleinement mes capacités.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1492
+Name: jcha3_work
+Text: Mon travail me permet de développer mes capacités.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1500
+Name: scs1_work
+Text: De nombreuses personnes  me soutiennent dans mon développement de carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1501
+Name: scs2_work
+Text: Mes amis me soutiennent dans mon développement professionnel.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1502
+Name: scs3_work
+Text: Mon entourage me soutient largement dans ma carrière professionnelle.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1503
+Name: scs4_work
+Text: Mes collègues me soutiennent dans mon développement de carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1510
+Name: net1_work
+Text: Je m’efforce toujours de disposer d’un bon réseau dans mon domaine professionnel.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1511
+Name: net2_work
+Text: J’établis souvent des contacts avec des personnes importantes pour le développement de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1512
+Name: net3_work
+Text: J’utilise souvent mes contacts avec d’autres personnes pour favoriser ma progression professionnelle.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1520
+Name: cexpl1_work
+Text: Je m’informe régulièrement des opportunités de carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1521
+Name: cexpl2_work
+Text: Je m’informe régulièrement sur le marché du travail et sur les opportunités d'emplois.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1522
+Name: cexpl3_work
+Text: Je m’informe régulièrement sur les emplois envisageables.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1530
+Name: lear1_work
+Text: Je saisis chaque occasion d’élargir le champ de mes connaissances professionnelles.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1531
+Name: lear2_work
+Text: Je développe constamment mes compétences professionnelles.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 1532
+Name: lear3_work
+Text: Je fais en sorte de garder à jour mes connaissances et mes compétences professionnelles.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2230
+Name: nationality_de
+Text: Quelle est votre nationalité?
+Values:
+1: Suisse
+2: Allemagne
+3: Autriche
+4: Liechtenstein
+5: Luxembourg
+6: Belgique
+7: Autre pays
+Format: Dropdown
+Datatype: DropdownChoice
+
+ItemID: 2250
+Name: study
+Text: Dans quel type de haute école étudiez-vous actuellement?
+Values:
+1: Haute école spécialisée
+2: Université
+3: Autre institution académique
+4: Je n’étudie pas dans une haute école.
+Format: LikertVertical
+Datatype: LikertChoice
+
+ItemID: 2260
+Name: study_field
+Text: Quel est votre domaine d’études?
+Values:
+1: Ingénierie, technique
+2: Culture, sciences politiques, société
+3: Enseignement
+4: Mathématiques et informatique
+5: Médias, communication, information
+6: Musique, danse, théâtre, art, cinéma
+7: Psychologie
+8: Droit
+9: Religion, philosophie
+10: Affaires sociales, sciences de l’éducation, pédagogie
+11: Sport, alimentation, santé
+12: Langues, littérature
+13: Environnement, ressources, protection de la nature, climat
+14: Commerce, gestion, économie
+15: Autre, à savoir:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 2280
+Name: bachelor_master
+Text: Suivez-vous actuellement des études de niveau bachelor ou de master?
+Values:
+1: Bachelor
+2: Master
+3: Autre, à savoir:
+Format: LikertVerticalFreeOptions
+Datatype: LikertChoiceFreeOptions
+
+ItemID: 2290
+Name: study_year
+Text: Depuis combien d’années étudiez-vous déjà dans votre cursus actuel?
+Format: Number
+Datatype: IntType
+
+ItemID: 2400
+Name: oe1_stud
+Text: Les autres me considèrent comme une personne experte dans la profession que j’ambitionne d'exercer.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2401
+Name: oe2_stud
+Text: Je dispose de connaissances approfondies dans la profession que j’ambitionne d'exercer.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2402
+Name: oe3_stud
+Text: Je dispose d’un niveau très élevé de connaissances et compétences spécifiques à la profession que je veux exercer.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2410
+Name: jmk1_stud
+Text: J’ai une bonne connaissance du marché du travail.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2411
+Name: jmk2_stud
+Text: Je dispose de larges connaissances sur le marché du travail actuel.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2412
+Name: jmk3_stud
+Text: J'ai une bonne vue d'ensemble des tendances en matière d'emploi.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2420
+Name: ssk1_stud
+Text: Je dispose de nombreuses capacités, que je pourrais utiliser pour des professions très différentes.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2421
+Name: ssk2_stud
+Text: Je dispose de multiples compétences, également utiles dans de nombreuses autres professions.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2422
+Name: ssk3_stud
+Text: En plus de connaissances purement spécialisées, je dispose de nombreuses capacités et compétences importantes pour différents postes.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2430
+Name: inv1_stud
+Text: Les études sont un élément central de mon identité.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2431
+Name: inv2_stud
+Text: Les études sont un élément central de ma vie.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2432
+Name: inv3_stud
+Text: Je ressens un lien fort avec mes études.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2440
+Name: con1_stud
+Text: Je suis capable de façonner ma future carrière avec succès.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2441
+Name: con2_stud
+Text: Lorsque je me fixe des objectifs de carrière, j’ai la conviction de pouvoir les atteindre.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2442
+Name: con3_stud
+Text: Je pense être capable de relever efficacement les défis de ma future carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2443
+Name: con4_stud
+Text: Je peux développer la suite de ma carrière efficacement.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2450
+Name: cl1_stud
+Text: Je me représente clairement ce que je souhaite atteindre au cours de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2451
+Name: cl2_stud
+Text: Je dispose d’objectifs de carrière bien définis, en accord avec mes intérêts et mes valeurs personnelles.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2452
+Name: cl3_stud
+Text: Mes objectifs professionnels sont clairs.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2460
+Name: os1_stud
+Text: Ma haute école me soutient activement dans le développement de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2461
+Name: os2_stud
+Text: Ma haute école me soutient dans la carrière que j’ambitionne.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2462
+Name: os3_stud
+Text: J’ai le sentiment de disposer d’un soutien optimal de la part de ma haute école pour ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2470
+Name: jcha1_stud
+Text: Mes études me permettent de mettre pleinement à profit mes capacités.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2471
+Name: jcha2_stud
+Text: Mes études actuelles exploitent pleinement mes capacités.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2472
+Name: jcha3_stud
+Text: Mes études me permettent de développer mes capacités.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2480
+Name: scs1_stud
+Text: De nombreuses personnes  me soutiennent dans mon développement de carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2481
+Name: scs2_stud
+Text: Mes amis me soutiennent dans mon développement professionnel.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2482
+Name: scs3_stud
+Text: Mon entourage me soutient largement dans ma carrière professionnelle.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2483
+Name: scs4_stud
+Text: Mes camarades d’études me soutiennent dans le développement de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2490
+Name: net1_stud
+Text: Je m’efforce toujours de disposer d’un bon réseau dans le domaine professionnel auquel j’aspire.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2491
+Name: net2_stud
+Text: J’établis souvent des contacts avec des personnes importantes pour le développement de ma carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2492
+Name: net3_stud
+Text: J’utilise souvent mes contacts avec d’autres personnes pour favoriser ma progression professionnelle.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2500
+Name: cexpl1_stud
+Text: Je m’informe régulièrement des opportunités de carrière.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2501
+Name: cexpl2_stud
+Text: Je m’informe régulièrement sur le marché du travail et sur les opportunités d'emplois.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2502
+Name: cexpl3_stud
+Text: Je m’informe régulièrement sur les emplois envisageables.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2510
+Name: lear1_stud
+Text: Je saisis chaque occasion d’élargir le champ de mes connaissances professionnelles.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2511
+Name: lear2_stud
+Text: Je développe constamment mes compétences professionnelles.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+
+ItemID: 2512
+Name: lear3_stud
+Text: Je fais en sorte de garder à jour mes connaissances et mes compétences professionnelles.
+Values:
+1: pas du tout vrai
+2: très peu vrai
+3: moyennement vrai
+4: plutôt vrai
+5: parfaitement vrai
+Format: LikertHorizontalSlider
+Datatype: LikertChoice
+

@@ -1,0 +1,535 @@
+---
+title: "Alle plots des zwischenbericht"
+output: html_notebook
+---
+
+```{r}
+library(sjPlot)
+library(brms)
+library(broom.mixed)
+library(ggcharts)
+library(ggthemes)
+library(ggpubr)
+source("../lib/likert_labeller.R")
+source("../lib/numeric_conv.R")
+source("https://raw.githubusercontent.com/alanthompsonch/AOP_uni/main/crq_00_palette.R")
+```
+
+```{r}
+theme_set(theme_few(base_size = 11))
+
+size_geom_text <- 3.5
+```
+
+## Kapitel Zielgruppe
+
+### Gruende
+
+```{r gruende_plot}
+gruende_mutate <- function(x) {
+    as.numeric(x) %>% recode(`1` = 0, `2` = 1)
+}
+gruende <- df %>% select(viamiaID, starts_with("A1_Gruende")) %>% mutate(across(starts_with("A1_Gruende"), .fns = gruende_mutate))
+names(gruende) <- c("viamiaID", "Ausweg aus Arbeitslosigkeit",
+                    "Beruflicher Wiedereinstieg (nach freiwilliger Erwerbspause)",
+                    "Berufliche Weiterentwicklung",
+                    "Berufliche Umorientierung",
+                    "Erhöhung des Arbeitspensums",
+                    "Unsicherheiten in Bezug auf künftige Arbeitssituation",
+                    "Bessere gesellschaftliche Integration",
+                    "Finanzielle Besserstellung",
+                    "Grössere Zufriedenheit mit Arbeit",
+                    "Generelle Wunsch nach Veränderung",
+                    "Gesundheitliche Probleme")
+gruende <- gruende %>% select(-viamiaID) %>% summarise(across(.fns = sum, na.rm = TRUE)) %>%
+    pivot_longer(everything()) %>%
+  mutate(value = (value/sum(ecoplan_0721$A1_ausgefüllt, na.rm = TRUE))*100) %>% 
+    arrange(value)
+
+# manual levels
+levels_gruende <- gruende$name
+# plotten    
+# plotten    
+plotdat <- gruende %>% 
+  mutate(label = proc_convert(value),
+         name = factor(name, levels = levels_gruende))
+
+
+# plotdat %>%
+#   bar_chart(name, value) +
+#   geom_text(aes(label = label, hjust = -0.1), size = 5) +
+#   scale_x_discrete(labels = function(x) str_wrap(x, width = 30))
+
+plotdat %>%
+  ggplot(aes(x = name, y = value)) +
+  geom_col(fill = "steelblue") +
+  labs(y = "von Kunden genannt", x = "Gründe für Teilnahme") +
+  geom_text(aes(label = label), hjust = -0.1, size = size_geom_text) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 30)
+  ) +
+  scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,80)) +
+  coord_flip()
+
+
+
+ggsave("plots/01_plot_gruende.png", width = 6.27, height = 5)
+```
+
+
+### Ziele
+
+```{r}
+ziele <- map_dfr(levels(df$A1_Zielezuord1), function(ziel) {
+  data.frame(x = ziel,
+             y = (
+               sum(df$A1_Zielezuord1 == ziel, na.rm = TRUE) +
+                 sum(df$A1_Zielezuord2 == ziel, na.rm = TRUE) +
+                 sum(df$A1_Zielezuord3 == ziel, na.rm = TRUE)
+             ) / sum(!is.na(df$A1_Zielezuord1)))
+}) %>% mutate(y = y * 100) %>%
+  arrange(y)
+
+ziele$x <- c("Unterstützung durch soziales Umfeld",
+             "Arbeitseinsatz",
+             "Entwicklungsmöglichkeiten  beim jetzigen Arbeitgeber",
+             "Netzwerken",
+             "Zutrauen",
+             "Allgemeine Fähigkeiten",
+             "Sonstiges",
+             "Arbeitsmarktwissen",
+             "Berufliche Expertise",
+             "Klarheit über berufliche Perspektiven und Ziele")
+
+# manual levels
+levels_ziele <- ziele$x
+
+plotdat <- ziele %>% 
+  mutate(label = proc_convert(y),
+         x = factor(x, levels = levels_ziele))
+
+# plotten    
+plot_ziele <-
+  plotdat %>% ggplot(aes(x = x, y = y)) +
+  geom_col(fill = "steelblue") +
+  labs(y = "von Kunden genannt", x = "Ziele der weiteren Beratung") +
+  geom_text(aes(label = label), hjust = -0.1, size = size_geom_text) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 30)
+  ) +
+  coord_flip() +
+  scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,100))
+
+plot_ziele
+ggsave("plots/02_plot_ziele.png", width = 6.27, height = 5)
+```
+
+
+### Arbeitsmarktfähigkeit
+
+```{r}
+plotdat <- df_brm %>% filter(!is.na(B1_amf)) %>% select(B1_amf) %>% 
+  sjmisc::frq() %>% .[[1]] %>% filter(val != "<NA>") %>% 
+  mutate(label = proc_convert(valid.prc),
+         val = factor(get_labels(df_brm$B1_amf), levels = get_labels(df_brm$B1_amf))) 
+
+plotdat %>% 
+  ggplot(aes(x = val, y = valid.prc, fill = val)) +
+  geom_col() +
+  geom_text(aes(label = label), hjust = 0.5, vjust = -0.2, size = size_geom_text) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  fill_palette(rev(colors_viamia[1:5])) +
+  labs(x = "Ausprägung der Arbeitsmarktfähigkeit", y = "Häufigkeit (in %)") +
+  theme(legend.position = "none") +
+  scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,45))
+ggsave("plots/amf.png", width = 6.27, height = 3)
+```
+
+### AMF nach Kanton
+
+```{r}
+plotdat <- df_brm %>% select(B1_amf, knsk, mot, env, act) %>%
+  mutate(B1_amf = num_to_fact(B1_amf)) %>% 
+  group_by(B1_amf) %>%
+  summarise(across(c(knsk, mot, env, act), .fns = ~mean(.x, na.rm = TRUE))) %>% 
+  filter(!is.na(B1_amf)) %>% 
+  pivot_longer(c(knsk, mot, env, act)) %>%
+  mutate(name = as.factor(name)) %>%
+  mutate(name = fct_recode(name, `Aktivitäten` = "act", `Umfeld` = "env", `Motivation` = "mot", `Wissen und Kompetenzen` = "knsk"))
+
+plotdat %>%  
+  ggplot(aes(x = B1_amf, y = value, fill = B1_amf)) +
+  geom_col() +
+  fill_palette(rev(colors_viamia[1:5])) +
+  labs(x = "Ausprägung der Arbeitsmarktfähigkeit", y = "Werte in CRQ-Dimension") +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  theme(axis.text.x = element_text(size = 7)) + 
+  facet_wrap(~ name)
+ggsave("plots/crq_by_amf.png", width = 6.27, height = 4)
+```
+
+### Weitermachen nach Kanton
+
+```{r}
+weitermachen <-
+    df %>% group_by(Kanton) %>% summarise(weiter_prz = deframe(fct_count(A1_WBe)[2, 2] /
+                                                                   (fct_count(A1_WBe)[2, 2] + fct_count(A1_WBe)[1, 2])))
+weitermachen <- rbind(weitermachen,
+                      data.frame(Kanton = "Insgesamt",
+                                 weiter_prz = deframe(
+                                     fct_count(df$A1_WBe)[2, 2] / (fct_count(df$A1_WBe)[2, 2] + fct_count(df$A1_WBe)[1, 2])
+                                 ))) %>% 
+    arrange(weiter_prz) %>% 
+  mutate(weiter_prz = weiter_prz*100,
+         label = proc_convert(weiter_prz),
+         Kanton = factor(Kanton, levels = Kanton),
+         highlight = ifelse(Kanton == "Insgesamt", "yes", "no")) %>% 
+  filter(!is.na(Kanton))
+```
+
+```{r}
+# plotten    
+weitermachen %>% ggplot(aes(x = Kanton, y = weiter_prz, fill = highlight)) +
+    geom_col() +
+    labs(y = "Weitere Beratung (in Prozent)", x = "Kanton") +
+  scale_fill_manual(values = c("yes" = "steelblue", "no" = "lightskyblue"), guide = FALSE) +
+    geom_text(aes(label = label), hjust = -0.1, size = size_geom_text) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 30)) +
+  coord_flip() +
+  scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,100))
+ggsave("plots/03_plot_weitermachenkanton.png", width = 6.27, height = 5)
+```
+
+```{r}
+n_per_lvl <- df_brm %>% select(A1_WBe, B1_amf) %>%
+  mutate(B1_amf = num_to_fact(B1_amf)) %>% 
+    filter(A1_WBe != is.na(A1_WBe) & B1_amf != is.na(B1_amf))
+n_per_lvl <- fct_count(n_per_lvl$B1_amf)
+
+amf_levels <- num_to_fact(df_brm$B1_amf)
+amf_levels <- factor(levels(amf_levels), levels = levels(amf_levels), ordered = TRUE) 
+
+df_brm %>% select(A1_WBe, B1_amf) %>%
+  mutate(B1_amf = num_to_fact(B1_amf)) %>% 
+    filter(A1_WBe != is.na(A1_WBe) & B1_amf != is.na(B1_amf)) %>%
+    group_by(A1_WBe) %>% 
+    summarise(perc = (fct_count(B1_amf)$n/n_per_lvl$n)*100) %>% 
+    mutate(amf_lvl = amf_levels) %>% 
+    ggplot(aes(y = perc, x = amf_lvl, fill = A1_WBe)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete(limits = levels(df_brm$B1_amf), labels = function(x) str_wrap(x, width = 20)) +
+        labs(y = "Weitere Beratungen (in %)", x = "Eingestufte Arbeitsmarktfähigkeit durch Berater") +
+    scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,80)) +
+  scale_fill_brewer(name = str_wrap("Werden Sie die Beratung weiterführen?",10), palette = "Set1")
+
+ggsave("plots/04_weitermachen_byamf.png", width = 6.27, height = 4)
+```
+
+```{r}
+
+datasel <- df_brm %>%  filter(Kanton == "TI" | Kanton == "VD" | Kanton == "FR") %>% 
+  select(Kanton, A1_WBe, B1_amf) %>%
+  filter(A1_WBe != is.na(A1_WBe) & B1_amf != is.na(B1_amf))
+specifics <- datasel %>% group_by(Kanton, B1_amf) %>% summarise(specific = fct_count(A1_WBe, prop = TRUE)) %>% 
+  ungroup(c(Kanton, B1_amf))
+
+# r sucks and does not unnest it for me, so screw that.,
+
+
+specifics %>% 
+    ggplot(aes(y = p, x = amf_lvl, fill = A1_WBe)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete(limits = levels(df_brm$B1_amf), labels = function(x) str_wrap(x, width = 20)) +
+    labs(y = "Weitere Beratungen (in %)", x = "Eingestufte Arbeitsmarktfähigkeit durch Berater") +
+    scale_fill_discrete(name = str_wrap("Werden Sie die Beratung weiterführen?",10))
+
+ggsave("plots/04b_weitermachen_byamf_tivdfr.png")
+```
+
+### Anzahl Sitzungen
+
+```{r}
+plotdat <- df_brm %>% select(Kanton, A1_WBe, AnzahlSitzungen)
+# plotdat %>% group_by(A1_WBe) %>% summarise(mean = mean(AnzahlSitzungen, na.rm = TRUE),
+#                                           max = max(AnzahlSitzungen, na.rm = TRUE))
+
+#hist(plotdat %>% filter(A1_WBe == "Nein") %>% select(AnzahlSitzungen)) # A1_WBe scheinbar sehr unreliabel, but too late to correct.
+
+plotdat_forreal <- plotdat %>% filter(AnzahlSitzungen != 1) %>% 
+  group_by(Kanton) %>% summarise(mean = mean(AnzahlSitzungen, na.rm = TRUE))
+
+tmp <- plotdat %>% filter(AnzahlSitzungen != 1) %>% 
+                           summarise(mean = mean(AnzahlSitzungen, na.rm = TRUE)) %>% deframe()
+sitzungen_insg <- data.frame(Kanton = "Insgesamt",
+                             mean = tmp)
+
+plotdat_forreal <- rbind(plotdat_forreal,
+                         sitzungen_insg) %>% 
+  arrange(mean) %>% 
+  mutate(Kanton = factor(Kanton, levels = Kanton),
+         highlight = ifelse(Kanton == "Insgesamt", "yes", "no"))
+
+plotdat_forreal %>% ggplot(aes(x = Kanton, y = mean, fill = highlight)) +
+    geom_col() +
+    labs(y = "durchschnittliche Anzahl Sitzungen im Falle weiterer Beratungen", x = "Kanton") +
+  scale_fill_manual(values = c("yes" = "steelblue", "no" = "lightskyblue"), guide = FALSE) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 30)) +
+  coord_flip() +
+ggsave("plots/anzahlsitzungen_nach_kanton.png", width = 6.27, height = 5)
+```
+## Standortbestimmung
+
+Einschätzung durch Kunden
+
+```{r hilfreich_elemente}
+source("../lib/likert_labeller.R")
+# df %>% select(A1_FB1:`A1_FB2[SQ005]`) %>%  plot_likert() # centered stack bars are stupid
+
+
+plot_df2 <-  df %>% select(`A1_FB2[SQ001]`:`A1_FB2[SQ005]`) %>% 
+    set_label(c("CRQ-Fragebogen ausfüllen", "Besprechung des CRQ-Fragebogens",
+                "Besprechung des Lebenslaufs", "Besprechung der Arbeitsmarktinformationen",
+                "Gespräch mit Beratungsperson insg.")) %>%
+    plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "last.desc") +
+     geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+plot_df2
+
+ggsave("plots/check_hilfreich.png", width = 6.27, height = 5)
+
+```
+
+```{r einschaetzung_plot}
+df %>% select(A1_FB1) %>%
+  set_label("Können Sie aufgrund des bisherigen Gesprächs Ihre Arbeitsmarktfähigkeit besser einschätzen?") %>% 
+  plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, geom.size = 0.5) + 
+       geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=1,byrow=TRUE))
+ggsave("plots/einschaetzung.png", width = 6.27, height = 2)
+```
+
+```{r}
+df %>% select(B1_A1:`B1_A2[SQ004]`) %>%
+     mutate(across(-B1_A1, .fns = fact_to_num)) %>% 
+    set_label(c("Standortbestimmung insgesamt", "CRQ-Fragebogen inkl. Besprechung", "Besprechung des Lebenslauf","Besprechung der Arbeitsmarktinformationen", "Allgemeines/Integratives Gespräch")) %>%
+    plot_stackfrq(show.total = FALSE, show.prc = FALSE, sort.frq = "last.desc") + 
+     geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+ggsave("plots/berater_hilfreich.png", width = 6.27, height = 5)
+```
+
+## Weitere Beratungen
+
+1.Welche Beratungsinhalte wurden fokussiert?
+
+```{r beratungsinhalte-barplot}
+df_brm %>% select(B2_A1SQ001 :B2_A1SQ005) %>% 
+    set_label(c("Fachliche und überfachlichen Kompetenzen und Fähigkeiten", "Motivation/Persönlichkeit",
+                "Unterstützung im sozialen und/oder beruflichen Umfeld", "Aktivitäten zur Laufbahngestaltung",
+                "Psychische und physische gesundheitliche Voraussetzungen")) %>%
+    plot_stackfrq(show.total = FALSE, show.prc = FALSE, sort.frq = "last.desc") + 
+    geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+ggsave("plots/beratungsinhalte.png", width = 6.27, height = 5)
+```
+Aktivitäten zur Laufbahngestaltung am häufigsten (über die oberen beiden Kategorien) --> handlungsorientiert.
+Motivation am zweithaufigsten behandelt --> passt zum Fokus auf Klarheit erreichen.
+
+```{r beratungsmethoden-barplot}
+methoden_mutate <- function(x) {
+    as.numeric(x) %>% recode(`1` = 0, `2` = 1)
+}
+
+methoden_label <- c("Arbeitsheften, Tagebücher oder Ähnliches",
+                "Quantitative Testverfahren ",
+                "Qualitative Verfahren/vorgegebene Arbeitsmittel/Arbeitsblätter ",
+                "Werte geklärt",
+                "Interessen abgeklärt",
+                "Persönlichkeitseigenschaften abgeklärt",
+                "(kognitive) Leistungsfähigkeit abgeklärt",
+                "Kompetenzen erarbeitet",
+                "Rollenmodelle/Vorbilder besprochen",
+                "Kognitive Umstrukturierung",
+                "Psychologische Unterstützung",
+                "Berufs- und Aus-/Weiterbildungsinformationen vermittelt",
+                "Berufs- und Weiterbildungsoptionen erkundet",
+                "Konzepte etc. zur Laufbahngestaltung vermittelt",
+                "Berufsoptionen bewertet und bei der beruflichen Entscheidungsfindung geholfen",
+                "Bewerbungsunterlagen und -strategien besprochen",
+                "Rollenspiele durchgeführt",
+                "Aktivitäts- und Zeitplan für die konkreten nächsten Schritte erstellt",
+                "Mögliche Hindernisse identifiziert und Strategien zum Umgang besprochen",
+                "Hausaufgaben aufgegeben")
+methoden <- df_brm %>% select(starts_with("B2_A4")) %>% mutate(across(.fns = methoden_mutate)) %>% 
+    set_label(methoden_label)
+
+percentage_methoden <- function(x) {
+    sum(x, na.rm = TRUE) / sum(!is.na(x))
+}
+
+methoden <- methoden %>% summarise(across(.fns = percentage_methoden)) %>%
+    pivot_longer(everything()) %>%
+    mutate(name = methoden_label) %>% 
+  mutate(prc_label  = likert_labeller(value, supress_small_values = FALSE)) %>% 
+  mutate(value = value *100) %>% 
+    arrange(value)
+
+# plotten    
+methoden %>% ggplot(aes(y = factor(name, levels = name), x = value)) +
+    geom_col(position = position_dodge(15), fill = "steelblue") +
+    labs(x = "Methode in weiteren Beratungen eingesetzt", y = "Eingesetzte Beratungsmethoden") +
+    scale_y_discrete(labels = function(y) str_wrap(y, width = 50)) +
+    geom_text(aes(label = prc_label), hjust = -0.1, size = size_geom_text) +
+    scale_x_continuous(labels = function(x) paste0(x, '%'), limits = c(0,100)) +
+    theme(axis.text.y = element_text(size = 8))  
+
+ggsave("plots/beratungsmethoden.png", width = 6.27, height = 6)
+```
+
+```{r}
+ecoplan_0721 %>% group_by(Kanton) %>% summarise(sum_B2 = sum(B2_ausgefüllt, na.rm = TRUE))
+
+inhaltsvergleich <- cbind(df_brm %>% select(Kanton), fokus) %>% 
+    group_by(Kanton) %>% 
+    summarise(across(.fns = percentage_methoden)) %>% 
+    filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH")
+names(inhaltsvergleich) <- c("Kanton", "Fachliche und überfachlichen Kompetenzen und Fähigkeiten", "Motivation/Persönlichkeit",
+                "Unterstützung im sozialen und/oder beruflichen Umfeld", "Aktivitäten zur Laufbahngestaltung",
+                "Psychische und physische gesundheitliche Voraussetzungen")
+
+inhaltsvergleich <- inhaltsvergleich %>% pivot_longer(-Kanton) %>% 
+  mutate(prc_label  = likert_labeller(value, supress_small_values = FALSE)) %>% 
+  mutate(value = value *100)
+
+inhaltsvergleich %>% 
+    ggplot(aes(x = name, y = value, fill = Kanton)) +
+    geom_col(position = 'dodge') +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 20)) +
+  ggpubr::fill_palette(colors_viamia[c(1,2,3)]) +
+  labs(x = "Inhaltsbereich", y = "Bereich im Fokus (in %)") +
+  theme(axis.text.x = element_text(size = 8)) + 
+  scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,45))
+  
+ggsave("plots/inhaltsvergleich.png", width = 6.27, height = 5)
+```
+
+## Förderung
+
+### Wirkung des Beratungsangebot auf die Förderung der Laufbahnressourcen
+
+```{r ressourcenfoerderung_likertplot}
+df_brm %>% select(A2_B3SQ001:A2_B3SQ004)  %>% 
+    set_label(c("Wissen über berufliche Möglichkeiten",
+                "persönliche berufliche Ziele und nächste Schritte kennen",
+                "Zutrauen, in meiner Laufbahn erfolgreich zu sein",
+                "Motivation zur aktiven Laufbahngestaltung")) %>%
+    plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "last.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+ggsave("plots/resourcenfoerderung.png")
+```
+
+### Ziele erreicht
+
+## Zielerreichung
+
+```{r zielerreichung_plot}
+
+tmp <- map(levels(df$A1_Zielezuord1), function(ziel) {
+  z1 <- vector(mode = "numeric", nrow(df_brm))
+  z2 <- vector(mode = "numeric", nrow(df_brm))
+  z3 <- vector(mode = "numeric", nrow(df_brm))
+  z1[] <- NA 
+  z2[] <- NA 
+  z3[] <- NA 
+  
+  for (i in seq_along(z1)) {
+    
+    if(!is.na(df_brm$A1_Zielezuord1[i])) {
+      if(df_brm$A1_Zielezuord1[i] == ziel) {
+        z1[i] <- df_brm$A2_B2SQ001[i]
+    } }
+    if(!is.na(df_brm$A1_Zielezuord2[i])) {
+      if(df_brm$A1_Zielezuord2[i] == ziel) {
+        z2[i] <- df_brm$A2_B2SQ002[i]
+    } }
+    if(!is.na(df_brm$A1_Zielezuord3[i])) {
+      if(df_brm$A1_Zielezuord3[i] == ziel) {
+        z3[i] <- df_brm$A2_B2SQ003[i]
+    } }
+  }
+  
+  data.frame(z1 = z1, z2 = z2,z3 = z3) %>%
+    mutate(ziel = ziel) %>%
+    pivot_longer(-ziel, names_to = "zielnum")
+})
+
+ziele_erreicht <- map_dfc(tmp, function(x) {
+  out <- data.frame(x = x$value)
+  names(out) <- x$ziel[1]
+  out <- set_labels(out, labels = c("Überhaupt nicht hilfreich" = 1, "wenig hilfreich" = 2,
+                             "eher hilfreich" = 3, "hilfreich" = 4))
+  return(out)
+})
+
+
+names(ziele_erreicht) <- c("Allgemeine Fähigkeiten",
+                     "Arbeitseinsatz",
+                     "Arbeitsmarktwissen",
+                     "Berufliche Expertise",
+                     "Entwicklungsmöglichkeiten beim jetzigen Arbeitgeber",
+                     "Klarheit",
+                     "Netzwerken",
+                     "Sonstiges",
+                     "Unterstützung durch soziales Umfeld",
+                     "Zutrauen")
+
+
+ziele_erreicht %>% plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+
+ggsave("plots/ziele_erreicht.png", width = 6.27, height = 5)
+```
+
+## Zielgruppen
+
+Kein plot
+
+## Beratungsbericht
+
+```{r}
+df %>% select(A3_B1, A3_B2, A3_B3) %>%
+  mutate(across(.fns = fact_to_num)) %>% 
+  set_label(c("Hat der Beratungsbericht die Inhalte und Ergebnisse der Beratung gut dargestellt?",
+              "Hat der Beratungsbericht mögliche weitere Schritte klar aufgeführt?",
+              "Wie fanden Sie den Beratungsbericht insgesamt?")) %>%
+  plot_stackfrq(show.total = FALSE, show.prc = FALSE, sort.frq = "last.desc") + 
+  geom_text(
+    aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE)) +
+  scale_fill_manual(values = blau_abst, 
+                    labels = c("Nein / Überhaupt nicht hilfreich",
+                               "Eher nein / Wenig hilfreich",
+                               "Eher ja / Eher hilfreich",
+                               "Ja / Sehr Hilfreich"))
+
+ggsave("notebooks/plots/beratungsbericht_nutzen.png", width = 6.27, height = 3)
+```
+
