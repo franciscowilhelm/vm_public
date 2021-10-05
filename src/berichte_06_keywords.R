@@ -78,10 +78,6 @@ wissen <- wissen %>%
   map(discard, is.na) %>%
   compact()
 
-motper <- motper %>%
-  map(discard, is.na) %>%
-  compact()
-
 # if ends on hyphen, remove hyphen and collapse. if not, collapse with space.
 source("lib/custom_flattener.R")
 wissen_clean <- map(wissen, function(doc) {
@@ -100,26 +96,6 @@ wissen_clean <- map(wissen, function(doc) {
   }
   return(out)
 })
-
-
-motper_clean <- map(motper, function(doc) {
-  # does the line end with a hyphen?
-  hyphen_end <- map_lgl(doc, function(line) {
-    lastchar <- str_sub(line, start = -1, end = -1) # whats the last character of the line
-    if(lastchar == "-") {
-      return(TRUE)
-    }
-    else return(FALSE)
-  })
-  out <- if(length(doc) == 1) {
-    return(doc)
-  } else {
-    return(custom_flattener(doc, hyphen_end))
-  }
-  return(out)
-})
-
-motper_clean <- str_remove_all(motper_clean, fixed("-"))
 
 #
 ##
@@ -142,8 +118,7 @@ motper <- motper %>%
   compact()
 
 # if ends on hyphen, remove hyphen and collapse. if not, collapse with space.
-source("lib/custom_flattener.R")
-motper_clean <- map(wissen, function(doc) {
+motper_clean <- map(motper, function(doc) {
   # does the line end with a hyphen?
   hyphen_end <- map_lgl(doc, function(line) {
     lastchar <- str_sub(line, start = -1, end = -1) # whats the last character of the line
@@ -183,7 +158,6 @@ umfeld <- umfeld %>%
   compact()
 
 # if ends on hyphen, remove hyphen and collapse. if not, collapse with space.
-source("lib/custom_flattener.R")
 umfeld_clean <- map(umfeld, function(doc) {
   # does the line end with a hyphen?
   hyphen_end <- map_lgl(doc, function(line) {
@@ -224,7 +198,6 @@ aktivitaet <- aktivitaet %>%
   compact()
 
 # if ends on hyphen, remove hyphen and collapse. if not, collapse with space.
-source("lib/custom_flattener.R")
 aktivitaet_clean <- map(aktivitaet, function(doc) {
   # does the line end with a hyphen?
   hyphen_end <- map_lgl(doc, function(line) {
@@ -265,7 +238,6 @@ trends <- trends %>%
   compact()
 
 # if ends on hyphen, remove hyphen and collapse. if not, collapse with space.
-source("lib/custom_flattener.R")
 trends_clean <- map(trends, function(doc) {
   # does the line end with a hyphen?
   hyphen_end <- map_lgl(doc, function(line) {
@@ -306,7 +278,6 @@ gesundh <- gesundh %>%
   compact()
 
 # if ends on hyphen, remove hyphen and collapse. if not, collapse with space.
-source("lib/custom_flattener.R")
 gesundh_clean <- map(gesundh, function(doc) {
   # does the line end with a hyphen?
   hyphen_end <- map_lgl(doc, function(line) {
