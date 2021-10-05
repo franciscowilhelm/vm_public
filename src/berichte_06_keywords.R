@@ -66,8 +66,21 @@ wissen <- pmap(list(berichte_cleaned_de, sektionen_standortbestimmung$x1, sektio
     NA
   }
 })
+
+motper <- pmap(list(berichte_cleaned_de, sektionen_standortbestimmung$x2, sektionen_standortbestimmung$x3),  function(x, start, end) {
+  if(!is.na(start) & !is.na(end)) {
+    x[(start+1):(end-1)]
+  }
+  else {
+    NA
+  }
+})
 # filter NA from list
 wissen <- wissen %>%
+  map(discard, is.na) %>%
+  compact()
+
+motper <- motper %>%
   map(discard, is.na) %>%
   compact()
 
@@ -90,6 +103,25 @@ wissen_clean <- map(wissen, function(doc) {
   return(out)
 })
 
-wissen_clean <- str_remove_all(wissen_clean, fixed("-"))
+
+motper_clean <- map(motper, function(doc) {
+  # does the line end with a hyphen?
+  hyphen_end <- map_lgl(doc, function(line) {
+    lastchar <- str_sub(line, start = -1, end = -1) # whats the last character of the line
+    if(lastchar == "-") {
+      return(TRUE)
+    }
+    else return(FALSE)
+  })
+  out <- if(length(doc) == 1) {
+    return(doc)
+  } else {
+    return(custom_flattener(doc, hyphen_end))
+  }
+  return(out)
+})
+
+motper_clean <- str_remove_all(motper_clean, fixed("-"))
 
 sample(wissen_clean, 1)
+sample(motper_clean, 1)
