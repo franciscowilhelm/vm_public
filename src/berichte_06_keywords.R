@@ -78,6 +78,10 @@ wissen <- wissen %>%
   map(discard, is.na) %>%
   compact()
 
+motper <- motper %>%
+  map(discard, is.na) %>%
+  compact()
+
 # if ends on hyphen, remove hyphen and collapse. if not, collapse with space.
 source("lib/custom_flattener.R")
 wissen_clean <- map(wissen, function(doc) {
@@ -97,7 +101,25 @@ wissen_clean <- map(wissen, function(doc) {
   return(out)
 })
 
-wissen_clean <- str_remove_all(wissen_clean, fixed("-"))
+
+motper_clean <- map(motper, function(doc) {
+  # does the line end with a hyphen?
+  hyphen_end <- map_lgl(doc, function(line) {
+    lastchar <- str_sub(line, start = -1, end = -1) # whats the last character of the line
+    if(lastchar == "-") {
+      return(TRUE)
+    }
+    else return(FALSE)
+  })
+  out <- if(length(doc) == 1) {
+    return(doc)
+  } else {
+    return(custom_flattener(doc, hyphen_end))
+  }
+  return(out)
+})
+
+motper_clean <- str_remove_all(motper_clean, fixed("-"))
 
 #
 ##
