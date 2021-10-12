@@ -1,9 +1,8 @@
 library(tidyverse)
 source("https://raw.githubusercontent.com/franciscowilhelm/r-collection/master/scoreItemsMulti.R")
 library(haven)
-df <- read_sav("data/CRQ Nicht-Erwerbstaetige_October 1, 2021_10.49.sav")
-
-scalenames <- c("oe", "jmk", "ssk", "inv", "con", "ccl", "scs", "net", "cexpl", "lear")
+df <- read_sav("data/CRQ Nicht-Erwerbstaetige_October 12, 2021_17.10.sav")
+scalenames <- c("oe_", "jmk_", "ssk_", "inv_", "con_", "ccl_", "scs_", "net_", "cexpl_", "lear_")
 
 x <- map_dfc(scalenames, function(scl) df %>% select(starts_with(scl))) 
 
