@@ -83,7 +83,7 @@ ind_false <- which(kant_false)
 # df with all false IDs
 id_false_df <-  crq[ind_false,3]
 
-current_len_ind_false <- nrow(id_false_df)
+current_len_ind_false <- 15
 
 if (current_len_ind_false != length(ind_false)) {
   print(crq[,3][ind_false,])
@@ -109,8 +109,14 @@ crq[[ind_false[4],3]] <- "via-be-123651"
 crq[[ind_false[5],3]] <- "via-vs-151779"
 crq[[ind_false[6],3]] <- "via-be-124344"
 crq[[ind_false[7],3]] <- "via-be-130727"
-
-
+crq[[ind_false[8],3]] <- "via-bl-8548"
+crq[[ind_false[9],3]] <- "via-be-47212"
+crq[[ind_false[10],3]] <- "via-bl-83902"
+crq[[ind_false[11],3]] <- "via-bl-19855"
+crq[[ind_false[12],3]] <- "via-zh-290365"
+crq[[ind_false[13],3]] <- "via-bl-19981"
+crq[[ind_false[14],3]] <- "via-bl-20011"
+crq[[ind_false[15],3]] <- "via-bl-20410"
 
 
 # 3. extract kanton from ID
