@@ -17,14 +17,26 @@ label <- str_subset(datakey_raw, "Text:") %>% str_remove(fixed("Text: "))
 # viamia excel(s)
 crq_0321_raw <- readxl::read_excel('data/CRQ/ViaMia Export 1.1. - 31.3.2021.xlsx', skip = 2)
 crq_0621_raw <- readxl::read_excel("data/CRQ/ViaMiaExport 01.04.-31.05.2021.xlsx", skip = 2)
+crq_1121_raw <- readxl::read_excel("data/CRQ/ViaMiaExport 01.06.-31.10.2021.xlsx", skip = 2)
 
 # compare variables
+
 setdiff(names(crq_0321_raw), names(crq_0621_raw))
 setdiff(names(crq_0621_raw), names(crq_0321_raw))
+setdiff(names(crq_1121_raw), names(crq_0621_raw))
+
 # View(crq_0321_raw[,"item2280"]) #2280 = empty anyway
 same_viamia_id <- inner_join(crq_0321_raw, crq_0621_raw, by = "ViaMia-ID") # two persons have same ID. discard both.
 crq_raw <- full_join(crq_0321_raw %>% filter(`ViaMia-ID` != "via-be-123080" | `ViaMia-ID` != "via-be-123500"),
                      crq_0621_raw %>% filter(`ViaMia-ID` != "via-be-123080" | `ViaMia-ID` != "via-be-123500"))
+
+# new stuff november 
+same_viamia_id <- inner_join(crq_raw, crq_1121_raw, by = "ViaMia-ID") # no persons have both
+crq_raw <- full_join(crq_raw, crq_1121_raw)
+
+# filter with out viamia ID as they do not belong to viamia (probably at least)
+crq_raw <- crq_raw %>% filter(!is.na(`ViaMia-ID`))
+
 
 # TRANSFORM DATA ---------
 
@@ -67,10 +79,11 @@ kantone <- split_viamia_id[,2]
 kant_false <- !(kantone %in% c("be","bl","bs","fr","ge","ju","ti","vd","vs","zg","zh"))
 ind_false <- which(kant_false)
 # display false ViaMia-IDs in base data (crq) and the relevant indexes
-crq[,3][ind_false,]
-ind_false
 
-current_len_ind_false <- 7
+# df with all false IDs
+id_false_df <-  crq[ind_false,3]
+
+current_len_ind_false <- nrow(id_false_df)
 
 if (current_len_ind_false != length(ind_false)) {
   print(crq[,3][ind_false,])
@@ -78,7 +91,7 @@ if (current_len_ind_false != length(ind_false)) {
   print(ind_false)
   cat("\nNumber of false Indeces\n")
   print(length(ind_false))
-  msgBox <- tkmessageBox(title = "Manual correction required!", 
+  msgBox <- tcltk::tkmessageBox(title = "Manual correction required!", 
                          message = "1. compare 'Indeces' with the manual corrections from line 87 onwards
                          \n2. Correct any indeces that have not yet been corrected
                          \n3. change the value of 'current_len_ind_false' in line 74 to the new 'Number of false Indeces'
@@ -96,6 +109,9 @@ crq[[ind_false[4],3]] <- "via-be-123651"
 crq[[ind_false[5],3]] <- "via-vs-151779"
 crq[[ind_false[6],3]] <- "via-be-124344"
 crq[[ind_false[7],3]] <- "via-be-130727"
+
+
+
 
 # 3. extract kanton from ID
 crq$`ViaMia-ID` <- tolower(crq$`ViaMia-ID`)
