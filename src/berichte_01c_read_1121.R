@@ -5,7 +5,7 @@ library(readtext)
 library(stringr)
 library(tidyverse)
 
-berichte_path <- file.path("C:/Users/zoot/OneDrive - Universitaet Bern/Other Projects/viamia_analysis/data/Berichte/0721/")
+berichte_path <- file.path("C:/Users/zoot/OneDrive - Universitaet Bern/Other Projects/viamia_analysis/data/Berichte/1121/")
 
 files <- list.files(path = berichte_path, pattern = "pdf$", recursive = TRUE)
 kanton_pdf <- str_extract(files, "(\\w)+(?=\\/)")
@@ -57,19 +57,19 @@ berichte_cleaned_de <- berichte_cleaned[grepl("BL|BS|BernDE|Freiburg|ValaisDE|Zu
 # # french lang
 berichte_cleaned_fr <- berichte_cleaned[grepl("BernFR|Fribourg|Geneve|ValaisFR|Vaud",kanton)] # Bern, Zug
 
-berichte_cleaned_de_0721 <- berichte_cleaned_de
-berichte_cleaned_fr_0721 <- berichte_cleaned_fr
-kanton_0721 <- kanton
-identifier_0721 <- identifier
+berichte_cleaned_de_1121 <- berichte_cleaned_de
+berichte_cleaned_fr_1121 <- berichte_cleaned_fr
+kanton_1121 <- kanton
+identifier_1121 <- identifier
 
 
-save(berichte_cleaned_de_0721, berichte_cleaned_fr_0721, identifier_0721, kanton_0721, file = "data/berichte_cleaned_0721.RData")
+save(berichte_cleaned_de_1121, berichte_cleaned_fr_1121, identifier_1121, kanton_1121, file = "data/berichte_cleaned_1121.RData")
 
 load("data/berichte_cleaned.RData")
 
-berichte_cleaned_de <- c(berichte_cleaned_de, berichte_cleaned_de_0721)
-berichte_cleaned_fr <- c(berichte_cleaned_fr, berichte_cleaned_fr_0721)
-kanton <- c(kanton, kanton_0721)
-identifier <- c(identifier, identifier_0721)
+berichte_cleaned_de <- c(berichte_cleaned_de, berichte_cleaned_de_1121)
+berichte_cleaned_fr <- c(berichte_cleaned_fr, berichte_cleaned_fr_1121)
+kanton <- c(kanton, kanton_1121)
+identifier <- c(identifier, identifier_1121)
 
 save(berichte_cleaned_de, berichte_cleaned_fr, identifier, kanton, file = "data/berichte_cleaned_integration.RData")
