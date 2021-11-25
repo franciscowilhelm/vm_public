@@ -5,7 +5,7 @@ library(readtext)
 library(stringr)
 library(tidyverse)
 
-berichte_path <- file.path("C:/Users/zoot/OneDrive - Universitaet Bern/Other Projects/viamia_analysis/data/Berichte/1121/")
+berichte_path <- file.path("C:/Users/zoot6/OneDrive - Universitaet Bern/Other Projects/viamia_analysis/data/Berichte/1121/")
 
 files <- list.files(path = berichte_path, pattern = "pdf$", recursive = TRUE)
 kanton_pdf <- str_extract(files, "(\\w)+(?=\\/)")
@@ -67,9 +67,9 @@ save(berichte_cleaned_de_1121, berichte_cleaned_fr_1121, identifier_1121, kanton
 
 load("data/berichte_cleaned.RData")
 
-berichte_cleaned_de <- c(berichte_cleaned_de, berichte_cleaned_de_1121)
-berichte_cleaned_fr <- c(berichte_cleaned_fr, berichte_cleaned_fr_1121)
-kanton <- c(kanton, kanton_1121)
-identifier <- c(identifier, identifier_1121)
+# berichte_cleaned_de <- c(berichte_cleaned_de, berichte_cleaned_de_1121)
+# berichte_cleaned_fr <- c(berichte_cleaned_fr, berichte_cleaned_fr_1121)
+# kanton <- c(kanton, kanton_1121)
+# identifier <- c(identifier, identifier_1121)
 
-save(berichte_cleaned_de, berichte_cleaned_fr, identifier, kanton, file = "data/berichte_cleaned_integration.RData")
+# save(berichte_cleaned_de, berichte_cleaned_fr, identifier, kanton, file = "data/berichte_cleaned_integration.RData")
