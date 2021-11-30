@@ -2,7 +2,7 @@
 
 library(quanteda.textmodels)
 # create weighting
-dfm_anliegen_idf <- dfm_anliegen %>% dfm_tfidf()
+dfm_anliegen_idf <- as.tokens(anliegen_spacyd, use_lemma = TRUE) %>% dfm() %>% dfm_tfidf()
 
 # show doc frequencies
 docfreq(dfm_anliegen_idf)[order(docfreq(dfm_anliegen_idf), decreasing = TRUE)] %>% .[1:80]
@@ -20,10 +20,12 @@ library(topicmodels)
 # Assign an arbitrary number of topics
 topic.count <- 15
 # Convert the trimmed DFM to a topicmodels object
+dfm_anliegen <- as.tokens(anliegen_spacyd, use_lemma = TRUE) %>% dfm() %>% 
+  dfm_trim(min_termfreq = 10, max_termfreq = 500)
 dfm2topicmodels <- convert(dfm_anliegen, to = "topicmodels")
 lda.model <- LDA(dfm2topicmodels, topic.count)
 
-terms(lda.model, 5)
+terms(lda.model, 10)
 # topics(lda.model)
 
 # 5c CLUSTER
