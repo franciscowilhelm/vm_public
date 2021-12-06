@@ -1,0 +1,132 @@
+---
+title: "Auswertung der Beratungsberichte"
+output: html_notebook
+---
+
+
+# 0. Preliminary
+
+```{r}
+load("../data/berichte_cleaned_integrated.RData")
+```
+
+
+# 1. Deskription der Berichte
+
+```{r}
+table(kanton_de)
+table(kanton_fr)
+```
+
+```{r}
+wortcount_de <- berichte_cleaned_de_integrated %>% map_dbl(., function(x) { sum(str_count(x, pattern = "\\W+")) } )
+mean(wortcount_de)
+range(wortcount_de)
+sd(wortcount_de)
+
+```
+
+```{r}
+wortcount_fr <- berichte_cleaned_fr_integrated %>% map_dbl(., function(x) { sum(str_count(x, pattern = "\\W+")) } )
+mean(wortcount_fr)
+range(wortcount_fr)
+sd(wortcount_fr)
+```
+
+# 2. Auswertung der Anliegen
+
+# deutsche Texte 
+
+```{r}
+load("../cache/sektionen_spacyd.RData")
+anliegen_nounphrases %>% count(root_text, sort = TRUE) %>% head(50)
+
+```
+
+```{r}
+anliegen_nounphrases %>% as_tibble() %>% count(root_text, sort = TRUE) %>%
+  mutate(proc = n/941) %>% slice(1:100) %>%
+  mutate(count_proc_text = str_c(n, " (", round(proc*100,1), "%)")) %>% 
+  write.table(., "clipboard", sep="\t", row.names=TRUE)
+```
+
+
+
+Hauptbegriff Weiterbildung mit 288 (in seinen Varianten). 
+Stelle bedeutet mal jetzig,, mal neu.
+
+```{r}
+anliegen_nounphrases %>% filter(root_text == "weiterbildung") %>% View()
+anliegen_nounphrases %>% filter(root_text == "stelle") %>% View()
+anliegen_nounphrases %>% filter(root_text == "stelle") %>% filter(str_detect(text, "neu")) %>%  View()
+anliegen_nounphrases %>% filter(root_text == "richtung") %>% View()
+anliegen_nounphrases %>% filter(root_text == "neuorientierung") %>% View()
+anliegen_nounphrases %>% filter(root_text == "kompetenzen") %>% View()
+anliegen_nounphrases %>% filter(root_text == "kinder") %>% View()
+anliegen_nounphrases %>% filter(root_text == "pensionierung") %>% View()
+anliegen_nounphrases %>% filter(root_text == "familie") %>% View()
+anliegen_nounphrases %>% filter(root_text == "perspektive") %>% View()
+anliegen_nounphrases %>% filter(root_text == "klarheit") %>% View()
+anliegen_nounphrases %>% filter(root_text == "bereich") %>% View()
+anliegen_nounphrases %>% filter(root_text == "interessen") %>% View()
+anliegen_nounphrases %>% filter(root_text == "netzwerk") %>% View()
+anliegen_nounphrases %>% filter(root_text == "arbeitsmarktfähigkeit") %>% View()
+anliegen_nounphrases %>% filter(root_text == "stellensuche") %>% View()
+```
+
+
+
+
+
+```{r}
+load("../cache/sektionen_spacyd_fr.RData")
+
+
+library(quanteda)
+library(quanteda.textplots)
+
+# top features
+dfm_obj <- as.tokens(anliegen_spacyd, use_lemma = TRUE) %>% dfm() %>%
+  dfm_trim(min_termfreq = 10, max_termfreq = 999)
+#head(dfm_anliegen)
+
+
+topfeatures(dfm_obj, 100) %>% write.table(., "clipboard", sep="\t", row.names=TRUE)
+```
+
+
+# 3. Auswertung der Ziele
+
+346 Berichte habne Ziel Sektion.
+
+```{r}
+ziele_nounphrases %>% as_tibble() %>% count(root_text, sort = TRUE) %>%
+  mutate(proc = n/346) %>% slice(1:100) %>%
+  mutate(count_proc_text = str_c(n, " (", round(proc*100,1), "%)")) %>% 
+  write.table(., "clipboard", sep="\t", row.names=TRUE)
+```
+
+
+
+# 4. Auswertung der Empfehlungen und Handlungsmöglichkeiten
+```{r}
+nounphrases_combi <- bind_rows(empfehlungen_nounphrases, moeglichkeiten_nounphrases)
+nounphrases_combi %>% as_tibble() %>% count(root_text, sort = TRUE) %>%
+  mutate(proc = n/941) %>% slice(1:100) %>%
+  mutate(count_proc_text = str_c(n, " (", round(proc*100,1), "%)")) %>% 
+  write.table(., "clipboard", sep="\t", row.names=TRUE)
+
+```
+
+```{r}
+nounphrases_combi %>% filter(root_text == "stellensuche") %>% View()
+nounphrases_combi %>% filter(root_text == "lebenslauf") %>% View()
+nounphrases_combi %>% filter(root_text == "ausbildung") %>% View()
+nounphrases_combi %>% filter(root_text == "netzwerk") %>% View()
+nounphrases_combi %>% filter(root_text == "kompetenzen") %>% View()
+nounphrases_combi %>% filter(root_text == "kontakt") %>% View()
+nounphrases_combi %>% filter(root_text == "bewerbungen") %>% View()
+nounphrases_combi %>% filter(root_text == "selbständigkeit") %>% View()
+
+```
+

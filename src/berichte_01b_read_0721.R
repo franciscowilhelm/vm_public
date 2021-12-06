@@ -5,7 +5,7 @@ library(readtext)
 library(stringr)
 library(tidyverse)
 
-berichte_path <- file.path("C:/Users/zoot/OneDrive - Universitaet Bern/Other Projects/viamia_analysis/data/Berichte/0721/")
+berichte_path <- file.path("C:/Users/zoot6/OneDrive - Universitaet Bern/Other Projects/viamia_analysis/data/Berichte/0721/")
 
 files <- list.files(path = berichte_path, pattern = "pdf$", recursive = TRUE)
 kanton_pdf <- str_extract(files, "(\\w)+(?=\\/)")
@@ -50,26 +50,36 @@ berichte_cleaned <- map(berichte_cleaned, function(txt) {
 })
 
 
-identifier <- c(files, files_word)
-kanton <- c(kanton_pdf, kanton_word)
+identifier_0721 <- c(files, files_word)
+kanton_0721 <- c(kanton_pdf, kanton_word)
 
-berichte_cleaned_de <- berichte_cleaned[grepl("BL|BS|BernDE|Freiburg|ValaisDE|Zug|Zürich",kanton)]
-# # french lang
-berichte_cleaned_fr <- berichte_cleaned[grepl("BernFR|Fribourg|Geneve|ValaisFR|Vaud",kanton)] # Bern, Zug
+lang_idx <- ifelse(grepl("BernFR|Fribourg|Geneve|Jura|ValaisFR|Vaud",kanton_0721), "fr", "de")
+
+identifier_0721_de <- identifier_0721[lang_idx == "de"]
+identifier_0721_fr <- identifier_0721[lang_idx == "fr"]
+
+kanton_0721_de <- kanton_0721[lang_idx == "de"]
+kanton_0721_fr <- kanton_0721[lang_idx == "fr"]
+
+berichte_cleaned_de <- berichte_cleaned[lang_idx == "de"]
+berichte_cleaned_fr <- berichte_cleaned[lang_idx == "fr"]
+
 
 berichte_cleaned_de_0721 <- berichte_cleaned_de
 berichte_cleaned_fr_0721 <- berichte_cleaned_fr
-kanton_0721 <- kanton
-identifier_0721 <- identifier
 
 
-save(berichte_cleaned_de_0721, berichte_cleaned_fr_0721, identifier_0721, kanton_0721, file = "data/berichte_cleaned_0721.RData")
 
-load("data/berichte_cleaned.RData")
+save(berichte_cleaned_de_0721, berichte_cleaned_fr_0721,
+     identifier_0721_de, identifier_0721_fr,
+     kanton_0721_de, kanton_0721_fr,
+     file = "data/berichte_cleaned_0721.RData")
 
-berichte_cleaned_de <- c(berichte_cleaned_de, berichte_cleaned_de_0721)
-berichte_cleaned_fr <- c(berichte_cleaned_fr, berichte_cleaned_fr_0721)
-kanton <- c(kanton, kanton_0721)
-identifier <- c(identifier, identifier_0721)
+# load("data/berichte_cleaned.RData")
 
-save(berichte_cleaned_de, berichte_cleaned_fr, identifier, kanton, file = "data/berichte_cleaned_integration.RData")
+# berichte_cleaned_de <- c(berichte_cleaned_de, berichte_cleaned_de_0721)
+# berichte_cleaned_fr <- c(berichte_cleaned_fr, berichte_cleaned_fr_0721)
+# kanton <- c(kanton, kanton_0721)
+# identifier <- c(identifier, identifier_0721)
+# 
+# save(berichte_cleaned_de, berichte_cleaned_fr, identifier, kanton, file = "data/berichte_cleaned_integration.RData")
