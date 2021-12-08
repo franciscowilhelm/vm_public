@@ -367,14 +367,14 @@ ggsave("plots/04b_weitermachen_byamf_tivdfr.png")
 
 
 ```{r}
-# fit_a1wbe2 <- brm(data = df,
-#     family = bernoulli(link = "logit"),
-#     A1_WBe ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-#     warmup = 500,
-#     iter = 2000, 
-#     chains = 4, 
-#     cores = 4,
-#     file = "models/a1wbe2")
+fit_a1wbe2 <- brm(data = df,
+    family = bernoulli(link = "logit"),
+    A1_WBe ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
+    warmup = 500,
+    iter = 2000,
+    chains = 4,
+    cores = 4,
+    file = "../models/a1wbe2")
 
 summary(a1wbe2)
 plot_model(a1wbe2, terms = c("knsk", "mot", "act", "env"))
@@ -391,7 +391,7 @@ fit_a1wbe3 <- brm(data = df_brm,
     iter = 2000,
     chains = 4,
     cores = 4,
-    file = "models/a1wbe3")
+    file = "../models/a1wbe3")
 ```
 
 
@@ -403,7 +403,7 @@ fit_a1wbe4 <- brm(data = df_brm,
     iter = 2000,
     chains = 4,
     cores = 4,
-    file = "models/a1wbe4")
+    file = "../models/a1wbe4")
 
 exp(fixef(fit_a1wbe4)) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 ```
@@ -427,10 +427,10 @@ fit_a1wbe4_glmer <- glmer(formula = A1_WBe ~ 1 + `A1_Gruende[SQ001]`  +
                               `A1_Gruende[SQ005]`  + `A1_Gruende[SQ006]`  + `A1_Gruende[SQ007]` +
                               `A1_Gruende[SQ008]` + `A1_Gruende[SQ009]`  + `A1_Gruende[SQ010]`
                           + `A1_Gruende[SQ011]`  + (1 | Kanton),
-                               family = binomial(logit),
+                               family = binomial(link = "logit"),
                                data = df)
 summary(fit_a1wbe4_glmer)
-plot_model(fit_a1wbe4_glmer, order.terms = ) + labs(x = c("viamiaID", "Ausweg aus Arbeitslosigkeit",
+sjPlot::plot_model(fit_a1wbe4_glmer, order.terms = ) + labs(x = c("viamiaID", "Ausweg aus Arbeitslosigkeit",
                     "Beruflicher Wiedereinstieg (nach freiwilliger Erwerbspause)",
                     "Berufliche Weiterentwicklung",
                     "Berufliche Umorientierung",
@@ -442,8 +442,21 @@ plot_model(fit_a1wbe4_glmer, order.terms = ) + labs(x = c("viamiaID", "Ausweg au
                     "Generelle Wunsch nach Veränderung",
                     "Gesundheitliche Probleme"))
 
-exp(fixef(fit_a1wbe4_glmer)) # odds ratios
+or_fit_a1wbe4_glmer <- exp(fixef(fit_a1wbe4_glmer)) # odds ratios
+names(or_fit_a1wbe4_glmer) <- c("Intercept", "Ausweg aus Arbeitslosigkeit",
+                    "Beruflicher Wiedereinstieg (nach freiwilliger Erwerbspause)",
+                    "Berufliche Weiterentwicklung",
+                    "Berufliche Umorientierung",
+                    "Erhöhung des Arbeitspensums",
+                    "Unsicherheiten in Bezug auf künftige Arbeitssituation",
+                    "Bessere gesellschaftliche Integration",
+                    "Finanzielle Besserstellung",
+                    "Grössere Zufriedenheit mit Arbeit",
+                    "Generelle Wunsch nach Veränderung",
+                    "Gesundheitliche Probleme")
+
 x <- exp(confint(fit_a1wbe4_glmer,parm="beta_",method="Wald"))
+
 cbind(exp(fixef(fit_a1wbe4_glmer)), x)  %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 ```
 Signifikante Gründe: 002, 004, 009 Beruflicher Wiedereinstieg, Umorientierung, Grössere Zufriedenheit mit Arbeit.

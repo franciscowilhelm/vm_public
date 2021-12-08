@@ -86,7 +86,7 @@ fit_kundnutz_ami_brm <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_ami")
+    file = "../models/kundnutz_ami")
 ```
 
 ```{r}
@@ -108,7 +108,7 @@ fit_kundnutz_crqb <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_crqb")
+    file = "../models/kundnutz_crqb")
 ```
 
 
@@ -125,7 +125,7 @@ fit_kundnutz_crq <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_crq")
+    file = "../models/kundnutz_crq")
 ```
 
 ```{r fit_kundnutz_cv}
@@ -141,7 +141,7 @@ fit_kundnutz_cv <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_cv")
+    file = "../models/kundnutz_cv")
 ```
 
 ```{r fit_kundnutz_insg}
@@ -157,7 +157,7 @@ fit_kundnutz_insg <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_insg")
+    file = "../models/kundnutz_insg")
 ```
 
 ```{r read_fits}
@@ -261,7 +261,7 @@ fit_beratnutz_crq <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/beratnutz_crq")
+    file = "../models/beratnutz_crq")
 ```
 
 ```{r}
@@ -277,7 +277,7 @@ fit_beratnutz_cv <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/beratnutz_cv")
+    file = "../models/beratnutz_cv")
 ```
 
 ```{r fit_beratnutz_ami}
@@ -293,7 +293,7 @@ fit_beratnutz_ami <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/beratnutz_ami")
+    file = "../models/beratnutz_ami")
 ```
 
 ```{r fit_beratnutz_gespraech}
@@ -309,7 +309,7 @@ fit_beratnutz_gespraech <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/beratnutz_gespraech")
+    file = "../models/beratnutz_gespraech")
 ```
 
 ```{r kompilation_beratnutz}
@@ -355,7 +355,7 @@ fit_korrespondenz1 <- brm(data = df,
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/korrespondenz1")
+    file = "../models/korrespondenz1")
 
 summary(fit_korrespondenz1)
 ```
@@ -367,7 +367,7 @@ fit_korrespondenz2 <- brm(data = df,
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/korrespondenz2")
+    file = "../models/korrespondenz2")
 
 summary(fit_korrespondenz2)
 ```
@@ -383,7 +383,7 @@ fit_korrespondenz3 <- brm(data = df,
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/korrespondenz3")
+    file = "../models/korrespondenz3")
 
 summary(fit_korrespondenz3)
 bayes_R2(fit_korrespondenz3) # rsquared probably invalid
@@ -405,7 +405,7 @@ fit_kundnutz_crq_bildung <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_crq_bildung")
+    file = "../models/kundnutz_crq_bildung")
 ```
 
 ```{r}
@@ -417,7 +417,7 @@ fit_kundnutz_crqb_bildung <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_crqb_bildung")
+    file = "../models/kundnutz_crqb_bildung")
 ```
 
 ```{r}
@@ -429,7 +429,7 @@ fit_kundnutz_cv_bildung <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_cv_bildung")
+    file = "../models/kundnutz_cv_bildung")
 ```
 
 ```{r}
@@ -441,7 +441,7 @@ fit_kundnutz_ami_bildung <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/kundnutz_ami_bildung")
+    file = "../models/kundnutz_ami_bildung")
 ```
 
 bei AMI Differenzen. bei CRQ schlechter bewertett mit bei Uni/höhere Berufsbildung, bei CV ebenfalls.
@@ -449,4 +449,3 @@ bei AMI Differenzen. bei CRQ schlechter bewertett mit bei Uni/höhere Berufsbild
 ```{r}
 summary(fit_kundnutz_ami_bildung)
 ```
-

@@ -139,6 +139,13 @@ crq <- crq %>%  mutate(education_de = factor(education_de, labels = c("Obligator
 scalenames <- c("oe", "jmk", "ssk", "inv", "con", "cl", "cop", "os", "jcha", "scs", "net", "cexpl", "lear")
 crq <- crq %>% mutate(across(contains(scalenames), as.numeric)) # convert to numeric
 
+# field
+
+load("data/CRQ/field_values.RData")
+tmp <- crq %>% mutate(field = factor(field,
+                                     levels = as.character(c(1:21)),
+                                     labels = field_values))
+tmp <- crq %>% mutate(field = val_labels(field, labels = field_values))
 
 # crq_scales <- map(scalenames, function(x) {
 #   df <- crq %>% select(contains(x))

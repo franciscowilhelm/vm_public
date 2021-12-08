@@ -43,8 +43,7 @@ names(gruende) <- c("viamiaID", "Ausweg aus Arbeitslosigkeit",
                     "Gesundheitliche Probleme")
 gruende <- gruende %>% select(-viamiaID) %>% summarise(across(.fns = sum, na.rm = TRUE)) %>%
     pivot_longer(everything()) %>%
-  mutate(value = (value/sum(ecoplan_0721$A1_ausgefüllt, na.rm = TRUE))*100) %>% 
-    arrange(value)
+  mutate(value = (value/sum(ecoplan_1221$A1_ausgefüllt, na.rm = TRUE))*100)
 
 # manual levels
 levels_gruende <- gruende$name
@@ -126,7 +125,9 @@ ggsave("plots/02_plot_ziele.png", width = 6.27, height = 5)
 ### Arbeitsmarktfähigkeit
 
 ```{r}
-plotdat <- df_brm %>% filter(!is.na(B1_amf)) %>% select(B1_amf) %>% 
+plotdat <- df_brm %>%
+  filter(!is.na(B1_amf)) %>% 
+  select(B1_amf) %>% 
   sjmisc::frq() %>% .[[1]] %>% filter(val != "<NA>") %>% 
   mutate(label = proc_convert(valid.prc),
          val = factor(get_labels(df_brm$B1_amf), levels = get_labels(df_brm$B1_amf))) 
@@ -136,7 +137,7 @@ plotdat %>%
   geom_col() +
   geom_text(aes(label = label), hjust = 0.5, vjust = -0.2, size = size_geom_text) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
-  fill_palette(rev(colors_viamia[1:5])) +
+  fill_palette(rev(colors_viamia[1:6])) +
   labs(x = "Ausprägung der Arbeitsmarktfähigkeit", y = "Häufigkeit (in %)") +
   theme(legend.position = "none") +
   scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,45))
@@ -268,12 +269,13 @@ plotdat_forreal <- rbind(plotdat_forreal,
   mutate(Kanton = factor(Kanton, levels = Kanton),
          highlight = ifelse(Kanton == "Insgesamt", "yes", "no"))
 
-plotdat_forreal %>% ggplot(aes(x = Kanton, y = mean, fill = highlight)) +
+plot <- plotdat_forreal %>% ggplot(aes(x = Kanton, y = mean, fill = highlight)) +
     geom_col() +
     labs(y = "durchschnittliche Anzahl Sitzungen im Falle weiterer Beratungen", x = "Kanton") +
   scale_fill_manual(values = c("yes" = "steelblue", "no" = "lightskyblue"), guide = FALSE) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 30)) +
-  coord_flip() +
+  coord_flip()
+plot
 ggsave("plots/anzahlsitzungen_nach_kanton.png", width = 6.27, height = 5)
 ```
 ## Standortbestimmung
@@ -301,7 +303,7 @@ ggsave("plots/check_hilfreich.png", width = 6.27, height = 5)
 ```
 
 ```{r einschaetzung_plot}
-df %>% select(A1_FB1) %>%
+df_brm %>% select(A1_FB1) %>%
   set_label("Können Sie aufgrund des bisherigen Gesprächs Ihre Arbeitsmarktfähigkeit besser einschätzen?") %>% 
   plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, geom.size = 0.5) + 
        geom_text(
@@ -396,7 +398,8 @@ ggsave("plots/beratungsmethoden.png", width = 6.27, height = 6)
 ```
 
 ```{r}
-ecoplan_0721 %>% group_by(Kanton) %>% summarise(sum_B2 = sum(B2_ausgefüllt, na.rm = TRUE))
+ecoplan_1221 %>% group_by(Kanton) %>% summarise(sum_B2 = sum(B2_ausgefüllt, na.rm = TRUE))
+fokus <- df_brm %>% select(B2_A1SQ001 :B2_A1SQ005) %>% mutate(across(.fns = ~ifelse(.x == 4, 1, 0)))
 
 inhaltsvergleich <- cbind(df_brm %>% select(Kanton), fokus) %>% 
     group_by(Kanton) %>% 
@@ -530,6 +533,6 @@ df %>% select(A3_B1, A3_B2, A3_B3) %>%
                                "Eher ja / Eher hilfreich",
                                "Ja / Sehr Hilfreich"))
 
-ggsave("notebooks/plots/beratungsbericht_nutzen.png", width = 6.27, height = 3)
+ggsave("plots/beratungsbericht_nutzen.png", width = 6.27, height = 3)
 ```
 

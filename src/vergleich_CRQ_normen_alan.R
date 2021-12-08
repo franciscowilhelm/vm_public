@@ -147,3 +147,23 @@ ggplot() +
   guides(fill=guide_legend(title="")) +
   ylim(c(1,5))
 
+
+# facet_wrap version. Dafür muss DF als long version gemacht werden (pivot longer)
+df_plot %>% pivot_longer(c(knsk, mot, env, act)) %>% 
+  ggplot(aes(y = value, fill=src)) +
+  geom_boxplot(
+    outlier.size = 0) +
+  scale_fill_manual(
+    values = c(colors_viamia[2],colors_viamia[4])) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position = "bottom") +
+  labs(title = "Actions") +
+  guides(fill=guide_legend(title="")) +
+  ylim(c(1,5)) +
+    facet_wrap(~ name)
+
+df_plot %>% pivot_longer(c(knsk, mot, env, act)) %>% 
+  ggplot(aes(y = value, fill=src, x = name)) +
+  geom_bar(position="dodge", stat="summary")

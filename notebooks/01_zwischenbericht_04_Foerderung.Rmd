@@ -55,7 +55,7 @@ fit_steigern_mot1 <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/steigern_mot1")
+    file = "../models/steigern_mot1")
 ```
 
 ```{r}
@@ -68,7 +68,7 @@ fit_steigern_mot2 <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/steigern_mot2")
+    file = "../models/steigern_mot2")
 ```
 
 ```{r}
@@ -80,7 +80,7 @@ fit_steigern_wissen1 <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/steigern_wissen1")
+    file = "../models/steigern_wissen1")
 ```
 
 ```{r}
@@ -93,7 +93,7 @@ fit_steigern_wissen2 <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/steigern_wissen2")
+    file = "../models/steigern_wissen2")
 ```
 
 
@@ -106,7 +106,7 @@ fit_steigern_ziele1 <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/steigern_ziele1")
+    file = "../models/steigern_ziele1")
 ```
 
 ```{r}
@@ -119,7 +119,7 @@ fit_steigern_ziele2 <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/steigern_ziele2")
+    file = "../models/steigern_ziele2")
 ```
 ```{r}
 fit_steigern_zutrauen2 <- brm(
@@ -131,7 +131,7 @@ fit_steigern_zutrauen2 <- brm(
     iter = 1500,
     chains = 4,
     cores = 4,
-    file = "models/steigern_zutrauen2")
+    file = "../models/steigern_zutrauen2")
 ```
 
 
