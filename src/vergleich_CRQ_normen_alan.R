@@ -1,7 +1,9 @@
+library (rstatix)
 library (tidyverse)
 library (stringr)
 library (sjlabelled)
 library (readxl)
+library (forcats)
 source("https://raw.githubusercontent.com/alanthompsonch/AOP_uni/main/crq_00_palette.R")
 
 #load viamia crq dataframe prepared in the file "crq_01_read.R"
@@ -78,92 +80,88 @@ summary(env)
 act <- aov(act ~ src, data = df_comp)
 summary(act)
 
+# T-Tests zu Differenzen zwischen Datensätzen und deren Ausmass
+# knsk
+t.test(x = df_viamia$knsk,
+       y = df_sdbb$knsk,
+       alternative = "two.sided",
+       conf.level = 0.95,
+       paired = FALSE)
+
+df_comp %>% cohens_d(knsk ~ src, var.equal = TRUE)
+
+# mot
+t.test(x = df_viamia$mot,
+       y = df_sdbb$mot,
+       alternative = "two.sided",
+       conf.level = 0.95,
+       paired = FALSE)
+
+df_comp %>% cohens_d(mot ~ src, var.equal = TRUE)
+
+# env
+t.test(x = df_viamia$env,
+       y = df_sdbb$env,
+       alternative = "two.sided",
+       conf.level = 0.95,
+       paired = FALSE)
+
+df_comp %>% cohens_d(env ~ src, var.equal = TRUE)
+
+# act
+t.test(x = df_viamia$act,
+       y = df_sdbb$act,
+       alternative = "two.sided",
+       conf.level = 0.95,
+       paired = FALSE)
+
+df_comp %>% cohens_d(act ~ src, var.equal = TRUE)
 
 ### PLOTTING ###
 df_plot <- select(df_all, knsk, mot, env, act, src)
 
-# Knowledge SKill graph
-ggplot() +
-  aes(y = knsk, fill=src) +
-  geom_boxplot(
-    data = df_plot,
-    outlier.size = 0) +
-  scale_fill_manual(
-    values = c(colors_viamia[2],colors_viamia[4])) +
-  theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.title.y=element_blank(),
-        legend.position = "bottom") +
-  labs(title = "Knowledge and Skills") +
-  guides(fill=guide_legend(title="")) +
-  ylim(c(1,5))
-  
-
-# Motivation graph
-ggplot() +
-  aes(y = mot, fill=src) +
-  geom_boxplot(
-    data = df_plot,
-    outlier.size = 0) +
-  scale_fill_manual(
-    values = c(colors_viamia[2],colors_viamia[4])) +
-  theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.title.y=element_blank(),
-        legend.position = "bottom") +
-  labs(title = "Motivation") +
-  guides(fill=guide_legend(title="")) +
-  ylim(c(1,5))
-
-# Environment graph
-ggplot() +
-  aes(y = env, fill=src) +
-  geom_boxplot(
-    data = df_plot,
-    outlier.size = 0) +
-  scale_fill_manual(
-    values = c(colors_viamia[2],colors_viamia[4])) +
-  theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.title.y=element_blank(),
-        legend.position = "bottom") +
-  labs(title = "Environment") +
-  guides(fill=guide_legend(title="")) +
-  ylim(c(1,5))
-
-# Actions graph
-ggplot() +
-  aes(y = act, fill=src) +
-  geom_boxplot(
-    data = df_plot,
-    outlier.size = 0) +
-  scale_fill_manual(
-    values = c(colors_viamia[2],colors_viamia[4])) +
-  theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.title.y=element_blank(),
-        legend.position = "bottom") +
-  labs(title = "Actions") +
-  guides(fill=guide_legend(title="")) +
-  ylim(c(1,5))
+# # Beispielplot Boxplot, veraltet
+# # Knowledge SKill graph
+# ggplot() +
+#   aes(y = knsk, fill=src) +
+#   geom_boxplot(
+#     data = df_plot,
+#     outlier.size = 0) +
+#   scale_fill_manual(
+#     values = c(colors_viamia[2],colors_viamia[4])) +
+#   theme(axis.text.x=element_blank(),
+#         axis.ticks.x=element_blank(),
+#         axis.title.y=element_blank(),
+#         legend.position = "bottom") +
+#   labs(title = "Knowledge and Skills") +
+#   guides(fill=guide_legend(title="")) +
+#   ylim(c(1,5))
 
 
-# facet_wrap version. Dafür muss DF als long version gemacht werden (pivot longer)
-df_plot %>% pivot_longer(c(knsk, mot, env, act)) %>% 
-  ggplot(aes(y = value, fill=src)) +
-  geom_boxplot(
-    outlier.size = 0) +
-  scale_fill_manual(
-    values = c(colors_viamia[2],colors_viamia[4])) +
-  theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.title.y=element_blank(),
-        legend.position = "bottom") +
-  labs(title = "Actions") +
-  guides(fill=guide_legend(title="")) +
-  ylim(c(1,5)) +
-    facet_wrap(~ name)
 
+# # facet_wrap version. Dafür muss DF als long version gemacht werden (pivot longer)
+# # ICH BEVORZUGE DEN UNTEREN PLOT
+# df_plot %>% pivot_longer(c(knsk, mot, env, act)) %>% 
+#   ggplot(aes(y = value, fill=src, x = name)) +
+#   scale_y_continuous(limits=c(0,5)) +
+#   geom_bar(position = "dodge2", stat="summary", fun = mean) +
+#   scale_fill_manual(
+#     values = c(colors_viamia[2],colors_viamia[4])) +
+#   theme(axis.text.x=element_blank(),
+#         axis.ticks.x=element_blank(),
+#         axis.title.y=element_blank()) +
+#   guides(fill=guide_legend(title="")) +
+#     facet_wrap(. ~ name)
+
+# FINAL PLOT
 df_plot %>% pivot_longer(c(knsk, mot, env, act)) %>% 
   ggplot(aes(y = value, fill=src, x = name)) +
-  geom_bar(position="dodge", stat="summary")
+  geom_bar(position="dodge", stat="summary", fun = mean) +
+  scale_fill_manual(values = c(colors_viamia[2],colors_viamia[4])) +
+  theme(axis.title.x = element_blank()) +
+  guides(fill=guide_legend(title="")) +
+  labs(title = "Mittelwertsvergleiche zwischen Stichproben über die 4 Subskalen hinweg") + 
+  aes(x = fct_inorder(name)) +
+  ylim(c(0,5))
+
+ggsave("plots/plot_vergleich_sdbb_viamia.png")
