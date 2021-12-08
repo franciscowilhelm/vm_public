@@ -117,6 +117,17 @@ t.test(x = df_viamia$act,
 
 df_comp %>% cohens_d(act ~ src, var.equal = TRUE)
 
+
+# Table with results
+fctrs <- c("knsk","mot","env","act")
+p_vals <- c(6.691e-06,1.594e-12,2.2e-16,0.01298)
+eff_sizes <- c(0.177,0.311,0.520,0.0971)
+mags <- c("negligible","small","moderate","negligible")
+
+T_test_cohens_results <- data.frame(fctrs,p_vals,eff_sizes,mags)
+
+T_test_cohens_results %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
 ### PLOTTING ###
 df_plot <- select(df_all, knsk, mot, env, act, src)
 
