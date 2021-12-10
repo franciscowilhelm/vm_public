@@ -1,4 +1,3 @@
-library (rstatix)
 library (tidyverse)
 library (stringr)
 library (sjlabelled)
@@ -66,6 +65,9 @@ group_by(df_all, src) %>%
   summarise(across(c(knsk,mot,act,env), .fn = mean)) %>% 
   write.table(., "clipboard", sep="\t", row.names=FALSE)
 
+means <- group_by(df_all, src) %>% 
+  summarise(across(c(knsk,mot,act,env), .fn = mean))
+
 # Unterschiede zwischen "frit" und "de" waren n.s., code nicht beibehalten, 
 # weil too much shit und es nicht Inhalt dieser Auswertung ist.
 
@@ -120,15 +122,36 @@ df_comp %>% cohens_d(act ~ src, var.equal = TRUE)
 
 # Table with results
 fctrs <- c("knsk","mot","env","act")
+means_viamia <- c(3.47,3.17,2.53,3.15)
+means_sdbb <- c(3.57,3.37,2.88,3.21)
 p_vals <- c(6.691e-06,1.594e-12,2.2e-16,0.01298)
 eff_sizes <- c(0.177,0.311,0.520,0.0971)
-mags <- c("negligible","small","moderate","negligible")
+mags <- c("vernachlässigbar","klein","moderat","vernachlässigbar")
 
-T_test_cohens_results <- data.frame(fctrs,p_vals,eff_sizes,mags)
+T_test_cohens_results <- data.frame(fctrs,
+                                    means_sdbb,
+                                    means_viamia,
+                                    p_vals,
+                                    eff_sizes,
+                                    mags)
+
+T_test_cohens_results <- T_test_cohens_results %>% 
+  rename(
+    "CRQ-Dimension" = fctrs,
+    "Mittelwert SDBB" = means_sdbb,
+    "Mittelwert viamia" = means_viamia,
+    "p-Wert" = p_vals,
+    "Effektstärke" = eff_sizes,
+    "Cohen's Einordnung" = mags
+  )
 
 T_test_cohens_results %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 
 ### PLOTTING ###
+theme_set(theme_few(base_size = 11))
+
+size_geom_text <- 3.5
+
 df_plot <- select(df_all, knsk, mot, env, act, src)
 
 # # Beispielplot Boxplot, veraltet
@@ -169,10 +192,10 @@ df_plot %>% pivot_longer(c(knsk, mot, env, act)) %>%
   ggplot(aes(y = value, fill=src, x = name)) +
   geom_bar(position="dodge", stat="summary", fun = mean) +
   scale_fill_manual(values = c(colors_viamia[2],colors_viamia[4])) +
-  theme(axis.title.x = element_blank()) +
-  guides(fill=guide_legend(title="")) +
-  labs(title = "Mittelwertsvergleiche zwischen Stichproben über die 4 Subskalen hinweg") + 
   aes(x = fct_inorder(name)) +
+  xlab("CRQ-Dimension") +
+  ylab("Durchschnittlicher Score") +
+  guides(fill=guide_legend(title="Stichprobe")) +
   ylim(c(0,5))
 
 ggsave("plots/plot_vergleich_sdbb_viamia.png")
