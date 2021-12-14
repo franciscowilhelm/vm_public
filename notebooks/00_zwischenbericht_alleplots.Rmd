@@ -429,7 +429,7 @@ ggsave("plots/inhaltsvergleich.png", width = 6.27, height = 5)
 
 ### Wirkung des Beratungsangebot auf die Förderung der Laufbahnressourcen
 
-```{r ressourcenfoerderung_likertplot}
+```{r ressourcenfoerderung_a2_likertplot}
 df_brm %>% select(A2_B3SQ001:A2_B3SQ004)  %>% 
     set_label(c("Wissen über berufliche Möglichkeiten",
                 "persönliche berufliche Ziele und nächste Schritte kennen",
@@ -442,6 +442,34 @@ df_brm %>% select(A2_B3SQ001:A2_B3SQ004)  %>%
   guides(fill=guide_legend(nrow=2,byrow=TRUE))
 
 ggsave("plots/resourcenfoerderung.png")
+```
+
+
+```{r ressourcenfoerderung_a3_likertplot}
+ressourcennames <- df_brm %>% select(starts_with("A3_A1SQ")) %>% names()
+ressourcenlabels <- c("Ich fühle mich wohler",
+                      "Ich bin selbstbewusster geworden",
+                      "Ich bin positiver eingestellt gegenüber beruflichen Veränderungen",
+"Ich kann künftig berufliche Entscheidungen besser treffen",
+"Ich habe neue Perspektiven erhalten bzw. Entdeckt",
+"Ich habe neues Wissen zu Weiterbildungsmöglichkeiten" ,
+"Ich kenne mehr konkrete Möglichkeiten, mich weiterzuentwickeln",
+"Ich kenne meine beruflichen Perspektiven besser",
+"Ich weiss besser, was meine beruflichen Ziele sind",
+"Ich traue mir besser zu, meine beruflichen Ziele zu erreichen",
+"Ich bin bei der Arbeit motivierter")
+
+plotdat <- df_brm %>% select(starts_with("A3_A1SQ"))
+set_label(plotdat) <- ressourcenlabels     
+plotdat <- set_labels(plotdat, labels = c("Nein", "Eher nein", "Eher ja", "Ja"))
+plotdat %>% plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "first.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+
+ggsave("plots/resourcenfoerderung_a3.png", width = 6.27, height = 7)
 ```
 
 ### Ziele erreicht
@@ -509,6 +537,8 @@ ziele_erreicht %>% plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
 
 ggsave("plots/ziele_erreicht.png", width = 6.27, height = 5)
 ```
+
+
 
 ## Zielgruppen
 

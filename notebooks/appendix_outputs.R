@@ -97,60 +97,57 @@ fit_steigern_act <- lm(A2_B3SQ004 ~ B1_amf + knsk + mot + act + env,
 
 
 #  in brms
-# fit_steiger_crq_wissen <- brm(
-#   family = cumulative(probit),
-#   formula = `A2_B3SQ001` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-#   data = df_brm,
-#   warmup = 500,
-#   iter = 1500,
-#   chains = 4,
-#   cores = 4,
-#   file = "models/steiger_crq_wissen")
-# 
-# fit_steiger_crq_ziele <- brm(
-#   family = cumulative(probit),
-#   formula = `A2_B3SQ002` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-#   data = df_brm,
-#   warmup = 500,
-#   iter = 1500,
-#   chains = 4,
-#   cores = 4,
-#   file = "models/steiger_crq_ziele")
-# 
-# fit_steiger_crq_zutrau <- brm(
-#   family = cumulative(probit),
-#   formula = `A2_B3SQ003` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-#   data = df_brm,
-#   warmup = 500,
-#   iter = 1500,
-#   chains = 4,
-#   cores = 4,
-#   file = "models/steiger_crq_zutrau")
-# 
-# fit_steiger_crq_act <- brm(
-#   family = cumulative(probit),
-#   formula = `A2_B3SQ004` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-#   data = df_brm,
-#   warmup = 500,
-#   iter = 1500,
-#   chains = 4,
-#   cores = 4,
-#   file = "models/steiger_crq_act")
-# 
-# fit_steiger_crq_tot <- brm(
-#   family = gaussian(),
-#   formula = `A2_B3_total` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-#   data = df_brm,
-#   warmup = 500,
-#   iter = 1500,
-#   chains = 4,
-#   cores = 4,
-#   file = "models/steiger_crq_tot")
+fit_steiger_crq_wissen <- brm(
+  family = cumulative(probit),
+  formula = `A2_B3SQ001` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
+  data = df_brm,
+  warmup = 500,
+  iter = 1500,
+  chains = 4,
+  cores = 4,
+  file = "models/steiger_crq_wissen")
 
-summary(fit_steiger_crq_tot)
-summary(fit_steiger_crq_act) 
-summary(fit_steiger_crq_zutrau)
-summary(fit_steiger_crq_wissen)
+fit_steiger_crq_ziele <- brm(
+  family = cumulative(probit),
+  formula = `A2_B3SQ002` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
+  data = df_brm,
+  warmup = 500,
+  iter = 1500,
+  chains = 4,
+  cores = 4,
+  file = "models/steiger_crq_ziele")
+
+fit_steiger_crq_zutrau <- brm(
+  family = cumulative(probit),
+  formula = `A2_B3SQ003` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
+  data = df_brm,
+  warmup = 500,
+  iter = 1500,
+  chains = 4,
+  cores = 4,
+  file = "models/steiger_crq_zutrau")
+
+fit_steiger_crq_act <- brm(
+  family = cumulative(probit),
+  formula = `A2_B3SQ004` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
+  data = df_brm,
+  warmup = 500,
+  iter = 1500,
+  chains = 4,
+  cores = 4,
+  file = "models/steiger_crq_act")
+
+fit_steiger_crq_tot <- brm(
+  family = gaussian(),
+  formula = `A2_B3_total` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
+  data = df_brm,
+  warmup = 500,
+  iter = 1500,
+  chains = 4,
+  cores = 4,
+  file = "models/steiger_crq_tot")
+
+
 
 tmp <- summary(fit_steiger_crq_ziele)
 

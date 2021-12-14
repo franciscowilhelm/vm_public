@@ -44,6 +44,25 @@ fit_steigern1 <- lm(A2_B3_total ~ B1_amf + knsk + mot + act + env,
                     data = df_brm)
 summary(fit_steigern1)
 ```
+
+```{r}
+fit_steigern_inhalt <- lm(A2_B3_total ~ B2_A1SQ001 + B2_A1SQ002 + B2_A1SQ003 + B2_A1SQ004 + B2_A1SQ005,
+                    data = df_brm)
+summary(fit_steigern_inhalt)
+
+
+fit_steigern_inhalt_Brm <- fit_steigern_mot1 <- brm(
+    family = gaussian(link = "identity"),
+    formula = A2_B3_total ~ B2_A1SQ001 + B2_A1SQ002 + B2_A1SQ003 + B2_A1SQ004 + B2_A1SQ005 + (1 | Kanton),
+                        data = df_brm,
+                            warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "../models/steigern_inhalt")
+```
+
+
 R-Squared is negligible.
 
 ```{r}
@@ -137,14 +156,20 @@ fit_steigern_zutrauen2 <- brm(
 
 ```{r}
 # steigern_mot2 %>% tidy() # broken (does not detect the parameters :()) 
-fixef(steigern_mot2)
+fixef(brm_fits$steigern_mot1.rds)
 fixef(steigern_wissen2) # nix
 fixef(steigern_ziele2)
+
 ```
 
 
 Inhaltliche Schwerpunkte scheinen Steigerungen eher nicht vorherzusagen. Bei Aktivitäten findet sich ein Effekt von Aktivitäten zur Laufbahngestaltung. Bei Zielen ebf. 
 Bei Zutrauen scheinen insb. Personen zu profitieren die bereits eine höhere AMF haben.
+
+
+## Methoden
+
+
 
 Methoden wären 20 Prädiktoren... problematisch.
 ```{r}
@@ -153,20 +178,27 @@ methoden_mutate <- function(x) {
 }
 methoden <- df_brm %>% select(starts_with("B2_A4")) %>% mutate(across(.fns = methoden_mutate))
 psych::vss(methoden, cor = "poly")
-psych::fa(methoden, nfactors = 7, cor = "poly")
+psych::fa(methoden, nfactors = 3, cor = "poly")
 
 ```
 
 Bei grobem druberschauen keine klare Lösung.
 
-
-
-GLM für einzelne Methoden.
 ```{r}
 source("../lib/numeric_conv.R")
 df_brm <- df_brm %>% mutate(across(c(starts_with("A2_B3SQ"), "B1_amf"), .fns = fact_to_num))
 ```
 
+Deskription
+
+```{r}
+ df_brm %>% select(starts_with("B2_A4")) %>% sjmisc::frq()
+```
+
+
+GLM für einzelne Methoden.
+
+Für A2_B3 (4 Ressourcen)
 
 ```{r}
 methodenvarnames <- df_brm %>% select(starts_with("B2_A4")) %>% names()
@@ -193,31 +225,69 @@ methoden_label <- c("Arbeitsheften, Tagebücher oder Ähnliches",
                 "Mögliche Hindernisse identifiziert und Strategien zum Umgang besprochen",
                 "Hausaufgaben aufgegeben")
 
+x <- data.frame(methodevar = methodenvarnames, methodelabel = methoden_label, outcomevar = outcomevarnames)
+
 outcome_methoden_pairs <- crossing(methodenvarnames, outcomevarnames)
 glm_outc_methoden <- map2_dfr(outcome_methoden_pairs$outcomevarnames, outcome_methoden_pairs$methodenvarnames, function(y,x) {
   glm_formula <- str_c(y, " ~ ", x, "+ B1_amf") 
   glm(glm_formula, family = gaussian(link = "identity"), data = df_brm) %>% tidy() %>% mutate(outcome = y)
 })
 
+glm_outc_methoden %>% mutate(methodelabel = str_detect(term, x$methodevar))
 # data.frame(old = "",
 #            new = c("(Intercept)", "Arbeitsmarktfähigkeit", methoden_label))
 
 glm_outc_methoden %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
   filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
+
+```
+
+Für die Ressourcen von T3. Hier mal mit gesamtfaktor probieren.
+
+```{r}
+tmp <- df_brm %>% select(starts_with("A3_A1"))
+
+psych::alpha(x = tmp,
+             keys = rep(1,11))
+resourcenfoerd_score <- psych::scoreItems(rep(1,11), tmp, impute = "none")
+df_brm <- df_brm %>% mutate(a3_a1_total = resourcenfoerd_score$scores)
 ```
 
 ```{r}
-gruendenames <- df_brm %>% select(starts_with("A1_GruendeSQ")) %>% names()
-outcome_gruende_pairs <- crossing(outcomevarnames, gruendenames)
-
-glm_outc_gruende <- map2_dfr(outcome_gruende_pairs$outcomevarnames, outcome_gruende_pairs$gruendenames, function(y,x) {
-  glm_formula <- str_c(y, " ~ ", x, "+ B1_amf") 
-  glm(glm_formula, family = gaussian(link = "identity"), data = df_brm) %>% tidy() %>% mutate(outcome = y)
+a3a1_methoden <- map_dfr(methodenvarnames, function(x) {
+  formula <- str_c("a3_a1_total ~ ", x, "+ B1_amf + (1 | Kanton)") 
+  lmer(formula, data = df_brm) %>% tidy()
 })
 
-glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
-  filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+a3a1_methoden %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
+  filter(p.value <= 0.05)  %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 ```
+
+Rollenbilder etc. nur 3 werden signifikant. Macht das SInn? Ich bereichte es eher nicht. Das einzige was wir dann noch testen ist der Match von Inhalt und CRQ.
+
+### Methoden - Zielerreichung
+
+VIelleicht mal auf die Zielerreichung schauen. Nur primärziel.
+
+```{r}
+a3a1_methoden <- map_dfr(methodenvarnames, function(x) {
+  formula <- str_c("A3_C2SQ001 ~ ", x, "+ B1_amf + (1 | Kanton)") 
+  lmer(formula, data = tmp) %>% tidy()
+})
+
+a3a1_methoden %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
+  filter(p.value <= 0.05)  %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+```
+
+Für spezifische Ziele
+
+```{r}
+
+
+ write.table(., "clipboard", sep="\t", row.names=FALSE)
+```
+
 
 Abweichungen in Prozent vom Durchschnitt
 ```{r}
@@ -304,9 +374,9 @@ names(ziele_erreicht) <- c("Allgemeine Fähigkeiten",
                      "Zutrauen")
 
 
-ziele_erreicht %>% plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
+ziele_erreicht %>% sjPlot::plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
       geom_text(
-      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = 3.5) +
     theme(legend.position = "bottom") +
   guides(fill=guide_legend(nrow=2,byrow=TRUE))
 
@@ -366,13 +436,137 @@ names(ziele_erreicht) <- c("Allgemeine Fähigkeiten",
                      "Zutrauen")
 
 
-ziele_erreicht %>% plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
+ziele_erreicht %>% sjPlot::plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
       geom_text(
-      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = 3.5) +
     theme(legend.position = "bottom") +
   guides(fill=guide_legend(nrow=2,byrow=TRUE))
 
 
 ggsave("plots/ziele_erreicht_a3.png", width = 6.27, height = 5)
+```
+
+
+
+# Gruende - A2 Ressourcen
+
+```{r}
+gruendenames <- df_brm %>% select(starts_with("A1_GruendeSQ")) %>% names()
+outcomevarnames <- df_brm %>% select(starts_with("A2_B3SQ")) %>% names() %>% c(., "A2_B3_total")
+
+outcome_gruende_pairs <- crossing(outcomevarnames, gruendenames)
+
+glm_outc_gruende <- map2_dfr(outcome_gruende_pairs$outcomevarnames, outcome_gruende_pairs$gruendenames, function(y,x) {
+  glm_formula <- str_c(y, " ~ ", x, "+ B1_amf") 
+  glm(glm_formula, family = gaussian(link = "identity"), data = df_brm) %>% tidy() %>% mutate(outcome = y)
+})
+
+glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
+  filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+```
+
+
+
+## A3A1 : 11 ASpekte der Ressourcenförderung
+
+```{r}
+df_brm <- df_brm %>% mutate(across(starts_with("A3_A1SQ"), as.numeric))
+psych::vss(df_brm %>% select(starts_with("A3_A1SQ")))
+psych::fa(df_brm %>% select(starts_with("A3_A1SQ")), nfactors = 2)
+```
+
+Grob zwei Bereiche: 1) Weiterentwicklung mit Sq006 und 007, 2) der Rest.
+
+
+## A3a1 AMF und CRQ
+
+
+```{r}
+ressourcennames <- df_brm %>% select(starts_with("A3_A1SQ")) %>% names()
+
+glm_outc_a3a1 <- map_dfr(ressourcennames, function(y) {
+  formula <- str_c(y, " ~ I(scale(B1_amf)) + (1 | Kanton)") 
+  lmer(formula, data = df_brm) %>% tidy() %>% mutate(outcome = y)
+})
+
+glm_outc_a3a1 %>% filter(term != "(Intercept)") %>% 
+  filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
+glm_outc_a3a1_crq <- map_dfr(ressourcennames, function(y) {
+  formula <- str_c(y, " ~ I(scale(knsk))+ I(scale(mot)) + I(scale(act)) + I(scale(env)) + (1 | Kanton)") 
+  lmer(formula, data = df_brm) %>% tidy() %>% mutate(outcome = y)
+})
+glm_outc_a3a1_crq %>% filter(term != "(Intercept)") %>% 
+  filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+  
+```
+
+## A3A1 RESSOURCEN TEILNAHMEGRUNDE
+
+```{r}
+gruendenames <- df_brm %>% select(starts_with("A1_GruendeSQ")) %>% names()
+
+glm_outc_gruende <- map_dfr(gruendenames, function(x) {
+  formula <- str_c("a3_a1_total~ ", x, "+ B1_amf + (1 | Kanton)") 
+  lmer(formula, data = df_brm) %>% tidy()
+})
+
+glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
+  filter(p.value <= 0.05)  %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
+```
+
+
+
+## A3C2 Zielerreichung im Followup
+
+```{r}
+tmp <- df_brm %>% mutate(A3_C2SQ001 = as.numeric(A3_C2SQ001))
+library(lmerTest)
+lmer(
+    formula = `A3_C2SQ001` ~ 1 +B1_amf + B2_A1SQ001 + B2_A1SQ002 +
+        B2_A1SQ003 + B2_A1SQ004 + B2_A1SQ005 + (1 | Kanton),
+                        data = tmp) %>% summary()
+
+lmer(A3_C2SQ001 ~  I(scale(B1_amf)) + (1 | Kanton),
+     tmp) %>% summary()
+
+glm_outc_amf %>% filter(term != "(Intercept)") %>% 
+  filter(p.value <= 0.05) %>% arrange(outcome)
+
+
+fit <- lmer(A3_C2SQ001 ~  I(scale(B1_amf)) + knsk + mot + act + env + (1 | Kanton),
+     tmp)
+sjPlot::tab_model(fit)
+
+
+
+# gruende
+
+gruendenames <- df_brm %>% select(starts_with("A1_GruendeSQ")) %>% names()
+outcome_gruende_pairs <- crossing(y = "A3_C2SQ001", gruendenames)
+glm_outc_gruende <- map2_dfr(outcome_gruende_pairs$y, outcome_gruende_pairs$gruendenames, function(y,x) {
+  formula <- str_c(y, " ~ ", x, "+ B1_amf + (1 | Kanton)") 
+  lmer(formula, data = tmp) %>% tidy() %>% mutate(outcome = y)
+})
+
+glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
+  filter(p.value <= 0.05) %>% arrange(outcome)
+
+glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% arrange(outcome) %>% 
+  write.table(., "clipboard", sep="\t", row.names=FALSE)
+  
+```
+
+# Korrespondenz CRQ - Inhaltlicher Fokus
+
+Variablenset 1: ksnk + mot + act + env
+Variablenset 2: B2_A1[SQ001] bis B2_A1[SQ001]
+
+Korrespondenz coden als? 
+- Knsk niedriger (z-standardisiert, ipsativiert?) - ziel gewählt. Qualitativ kodieren?
+
+```{r}
+
 ```
 

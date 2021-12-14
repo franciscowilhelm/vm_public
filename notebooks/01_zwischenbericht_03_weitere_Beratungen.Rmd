@@ -116,12 +116,12 @@ Relativ ähnliche Tops in den Gruppen.
 Zudem ist von Interesse, wie stark kantonale Differenzen im Einsatz von Beratungsmethoden oder -inhalten ausgeprägt sind.
 
 ```{r}
-ecoplan_0721 %>% group_by(Kanton) %>% summarise(sum_B2 = sum(B2_ausgefüllt, na.rm = TRUE))
+ecoplan_1221 %>% group_by(Kanton) %>% summarise(sum_B2 = sum(B2_ausgefüllt, na.rm = TRUE))
 
 inhaltsvergleich <- cbind(df_brm %>% select(Kanton), fokus) %>% 
     group_by(Kanton) %>% 
     summarise(across(.fns = percentage_methoden)) %>% 
-    filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH")
+    filter(Kanton == "BE" | Kanton == "VD" | Kanton == "VS" | Kanton == "ZH")
 names(inhaltsvergleich) <- c("Kanton", "Fachliche und überfachlichen Kompetenzen und Fähigkeiten", "Motivation/Persönlichkeit",
                 "Unterstützung im sozialen und/oder beruflichen Umfeld", "Aktivitäten zur Laufbahngestaltung",
                 "Psychische und physische gesundheitliche Voraussetzungen")
@@ -134,10 +134,10 @@ inhaltsvergleich %>%
     ggplot(aes(x = name, y = value, fill = Kanton)) +
     geom_col(position = 'dodge') +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 20)) +
-  ggpubr::fill_palette(colors_viamia[c(1,2,3)]) +
+  ggpubr::fill_palette(colors_viamia[c(1,2,3,4)]) +
   labs(x = "Inhaltsbereich", y = "Bereich im Fokus (in %)") +
   theme(axis.text.x = element_text(size = 8)) + 
-  scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,45))
+  scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,50))
   
 ggsave("plots/inhaltsvergleich.png", width = 6.27, height = 5)
 ```
@@ -155,7 +155,7 @@ methoden_kantone <- tmp %>%
   group_by(Kanton) %>% 
   summarise(across(starts_with("B2_A4"), .fns = percentage_methoden)) %>%
     pivot_longer(-Kanton) %>%
-  mutate(name = rep(methoden_label, 11)) %>% 
+  mutate(name = rep(methoden_label, 12)) %>% 
   mutate(prc_label  = likert_labeller(value, supress_small_values = FALSE)) %>% 
   mutate(value = value *100)
 
@@ -215,5 +215,34 @@ gruende_kanton %>% filter(Kanton == "BE" | Kanton == "VS" | Kanton == "ZH") %>%
   pivot_longer(-Kanton, names_to = "Grund", values_to = "Prozent") %>% 
   mutate(Prozent = proc_convert(Prozent*100)) %>% 
   pivot_wider(Grund, names_from = Kanton, values_from = Prozent) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+```
+
+
+# Ergebnisse und Handlungsempfeghlungen der Beratungen
+
+```{r}
+df_brm$Beratungsergebnis %>% as.factor() %>% sjmisc::frq()
+
+plotdat <- df_brm %>% mutate(Beratungsergebnis = as.factor(Beratungsergebnis)) %>%
+  filter(Beratungsergebnis != "0" & !is.na(Beratungsergebnis)) %>% 
+  sjmisc::frq(Beratungsergebnis) %>% .[[1]] %>%  as_tibble( .name_repair = "unique") %>% filter(val != is.na(val)) %>%
+  filter(val != "0") %>% 
+  arrange(valid.prc)
+
+plotdat$val <- fct_drop(plotdat$val)
+
+source("../lib/likert_labeller.R")
+plotdat$frq_label <-  proc_convert(plotdat$valid.prc)
+
+plotdat %>%
+ ggplot(aes(y = fct_inorder(val), x = valid.prc)) +
+    geom_col(position = position_dodge(15), fill = "steelblue") +
+    labs(x = "Prozent der Beratungen", y = "Beratungsergebnis gemäss Kategorien der  KBSB-Statistik") +
+    scale_y_discrete(labels = function(y) str_wrap(y, width = 50)) +
+    geom_text(aes(label = frq_label), hjust = -0.1, size = size_geom_text) +
+    scale_x_continuous(labels = function(x) paste0(x, '%'), limits = c(0,100)) +
+    theme(axis.text.y = element_text(size = 8))  
+
+ggsave("plots/beratungsergebnis_kbsb.png", width = 6.27, height = 5)
 ```
 

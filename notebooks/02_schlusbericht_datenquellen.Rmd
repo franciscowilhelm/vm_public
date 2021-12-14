@@ -1,0 +1,49 @@
+---
+title: "Datenquellen"
+output: html_notebook
+---
+
+Stichprobengrösse der einzelnen Quellen.
+
+Valide ecoplan Daten
+```{r}
+sum(!is.na(df_brm$A1_WBe))
+```
+2864 Personen die A1 ausgefüllt haben. 
+
+```{r}
+sum(!is.na(df_brm$A2_A3SQ001))
+```
+774 Personen die A2 Ausgefüllt haben.
+
+```{r}
+sum(!is.na(df_brm$A3_A1SQ001))
+```
+```{r}
+sum(!is.na(df_brm$A2_A3SQ001))
+df_brm %>% filter(AnzahlSitzungen > 1) %>% 
+  summarise(na = sum(!is.na(A2_A3SQ001)))
+
+
+```
+
+841 Personen die A3 ausgefüllt haben, davon 
+
+```{r}
+sum(!is.na(df_brm$B1_A1))
+
+```
+2700 Berater die A1.
+
+```{r}
+sum(!is.na(df_brm$B2_A1SQ001))
+```
+910 Berater die A2 ausgefüllt haben.
+
+```{r}
+sum(!is.na(df_brm$net1_work))
+```
+1665 gematchte PErsonen die den CRQ ausgefüllt haben.
+
+941 deutsche Berichte, 747 französische Berichte. Davon XX ohne, XX mit Weiterführung (schwer zu bestimmen). 941+747+29 = 1697 Berichte. 29 itl. 
+941/(941+747+29) = 55%

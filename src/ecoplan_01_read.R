@@ -34,7 +34,7 @@ ecoplan_1221 <- set_label(ecoplan_1221, newlabels)
 
 ecoplan_1221 <- ecoplan_1221 %>% select(-c(`A1_Kunde[SQ004]`, A2_email)) %>% 
   mutate(across(c(A1_Bisher:`A1_Gruende[SQ011]`,A1_WBe, A1_Kosten,A1_Zielezuord1, A1_Zielezuord2, A1_Zielezuord3,
-                  Ausbildungsstand:Beschäftigungssituation,`A2_A1[SQ001]`:A2_D2, `A3_A1[SQ003]`:`A3_C2[SQ003]`,
+                  Ausbildungsstand:Beschäftigungssituation,`A2_A1[SQ001]`:A2_D2, `A3_A1[SQ001]`:`A3_C2[SQ003]`,
                   B1_A1:B1_A3, B1_A5, `B2_A1[SQ001]`:`B2_A1[SQ005]`, `B2_A4[A1]`:`B2_A4[A20]`), as_factor))
 
 # set labels
@@ -231,6 +231,19 @@ df <- df %>%
                                                "Volksschule, obligatorische Schulzeit, inkl. «ohne Ausbildung»"))) %>% 
   mutate(Ausb_recode = fct_relevel(Ausb_recode, "sek", "tert", "other"))
 
+df <- df %>%
+  mutate(Ausb_recode2 = fct_collapse(Ausbildungsstand,
+                                    sek = c("Berufliche Grundbildung"),
+                                    hb = c("Höhere Berufsbildung, Berufsbildung Höhere Fachprüfung"),
+                                    uni_fh = c("Fachhochschule, Pädagogische Hochschule (inkl. NDS, CAS/DAS/MAS)",
+                                             "Universität, ETH (inkl. NDS, CAS/DAS/MAS)"),
+                                    other = c("Berufsmaturität (BM1, BM2)", "Fachmittelschule, andere Mittelschule",
+                                              "Mittelschule mit gymnasialer Matura (Gymnasium)",
+                                              "Schulisches Zwischenjahr oder berufliches Vorbereitungsjahr nach Sekundarstufe (Brückegebote)",
+                                              "Volksschule, obligatorische Schulzeit, inkl. «ohne Ausbildung»"))) %>% 
+  mutate(Ausb_recode2 = fct_relevel(Ausb_recode2, "sek", "hb", "uni_fh", "other"))
+
+
 
 
 
@@ -238,5 +251,25 @@ df <- df %>%
 tmp <- map_chr(names(df), ~str_replace(.x, fixed("["),"")) %>% map_chr(~str_replace(.x, fixed("]"),""))
 df_brm <- df %>% as_tibble()
 names(df_brm) <- tmp
+
+# set "ziel ist nicht mehr relevant" to NA
+df_brm$A3_C2SQ001[df_brm$A3_C2SQ001 == "Ziel ist nicht mehr relevant"] <- NA
+df_brm$A3_C2SQ002[df_brm$A3_C2SQ002 == "Ziel ist nicht mehr relevant"] <- NA
+df_brm$A3_C2SQ003[df_brm$A3_C2SQ003 == "Ziel ist nicht mehr relevant"] <- NA
+
+df_brm <- df_brm %>% mutate(across(starts_with('A3_C2SQ'), ~fct_drop(.x)))
+
+# convert A3A1 : 11 ASpekte der Ressourcenförderung, set "nicht relevant" to NA
+df_brm <- df_brm %>% mutate(across(starts_with("A3_A1SQ"), function(x) {
+  x[x == "Nicht relevant"] <- NA
+  x <- fct_drop(x)
+  x
+}))
+
+df_brm <- df_brm %>% mutate(across(c(A3_A1SQ001:A3_A1SQ011)
+                                   , .fns = as.numeric))
+
+df_brm <- df_brm %>% mutate(A3_C2SQ001 = as.numeric(A3_C2SQ001))
+
 
 save(ecoplan_1221, df,df_brm, file = "data/ecoplan_data.RData")

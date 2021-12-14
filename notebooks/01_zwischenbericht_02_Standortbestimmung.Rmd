@@ -180,7 +180,7 @@ Kompilation:
 ```{r kompilation_kundnutz}
 library(broom)
 library(broom.mixed)
-
+library(stringi)
 hdi_nonzero <- function(x) {
     # x needs to be tidyobject
     nonzero_idx <- pmap_lgl(x, function(...) {

@@ -122,6 +122,10 @@ ziele_spacyd <- spacy_parse(as.character(ziele_text_fr))
 moeglichkeiten_spacyd <- spacy_parse(as.character(moeglichkeiten_text_fr))
 empfehlungen_spacyd <- spacy_parse(as.character(empfehlungen_text_fr))
 
+moeglichkeiten_nounphrases <- spacy_extract_nounphrases(as.character(moeglichkeiten_text_fr))
+ziele_nounphrases <- spacy_extract_nounphrases(as.character(ziele_text_fr))
+empfehlungen_nounphrases <- spacy_extract_nounphrases(as.character(empfehlungen_text_fr))
+
 spacy_finalize()
 
 # Cleaning -----
@@ -132,7 +136,6 @@ spacy_finalize()
 
 anliegen_spacyd <- anliegen_spacyd %>% mutate(token = tolower(token), lemma = tolower(lemma)) %>% 
   anti_join(tibble(lemma = stopwords("fr", source = "stopwords-iso"))) %>%  #stopwords
-  anti_join(tibble(lemma = stopwords_custom)) %>% 
   filter(pos == "NOUN" | pos == "PROPN")# only nouns
 
 anliegen_nounphrases <- anliegen_nounphrases %>% mutate(text = tolower(text), root_text = tolower(root_text)) %>%
@@ -143,10 +146,31 @@ anliegen_nounphrases <- anliegen_nounphrases %>% mutate(text = tolower(text), ro
 stopwords_custom <- c("madame", "j’", "j'", "ans", "mme", "click")
 anliegen_nounphrases <- anliegen_nounphrases %>% anti_join(tibble(root_text = stopwords_custom))
 
+
 ziele_spacyd <- ziele_spacyd %>% mutate(token = tolower(token), lemma = tolower(lemma)) %>% 
   anti_join(tibble(lemma = stopwords("fr", source = "stopwords-iso"))) %>%  #stopwords
   anti_join(tibble(lemma = stopwords_custom)) %>% 
   filter(pos == "NOUN" | pos == "PROPN")# only nouns
+
+ziele_nounphrases <- ziele_nounphrases %>% mutate(text = tolower(text), root_text = tolower(root_text)) %>%
+  anti_join(tibble(root_text = stopwords("fr", source = "stopwords-iso"))) %>% anti_join(tibble(root_text = stopwords_custom))
+
+
+
+
+ziele_nounphrases <-
+  ziele_nounphrases %>% mutate(text = tolower(text), root_text = tolower(root_text)) %>%
+  anti_join(tibble(root_text = stopwords("fr", source = "stopwords-iso"))) %>%
+  anti_join(tibble(root_text = stopwords_custom))
+moeglichkeiten_nounphrases <-
+  moeglichkeiten_nounphrases %>% mutate(text = tolower(text), root_text = tolower(root_text)) %>%
+  anti_join(tibble(root_text = stopwords("fr", source = "stopwords-iso"))) %>%
+  anti_join(tibble(root_text = stopwords_custom))
+empfehlungen_nounphrases <-
+  empfehlungen_nounphrases %>% mutate(text = tolower(text), root_text = tolower(root_text)) %>%
+  anti_join(tibble(root_text = stopwords("fr", source = "stopwords-iso"))) %>%
+  anti_join(tibble(root_text = stopwords_custom))
+
 
 moeglichkeiten_spacyd <- moeglichkeiten_spacyd %>% mutate(token = tolower(token), lemma = tolower(lemma)) %>% 
   anti_join(tibble(lemma = stopwords("fr", source = "stopwords-iso"))) %>%  #stopwords

@@ -11,16 +11,15 @@ Education Levels nach ecoplan Befragung (es gibt auch die OTP Version).
 
 ```{r}
 scalenames <- c("oe", "jmk", "ssk", "inv", "con", "cl", "cop", "os", "jcha", "scs", "net", "cexpl", "lear")
-edlvls <- levels(df_brm$Ausb_recode)
+edlvls <- levels(df_brm$Ausb_recode2)
 alpha_by_edu <- map_dfc(edlvls, function(edlvl) {
   df_brm %>%
-    select(Ausb_recode, oe1_work:lear3_work) %>% 
-    filter(Ausb_recode == edlvl) %>% 
+    select(Ausb_recode2, oe1_work:lear3_work) %>% 
+    filter(Ausb_recode2 == edlvl) %>% 
     scoreItemsMulti(scalenames, ., exclude = TRUE) %>% 
     .$alpha %>% .[1,] %>% enframe()
 }) 
 
-alpha_by_edu <- alpha_by_edu[,c(1,2,4,6,8,10)]
 names(alpha_by_edu) <- c("Skala", edlvls)
 alpha_by_edu$Skala <- c("Berufliche Expertise", "Arbeitsmarktwissen", "Allgemeine Fähigkeiten", "Wichtigkeit der Arbeit",
                         "Zutrauen", "Klarheit", "Entwicklungsmöglichkeiten", "Organisationale Unterstützung",
@@ -30,8 +29,6 @@ alpha_by_edu %>% map(~min(.x)) # alpha mins increase by education, but its still
 alpha_by_edu %>% map(~mean(.x)) 
 
 alpha_by_edu %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
-
-
 ```
 Bildung Nach OTP:
 
@@ -54,9 +51,9 @@ alpha_by_edu %>% map(~mean(.x))
 
 Korrelation mit B1_AMF
 ```{r}
-edlvls <- levels(df_brm$Ausb_recode)
+edlvls <- levels(df_brm$Ausb_recode2)
 tmp <- map_dfr(edlvls, function(lvl) {
-  df_brm %>% filter(Ausb_recode == lvl) %>% 
+  df_brm %>% filter(Ausb_recode2 == lvl) %>% 
         lm(B1_amf ~ oe  +  jmk  +  ssk  +  inv  +  con  +  cl  +  cop  +  os  +  jcha  +  scs  +  net  +  cexpl  +  lear,
    .) %>% glance() %>% mutate(edu = lvl)
   })

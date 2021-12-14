@@ -3,6 +3,8 @@ library (stringr)
 library (sjlabelled)
 library (readxl)
 library (forcats)
+library(rstatix)
+library(ggthemes)
 source("https://raw.githubusercontent.com/alanthompsonch/AOP_uni/main/crq_00_palette.R")
 
 #load viamia crq dataframe prepared in the file "crq_01_read.R"
@@ -188,7 +190,11 @@ df_plot <- select(df_all, knsk, mot, env, act, src)
 #     facet_wrap(. ~ name)
 
 # FINAL PLOT
-df_plot %>% pivot_longer(c(knsk, mot, env, act)) %>% 
+df_plot$src[df_plot$src == "sdbb"] <- "SDBB"
+df_plot$src[df_plot$src =="viamia"] <- "Viamia"
+df_plot %>% 
+  rename("Wissen und Kompetenzen" = knsk, "Motivation" = mot, "Umfeld" = env, "Aktivitäten" = act) %>% 
+  pivot_longer(c(`Wissen und Kompetenzen`, Motivation, Umfeld, Aktivitäten)) %>% 
   ggplot(aes(y = value, fill=src, x = name)) +
   geom_bar(position="dodge", stat="summary", fun = mean) +
   scale_fill_manual(values = c(colors_viamia[2],colors_viamia[4])) +
@@ -198,4 +204,26 @@ df_plot %>% pivot_longer(c(knsk, mot, env, act)) %>%
   guides(fill=guide_legend(title="Stichprobe")) +
   ylim(c(0,5))
 
-ggsave("plots/plot_vergleich_sdbb_viamia.png")
+ggsave("notebooks/plots/plot_vergleich_sdbb_viamia.png", width = 6.27, height = 5)
+
+
+# post-hoc for subdimensions
+
+map(c("os", "cop", "jcha", "scs"), function(scale) {
+  t.test(x = df_viamia[,scale],
+         y = df_sdbb[,scale],
+         alternative = "two.sided",
+         conf.level = 0.95,
+         paired = FALSE)
+  df_comp %>% cohens_d(formula(str_c(scale, " ~ src", collapse = "")), var.equal = TRUE)
+})
+
+
+map(c("os", "cop", "jcha", "scs"), function(scale) {
+  t.test(x = df_viamia[,scale],
+         y = df_sdbb[,scale],
+         alternative = "two.sided",
+         conf.level = 0.95,
+         paired = FALSE)
+  df_comp %>% cohens_d(formula(str_c(scale, " ~ src", collapse = "")), var.equal = TRUE)
+})

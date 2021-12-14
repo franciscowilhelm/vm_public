@@ -22,4 +22,18 @@ summary(brm_fits$korrespondenz3_act.rds)
 summary(brm_fits$korrespondenz3_env.rds)
 
 cor(df_brm %>% select(B1_amf, knsk, act, mot, env), use = "pairwise")
-lm(B1_amf ~ knsk, act, mot, env, data = df_brm) %>% summary()
+lm(B1_amf ~ knsk + act + mot + env, data = df_brm) %>% summary()
+
+cor(df_brm %>% select(B1_amf, oe:lear), use = "pairwise")
+
+
+summary(brm_fits$korrespondenz3.rds)
+
+summary(brm_fits$steiger_crq_tot.rds)
+summary(brm_fits$steiger_crq_act.rds)
+summary(brm_fits$steiger_crq_wissen.rds)
+summary(brm_fits$steiger_crq_ziele.rds)
+summary(brm_fits$steiger_crq_zutrau.rds)
+tidy(brm_fits$steiger_crq_tot.rds) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
+summary(brm_fits$steiger)

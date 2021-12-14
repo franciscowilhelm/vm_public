@@ -95,6 +95,22 @@ topfeatures(dfm_obj, 100) %>% write.table(., "clipboard", sep="\t", row.names=TR
 ```
 
 
+
+# frz Texte 
+
+```{r}
+load("../cache/sektionen_spacyd_fr.RData")
+anliegen_nounphrases %>% count(root_text, sort = TRUE) %>% head(50)
+
+```
+
+```{r}
+anliegen_nounphrases %>% as_tibble() %>% count(root_text, sort = TRUE) %>%
+  mutate(proc = n/747) %>% slice(1:100) %>%
+  mutate(count_proc_text = str_c(n, " (", round(proc*100,1), "%)")) %>% 
+  write.table(., "clipboard", sep="\t", row.names=TRUE)
+```
+
 # 3. Auswertung der Ziele
 
 346 Berichte habne Ziel Sektion.
