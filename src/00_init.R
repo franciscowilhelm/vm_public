@@ -1,3 +1,7 @@
 library(tidyverse)
 library(brms)
 load("data/ecoplan_data.RData")
+source("lib/custom_flattener.R")
+source("lib/hdi_nonzero.R")
+source("lib/likert_labeller.R")
+source("lib/numeric_conv.R")

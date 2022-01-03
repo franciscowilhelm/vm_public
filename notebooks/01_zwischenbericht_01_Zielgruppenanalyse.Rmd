@@ -493,3 +493,9 @@ plotdat_forreal %>% ggplot(aes(x = Kanton, y = mean, fill = highlight)) +
 ggsave("plots/anzahlsitzungen_nach_kanton.png", width = 6.27, height = 5)
 ```
 
+
+# Korrespondenz AMF und CRQ
+
+```{r}
+lm(B1_amf ~ oe  +  jmk  +  ssk  +  inv  +  con  +  cl  +  cop  +  os  +  jcha  +  scs  +  net  +  cexpl  +  lear, df_brm) %>% summary()
+```

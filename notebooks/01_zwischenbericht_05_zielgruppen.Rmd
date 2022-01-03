@@ -61,6 +61,14 @@ tmp <- map_dfr(edlvls, function(lvl) {
 tmp %>% mutate(mcorr = sqrt(r.squared)) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 ```
 
+Z-standardisiert B1_AMF, dann Differenz nach Bildung?
+```{r}
+df_brm %>% mutate(B1_amf_z  = scale(B1_amf)) %>% group_by(Ausb_recode2) %>% summarise(across(c(knsk, mot, env, act, B1_amf), ~mean(.x, na.rm = TRUE)))
+
+```
+
+
+
 ```{r}
 df_brm %>% filter(A1_GruendeSQ002 == "Ja") %>% 
       lm(B1_amf ~ oe  +  jmk  +  ssk  +  inv  +  con  +  cl  +  cop  +  os  +  jcha  +  scs  +  net  +  cexpl  +  lear,

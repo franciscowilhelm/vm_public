@@ -190,7 +190,7 @@ df_plot <- select(df_all, knsk, mot, env, act, src)
 #     facet_wrap(. ~ name)
 
 # FINAL PLOT
-df_plot$src[df_plot$src == "sdbb"] <- "SDBB"
+df_plot$src[df_plot$src == "sdbb"] <- "BSLB"
 df_plot$src[df_plot$src =="viamia"] <- "Viamia"
 df_plot %>% 
   rename("Wissen und Kompetenzen" = knsk, "Motivation" = mot, "Umfeld" = env, "Aktivitäten" = act) %>% 
@@ -202,7 +202,7 @@ df_plot %>%
   xlab("CRQ-Dimension") +
   ylab("Durchschnittlicher Score") +
   guides(fill=guide_legend(title="Stichprobe")) +
-  ylim(c(0,5))
+  coord_cartesian(ylim = c(1,5))
 
 ggsave("notebooks/plots/plot_vergleich_sdbb_viamia.png", width = 6.27, height = 5)
 
@@ -227,3 +227,72 @@ map(c("os", "cop", "jcha", "scs"), function(scale) {
          paired = FALSE)
   df_comp %>% cohens_d(formula(str_c(scale, " ~ src", collapse = "")), var.equal = TRUE)
 })
+
+sjmisc::frq(df_sdbb$age)
+sjmisc::frq(df_viamia$Alter)
+sjmisc::frq(df_sdbb$edu)
+sjmisc::frq(df_sdbb$gender)
+sjmisc::frq(df_viamia$Geschlecht)
+
+# bei Ausschluss von U30
+df_u40 <- df_sdbb %>% filter(age > 39)
+
+df_comp2 <- bind_rows(df_viamia, df_u40)
+knsk <- aov(knsk ~ src, data = df_comp)
+summary(knsk)
+mot <- aov(mot ~ src, data = df_comp)
+summary(mot)
+env <- aov(env ~ src, data = df_comp)
+summary(env)
+act <- aov(act ~ src, data = df_comp)
+summary(act)
+
+df_plot_u30 <- select(df_comp2, knsk, mot, env, act, src)
+df_plot_u30$src[df_plot_u30$src == "sdbb"] <- "KBSB"
+df_plot_u30$src[df_plot_u30$src =="viamia"] <- "Viamia"
+df_plot_u30 %>% 
+  rename("Wissen und Kompetenzen" = knsk, "Motivation" = mot, "Umfeld" = env, "Aktivitäten" = act) %>% 
+  pivot_longer(c(`Wissen und Kompetenzen`, Motivation, Umfeld, Aktivitäten)) %>% 
+  ggplot(aes(y = value, fill=src, x = name)) +
+  geom_bar(position="dodge", stat="summary", fun = mean) +
+  scale_fill_manual(values = c(colors_viamia[2],colors_viamia[4])) +
+  aes(x = fct_inorder(name)) +
+  xlab("CRQ-Dimension") +
+  ylab("Durchschnittlicher Score") +
+  guides(fill=guide_legend(title="Stichprobe")) +
+  ylim(c(1,5))
+
+t.test(x = df_viamia$knsk,
+       y = df_sdbb$knsk,
+       alternative = "two.sided",
+       conf.level = 0.95,
+       paired = FALSE)
+
+df_comp2 %>% cohens_d(knsk ~ src, var.equal = TRUE)
+
+# mot
+t.test(x = df_viamia$mot,
+       y = df_u40$mot,
+       alternative = "two.sided",
+       conf.level = 0.95,
+       paired = FALSE)
+
+df_comp2 %>% cohens_d(mot ~ src, var.equal = TRUE)
+
+# env
+t.test(x = df_viamia$env,
+       y = df_sdbb$env,
+       alternative = "two.sided",
+       conf.level = 0.95,
+       paired = FALSE)
+
+df_comp2 %>% cohens_d(env ~ src, var.equal = TRUE)
+
+# act
+t.test(x = df_viamia$act,
+       y = df_sdbb$act,
+       alternative = "two.sided",
+       conf.level = 0.95,
+       paired = FALSE)
+
+df_comp2 %>% cohens_d(act ~ src, var.equal = TRUE)

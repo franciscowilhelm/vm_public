@@ -570,3 +570,31 @@ Korrespondenz coden als?
 
 ```
 
+
+## Deskriptive Statistiken - Plots
+
+```{r}
+plotdat <- df_brm %>% mutate(A3_C2SQ001 = sjlabelled::as_factor(A3_C2SQ001),
+                             B1_amf = as_factor(B1_amf)) %>% 
+  group_by(B1_amf) %>% 
+  summarise(fct_count(A3_C2SQ001, prop = TRUE)) %>% filter(f != is.na(f))
+levels(plotdat$B1_amf) <- get_labels(df_brm$B1_amf)
+levels(plotdat$f) <- get_labels(df_brm$A3_C2SQ001)
+
+ggplot(plotdat, aes(y = n, x = B1_amf, fill = f)) +
+  geom_bar(position="stack", stat="identity")
+
+
+plotdat <- df_brm %>% mutate(A2_B2SQ001 = sjlabelled::as_factor(A2_B2SQ001),
+                             B1_amf = as_factor(B1_amf)) %>% 
+  group_by(B1_amf) %>% 
+  summarise(fct_count(A2_B2SQ001, prop = TRUE)) %>% filter(f != is.na(f))
+levels(plotdat$B1_amf) <- get_labels(df_brm$B1_amf)
+levels(plotdat$f) <- get_labels(df_brm$A2_B2SQ001)
+
+ggplot(plotdat, aes(y = p, x = B1_amf, fill = f)) +
+  geom_bar(position="stack", stat="identity")
+
+```
+
+

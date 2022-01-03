@@ -269,7 +269,7 @@ df_brm <- df_brm %>% mutate(across(starts_with("A3_A1SQ"), function(x) {
 df_brm <- df_brm %>% mutate(across(c(A3_A1SQ001:A3_A1SQ011)
                                    , .fns = as.numeric))
 
-df_brm <- df_brm %>% mutate(A3_C2SQ001 = as.numeric(A3_C2SQ001))
+df_brm <- df_brm %>% mutate(A3_C2SQ001 = as_numeric(A3_C2SQ001))
 
 
 save(ecoplan_1221, df,df_brm, file = "data/ecoplan_data.RData")
