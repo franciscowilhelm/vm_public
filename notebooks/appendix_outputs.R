@@ -1,12 +1,17 @@
 library(brms)
 library(broom.mixed)
 library(sjPlot)
+library(tidyverse)
+
+# einlesen aller BRMS Files aus Models
+brm_fits <- map(list.files("models/"),
+                ~readRDS(str_c("models/", .x)))
+names(brm_fits) <- list.files("models")
+
 
 # Tabelle mit den Korrelationen CRQ-Wert nach Dimension und AMF einfügen und im Text kurz darauf verweisen/erklären?
 
-
-
-a1wbe2 %>% tidy() %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+brm_fits$a1wbe2 %>% tidy() %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 a1wbe2 %>% tab_model()
 summary(a1wbe2)
 
@@ -17,16 +22,17 @@ tmp <- df_brm %>% select(B1_amf, oe:lear) %>% cor(., use = "pairwise", method = 
 t(sort(tmp[1,], decreasing = TRUE)) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 df_brm %>% select(B1_amf, jmk:lear) %>% get_label()
 
-a1wbe3 %>% tidy() %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
-a1wbe4 %>% tidy() %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+brm_fits$a1wbe3 %>% tidy() %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+brm_fits$a1wbe4 %>% tidy() %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
 
 library(lme4)
-fit_a1wbe4_glmer <- glmer(formula = A1_WBe ~ 1 + `A1_Gruende[SQ001]`  +
+fit_a1wbe4_glmer <- lme4::glmer(formula = A1_WBe ~ 1 + `A1_Gruende[SQ001]`  +
                             + `A1_Gruende[SQ002]`  + `A1_Gruende[SQ003]` + `A1_Gruende[SQ004]` +
                             `A1_Gruende[SQ005]`  + `A1_Gruende[SQ006]`  + `A1_Gruende[SQ007]` +
                             `A1_Gruende[SQ008]` + `A1_Gruende[SQ009]`  + `A1_Gruende[SQ010]`
                           + `A1_Gruende[SQ011]`  + (1 | Kanton),
-                          family = binomial(logit),
+                          family = binomial("logit"),
                           data = df)
 summary(fit_a1wbe4_glmer)
 plot_model(fit_a1wbe4_glmer, order.terms = ) + labs(x = c("viamiaID", "Ausweg aus Arbeitslosigkeit",
@@ -64,7 +70,8 @@ fit_a1wbe4_glmer %>% summary()
 
 
 # nutzen der standortbesitmmung
-kundnutz_table <- map_dfr(list(kundnutz_crq, kundnutz_crqb, kundnutz_ami, kundnutz_cv, kundnutz_insg), function(fit) {
+kundnutz_table <- map_dfr(list(brm_fits$kundnutz_crq.rds, brm_fits$kundnutz_crqb.rds, brm_fits$kundnutz_ami.rds,
+                               brm_fits$kundnutz_cv.rds, brm_fits$kundnutz_insg.rds), function(fit) {
   tidy(fit) %>% mutate(outcome = fit[["formula"]][["resp"]])
 })
 kundnutz_table %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
@@ -72,12 +79,23 @@ kundnutz_table %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 summary(kundnutz_crq)
 
 
-beratnutz_table <- map_dfr(list(beratnutz_crq, beratnutz_ami, beratnutz_cv, beratnutz_gespraech, beratnutz_insg), function(fit) {
+beratnutz_table <- map_dfr(list(brm_fits$beratnutz_crq.rds, brm_fits$beratnutz_ami.rds, brm_fits$beratnutz_cv.rds,
+                                brm_fits$beratnutz_gespraech.rds, brm_fits$beratnutz_insg.rds), function(fit) {
   tidy(fit) %>% mutate(outcome = fit[["formula"]][["resp"]])
 })
 beratnutz_table %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 
 # nach AMF  / CRQ
+
+# A Anhang A6 Unterschiede e...
+brm_fits$steiger_crq_tot.rds %>% tidy(.) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
+# Anhang A7 
+brm_fits$steigern_inhalt.rds %>% summary()
+brm_fits$steigern_inhalt.rds %>% tidy(.) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
+
+
 df_resourcenfoerd <- df_brm %>% select(A2_B3SQ001:A2_B3SQ004) %>% mutate(across(.fns = as.numeric))
 psych::alpha(x = df_resourcenfoerd,
              keys = rep(1,4))
@@ -94,62 +112,6 @@ fit_steigern_zutrauen <- lm(A2_B3SQ003 ~ B1_amf + knsk + mot + act + env,
                          data = df_brm)
 fit_steigern_act <- lm(A2_B3SQ004 ~ B1_amf + knsk + mot + act + env,
                             data = df_brm)
-
-
-#  in brms
-fit_steiger_crq_wissen <- brm(
-  family = cumulative(probit),
-  formula = `A2_B3SQ001` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-  data = df_brm,
-  warmup = 500,
-  iter = 1500,
-  chains = 4,
-  cores = 4,
-  file = "models/steiger_crq_wissen")
-
-fit_steiger_crq_ziele <- brm(
-  family = cumulative(probit),
-  formula = `A2_B3SQ002` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-  data = df_brm,
-  warmup = 500,
-  iter = 1500,
-  chains = 4,
-  cores = 4,
-  file = "models/steiger_crq_ziele")
-
-fit_steiger_crq_zutrau <- brm(
-  family = cumulative(probit),
-  formula = `A2_B3SQ003` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-  data = df_brm,
-  warmup = 500,
-  iter = 1500,
-  chains = 4,
-  cores = 4,
-  file = "models/steiger_crq_zutrau")
-
-fit_steiger_crq_act <- brm(
-  family = cumulative(probit),
-  formula = `A2_B3SQ004` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-  data = df_brm,
-  warmup = 500,
-  iter = 1500,
-  chains = 4,
-  cores = 4,
-  file = "models/steiger_crq_act")
-
-fit_steiger_crq_tot <- brm(
-  family = gaussian(),
-  formula = `A2_B3_total` ~ 1 + mo(B1_amf) + knsk + mot + act + env + (1 | Kanton),
-  data = df_brm,
-  warmup = 500,
-  iter = 1500,
-  chains = 4,
-  cores = 4,
-  file = "models/steiger_crq_tot")
-
-
-
-tmp <- summary(fit_steiger_crq_ziele)
 
 
 fixef_crq <- map_dfr(list(fit_steiger_crq_act, fit_steiger_crq_wissen, fit_steiger_crq_ziele, fit_steiger_crq_zutrau, fit_steiger_crq_tot),

@@ -118,9 +118,9 @@ spacy_initialize(model = "fr_core_news_lg")
 anliegen_spacyd <- spacy_parse(as.character(anliegen_text_fr), tag = TRUE, dependency = TRUE)
 anliegen_nounphrases <- spacy_extract_nounphrases(as.character(anliegen_text_fr))
 
-ziele_spacyd <- spacy_parse(as.character(ziele_text_fr))
-moeglichkeiten_spacyd <- spacy_parse(as.character(moeglichkeiten_text_fr))
-empfehlungen_spacyd <- spacy_parse(as.character(empfehlungen_text_fr))
+ziele_spacyd <- spacy_parse(as.character(ziele_text_fr),tag = TRUE, dependency = TRUE)
+moeglichkeiten_spacyd <- spacy_parse(as.character(moeglichkeiten_text_fr), tag = TRUE, dependency = TRUE)
+empfehlungen_spacyd <- spacy_parse(as.character(empfehlungen_text_fr), tag = TRUE, dependency = TRUE)
 
 moeglichkeiten_nounphrases <- spacy_extract_nounphrases(as.character(moeglichkeiten_text_fr))
 ziele_nounphrases <- spacy_extract_nounphrases(as.character(ziele_text_fr))
@@ -136,6 +136,8 @@ spacy_finalize()
 
 source("lib/frenchphase_join.R")
 
+
+# anliegen
 frenchphrase_join(anliegen_spacyd %>% filter(doc_id == "text1" & sentence_id == 1))
 
 unique_doc <- unique(anliegen_nounphrases$doc_id)
@@ -162,6 +164,80 @@ x2 <- as_vector(x, .type = "character")
 x2 %>% enframe() %>% count(value, sort = TRUE)
 x2 %>% enframe() %>% count(value, sort = TRUE) %>%   head(100) %>% write.table(., "clipboard", sep="\t", row.names=TRUE)
 
+# ziele 
+unique_doc <- unique(ziele_nounphrases$doc_id)
+out_phrases_anliegen <- vector("list", length(unique_doc))
+
+for(doc in seq_along(out_phrases_anliegen)) {
+  # filter one doc
+  x <- ziele_spacyd %>% filter(doc_id == unique_doc[doc]) 
+  # go over all sentences
+  
+  out1 <- vector(mode = "list", length(unique(x$sentence_id)))
+  for(s in seq_along(out1)) {
+    sentence <- x %>% filter(sentence_id == s)
+    if(nrow(sentence) >= 3) {
+      out1[[s]] <- frenchphrase_join(sentence)
+    } else {out1[[s]] <- ""}
+  }
+  
+  out_phrases_anliegen[[doc]] <- out1
+}
+
+x <- map(out_phrases_anliegen, ~as_vector(.x, .type = "character"))
+x2 <- as_vector(x, .type = "character")
+x2 %>% enframe() %>% count(value, sort = TRUE)
+x2 %>% enframe() %>% count(value, sort = TRUE) %>%   head(100) %>% write.table(., "clipboard", sep="\t", row.names=TRUE)
+
+# empfehlungen phrasen
+unique_doc <- unique(empfehlungen_nounphrases$doc_id)
+out_phrases_anliegen <- vector("list", length(unique_doc))
+
+for(doc in seq_along(out_phrases_anliegen)) {
+  # filter one doc
+  x <- empfehlungen_spacyd %>% filter(doc_id == unique_doc[doc]) 
+  # go over all sentences
+  
+  out1 <- vector(mode = "list", length(unique(x$sentence_id)))
+  for(s in seq_along(out1)) {
+    sentence <- x %>% filter(sentence_id == s)
+    if(nrow(sentence) >= 3) {
+      out1[[s]] <- frenchphrase_join(sentence)
+    } else {out1[[s]] <- ""}
+  }
+  
+  out_phrases_anliegen[[doc]] <- out1
+}
+
+x <- map(out_phrases_anliegen, ~as_vector(.x, .type = "character"))
+x2 <- as_vector(x, .type = "character")
+x2 %>% enframe() %>% count(value, sort = TRUE)
+x2 %>% enframe() %>% count(value, sort = TRUE) %>%   head(100) %>% write.table(., "clipboard", sep="\t", row.names=TRUE)
+
+# handlungen
+unique_doc <- unique(moeglichkeiten_nounphrases$doc_id)
+out_phrases_anliegen <- vector("list", length(unique_doc))
+
+for(doc in seq_along(out_phrases_anliegen)) {
+  # filter one doc
+  x <- moeglichkeiten_spacyd %>% filter(doc_id == unique_doc[doc]) 
+  # go over all sentences
+  
+  out1 <- vector(mode = "list", length(unique(x$sentence_id)))
+  for(s in seq_along(out1)) {
+    sentence <- x %>% filter(sentence_id == s)
+    if(nrow(sentence) >= 3) {
+      out1[[s]] <- frenchphrase_join(sentence)
+    } else {out1[[s]] <- ""}
+  }
+  
+  out_phrases_anliegen[[doc]] <- out1
+}
+
+x <- map(out_phrases_anliegen, ~as_vector(.x, .type = "character"))
+x2 <- as_vector(x, .type = "character")
+x2 %>% enframe() %>% count(value, sort = TRUE)
+x2 %>% enframe() %>% count(value, sort = TRUE) %>%   head(100) %>% write.table(., "clipboard", sep="\t", row.names=TRUE)
 
 anliegen_spacyd <- anliegen_spacyd %>% mutate(token = tolower(token), lemma = tolower(lemma)) %>% 
   anti_join(tibble(lemma = stopwords("fr", source = "stopwords-iso"))) %>%  #stopwords

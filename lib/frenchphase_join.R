@@ -5,7 +5,8 @@ frenchphrase_join <- function(sentence) {
   }
   # extract
   # stop when none found
-  if(any(idx) == FALSE) { return("") }
+  # if(is.na(any(idx))) { return("") }
+  if(any(idx, na.rm = TRUE) == FALSE) { return("") }
   idx_which <- which(idx)
   out <- vector(mode = "character", length = length(idx_which))
   

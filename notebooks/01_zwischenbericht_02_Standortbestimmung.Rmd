@@ -234,19 +234,19 @@ Das Gespräch insgesamt wird als weniger nützlich empfunden von Personen, die U
 ### Subjektiver Nutzen der einzelnen Komponenten der Standortbestimmung aus Sicht der Beratungspersonen
 
 ```{r}
-# fit_beratnutz_insg <- brm(
-#     family = cumulative(probit),
-#     formula = B1_A1 ~ 1 + `A1_GruendeSQ001`  +
-#                               + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
-#                               `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
-#                               `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
-#                           + `A1_GruendeSQ011`  + (1 | Kanton),
-#                                data = df_brm %>% mutate(B1_A1 = as.ordered(B1_A1)),
-#     warmup = 500,
-#     iter = 1500,
-#     chains = 4,
-#     cores = 4,
-#     file = "models/beratnutz_insg")
+fit_beratnutz_insg <- brm(
+    family = cumulative(probit),
+    formula = B1_A1 ~ 1 + `A1_GruendeSQ001`  +
+                              + `A1_GruendeSQ002`  + `A1_GruendeSQ003` + `A1_GruendeSQ004` +
+                              `A1_GruendeSQ005`  + `A1_GruendeSQ006`  + `A1_GruendeSQ007` +
+                              `A1_GruendeSQ008` + `A1_GruendeSQ009`  + `A1_GruendeSQ010`
+                          + `A1_GruendeSQ011`  + (1 | Kanton),
+                               data = df_brm %>% mutate(B1_A1 = as.ordered(B1_A1)),
+    warmup = 500,
+    iter = 1500,
+    chains = 4,
+    cores = 4,
+    file = "../models/beratnutz_insg")
 ```
 ```{r}
 fit_beratnutz_crq <- brm(

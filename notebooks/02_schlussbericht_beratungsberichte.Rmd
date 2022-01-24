@@ -122,6 +122,15 @@ ziele_nounphrases %>% as_tibble() %>% count(root_text, sort = TRUE) %>%
   write.table(., "clipboard", sep="\t", row.names=TRUE)
 ```
 
+frz.
+
+```{r}
+ziele_spacyd %>% as_tibble() %>% count(lemma, sort = TRUE) %>%
+  mutate(proc = n/length(unique(ziele_spacyd$doc_id))) %>% slice(1:100) %>%
+  mutate(count_proc_text = str_c(n, " (", round(proc*100,1), "%)")) %>% 
+  write.table(., "clipboard", sep="\t", row.names=TRUE)
+```
+
 
 
 # 4. Auswertung der Empfehlungen und Handlungsmöglichkeiten
@@ -133,6 +142,19 @@ nounphrases_combi %>% as_tibble() %>% count(root_text, sort = TRUE) %>%
   write.table(., "clipboard", sep="\t", row.names=TRUE)
 
 ```
+
+
+Frz. 
+
+```{r}
+empfehlungen_handlung_frz <- bind_rows(empfehlungen_spacyd, moeglichkeiten_spacyd)
+empfehlungen_handlung_frz %>% as_tibble() %>% count(lemma, sort = TRUE) %>%
+  mutate(proc = n/727) %>% slice(1:100) %>%
+  mutate(count_proc_text = str_c(n, " (", round(proc*100,1), "%)")) %>% 
+  write.table(., "clipboard", sep="\t", row.names=TRUE)
+```
+
+
 
 ```{r}
 nounphrases_combi %>% filter(root_text == "stellensuche") %>% View()

@@ -238,38 +238,60 @@ Education Levels nach ecoplan Befragung (es gibt auch die OTP Version).
 &lt;!-- rnb-chunk-begin --&gt;
 
 
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2NhbGVuYW1lcyA8LSBjKFwib2VcIiwgXCJqbWtcIiwgXCJzc2tcIiwgXCJpbnZcIiwgXCJjb25cIiwgXCJjbFwiLCBcImNvcFwiLCBcIm9zXCIsIFwiamNoYVwiLCBcInNjc1wiLCBcIm5ldFwiLCBcImNleHBsXCIsIFwibGVhclwiKVxuZWRsdmxzIDwtIGxldmVscyhkZl9icm0kQXVzYl9yZWNvZGUyKVxuYWxwaGFfYnlfZWR1IDwtIG1hcF9kZmMoZWRsdmxzLCBmdW5jdGlvbihlZGx2bCkge1xuICBkZl9icm0gJT4lXG4gICAgc2VsZWN0KEF1c2JfcmVjb2RlMiwgb2UxX3dvcms6bGVhcjNfd29yaykgJT4lIFxuICAgIGZpbHRlcihBdXNiX3JlY29kZTIgPT0gZWRsdmwpICU+JSBcbiAgICBzY29yZUl0ZW1zTXVsdGkoc2NhbGVuYW1lcywgLiwgZXhjbHVkZSA9IFRSVUUpICU+JSBcbiAgICAuJGFscGhhICU+JSAuWzEsXSAlPiUgZW5mcmFtZSgpXG59KSBcblxubmFtZXMoYWxwaGFfYnlfZWR1KSA8LSBjKFwiU2thbGFcIiwgZWRsdmxzKVxuYWxwaGFfYnlfZWR1JFNrYWxhIDwtIGMoXCJCZXJ1ZmxpY2hlIEV4cGVydGlzZVwiLCBcIkFyYmVpdHNtYXJrdHdpc3NlblwiLCBcIkFsbGdlbWVpbmUgRsOkaGlna2VpdGVuXCIsIFwiV2ljaHRpZ2tlaXQgZGVyIEFyYmVpdFwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgXCJadXRyYXVlblwiLCBcIktsYXJoZWl0XCIsIFwiRW50d2lja2x1bmdzbcO2Z2xpY2hrZWl0ZW5cIiwgXCJPcmdhbmlzYXRpb25hbGUgVW50ZXJzdMO8dHp1bmdcIixcbiAgICAgICAgICAgICAgICAgICAgICAgIFwiQXJiZWl0c2hlcmF1c2ZvcmRlcnVuZ1wiLCBcIlNvemlhbGUgVW50ZXJzdMO8dHp1bmdcIiwgXCJOZXR6d2Vya2VuXCIsIFwiSW5mb3JtaWVyZW4gw7xiZXIgTcO2Z2xpY2hrZWl0ZW5cIixcbiAgICAgICAgICAgICAgICAgICAgICAgIFwiS29udGludWllcmxpY2hlcyBMZXJuZW5cIilcbmFscGhhX2J5X2VkdSAlPiUgbWFwKH5taW4oLngpKSAjIGFscGhhIG1pbnMgaW5jcmVhc2UgYnkgZWR1Y2F0aW9uLCBidXQgaXRzIHN0aWxsIGFkZXF1YXRlIHdpdGggbG93ZXIgbGV2ZWwuXG5hbHBoYV9ieV9lZHUgJT4lIG1hcCh+bWVhbigueCkpIFxuXG5hbHBoYV9ieV9lZHUgJT4lIHdyaXRlLnRhYmxlKC4sIFwiY2xpcGJvYXJkXCIsIHNlcD1cIlxcdFwiLCByb3cubmFtZXM9RkFMU0UpXG5gYGAifQ== --&gt;
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxwaGFfYnlfZWR1ICU+JSBtYXAofm1lYW4oLngpKSBcblxuYGBgIn0= --&gt;
 
 ```r
-scalenames &lt;- c(&quot;oe&quot;, &quot;jmk&quot;, &quot;ssk&quot;, &quot;inv&quot;, &quot;con&quot;, &quot;cl&quot;, &quot;cop&quot;, &quot;os&quot;, &quot;jcha&quot;, &quot;scs&quot;, &quot;net&quot;, &quot;cexpl&quot;, &quot;lear&quot;)
-edlvls &lt;- levels(df_brm$Ausb_recode2)
-alpha_by_edu &lt;- map_dfc(edlvls, function(edlvl) {
-  df_brm %&gt;%
-    select(Ausb_recode2, oe1_work:lear3_work) %&gt;% 
-    filter(Ausb_recode2 == edlvl) %&gt;% 
-    scoreItemsMulti(scalenames, ., exclude = TRUE) %&gt;% 
-    .$alpha %&gt;% .[1,] %&gt;% enframe()
-}) 
-
-names(alpha_by_edu) &lt;- c(&quot;Skala&quot;, edlvls)
-alpha_by_edu$Skala &lt;- c(&quot;Berufliche Expertise&quot;, &quot;Arbeitsmarktwissen&quot;, &quot;Allgemeine Fähigkeiten&quot;, &quot;Wichtigkeit der Arbeit&quot;,
-                        &quot;Zutrauen&quot;, &quot;Klarheit&quot;, &quot;Entwicklungsmöglichkeiten&quot;, &quot;Organisationale Unterstützung&quot;,
-                        &quot;Arbeitsherausforderung&quot;, &quot;Soziale Unterstützung&quot;, &quot;Netzwerken&quot;, &quot;Informieren über Möglichkeiten&quot;,
-                        &quot;Kontinuierliches Lernen&quot;)
-alpha_by_edu %&gt;% map(~min(.x)) # alpha mins increase by education, but its still adequate with lower level.
 alpha_by_edu %&gt;% map(~mean(.x)) 
-
-alpha_by_edu %&gt;% write.table(., &quot;clipboard&quot;, sep=&quot;\t&quot;, row.names=FALSE)</code></pre>
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBpbiBtZWFuLmRlZmF1bHQoLngpIDpcbiAgYXJndW1lbnQgaXMgbm90IG51bWVyaWMgb3IgbG9naWNhbDogcmV0dXJuaW5nIE5BXG5XYXJuaW5nIGluIG1lYW4uZGVmYXVsdCgueCkgOlxuICBhcmd1bWVudCBpcyBub3QgbnVtZXJpYyBvciBsb2dpY2FsOiByZXR1cm5pbmcgTkFcbldhcm5pbmcgaW4gbWVhbi5kZWZhdWx0KC54KSA6XG4gIGFyZ3VtZW50IGlzIG5vdCBudW1lcmljIG9yIGxvZ2ljYWw6IHJldHVybmluZyBOQVxuV2FybmluZyBpbiBtZWFuLmRlZmF1bHQoLngpIDpcbiAgYXJndW1lbnQgaXMgbm90IG51bWVyaWMgb3IgbG9naWNhbDogcmV0dXJuaW5nIE5BXG4ifQ== -->
+<pre><code>Warning in mean.default(.x) :
+  argument is not numeric or logical: returning NA
+Warning in mean.default(.x) :
+  argument is not numeric or logical: returning NA
+Warning in mean.default(.x) :
+  argument is not numeric or logical: returning NA
+Warning in mean.default(.x) :
+  argument is not numeric or logical: returning NA</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJFNrYWxhXG5bMV0gTkFcblxuJHNla1xuWzFdIDAuODExNTU3MVxuXG4kaGJcblsxXSBOQVxuXG4kdW5pX2ZoXG5bMV0gMC44MjExMDJcblxuJG90aGVyXG5bMV0gTkFcblxuJDxOQT5cblsxXSAwLjgzMzg1MTlcblxuJDxOQT5cblsxXSBOQVxuXG4kPE5BPlxuWzFdIDAuODM1MTU1MVxuIn0= -->
+<pre><code>$Skala
+[1] NA
+
+$sek
+[1] 0.8115571
+
+$hb
+[1] NA
+
+$uni_fh
+[1] 0.821102
+
+$other
+[1] NA
+
+$&lt;NA&gt;
+[1] 0.8338519
+
+$&lt;NA&gt;
+[1] NA
+
+$&lt;NA&gt;
+[1] 0.8351551</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Bildung Nach OTP:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZWRsdmxzIDwtIGxldmVscyhkZl9jcnEkZWR1Y2F0aW9uX2RlKVstYygxLDcpXSAjZG9uJ3QgZG8gaXQgZm9yIG9ibGlnYXRvcmlzY2ggYW5kIGRva3RvcmF0IC0gbm90IGVub3VnaCBjYXNlcyB5ZXRcblxuYWxwaGFfYnlfZWR1IDwtIG1hcChlZGx2bHMsIGZ1bmN0aW9uKGVkbHZsKSB7XG4gIGRmX2NycSAlPiVcbiAgICBzZWxlY3QoZWR1Y2F0aW9uX2RlLCBvZTFfd29yazpsZWFyM193b3JrKSAlPiUgXG4gICAgZmlsdGVyKGVkdWNhdGlvbl9kZSA9PSBlZGx2bCkgJT4lIFxuICAgIHNjb3JlSXRlbXNNdWx0aShzY2FsZW5hbWVzLCAuLCBleGNsdWRlID0gVFJVRSkgJT4lIFxuICAgIC4kYWxwaGFcbn0pIFxuXG5cblxuYWxwaGFfYnlfZWR1ICU+JSBtYXAofm1pbigueCkpICMgYWxwaGEgbWlucyBpbmNyZWFzZSBieSBlZHVjYXRpb24sIGJ1dCBpdHMgc3RpbGwgYWRlcXVhdGUgd2l0aCBsb3dlciBsZXZlbC5cbmFscGhhX2J5X2VkdSAlPiUgbWFwKH5tZWFuKC54KSkgXG5gYGBcbmBgYCJ9 -->
-<pre class="r"><code>```r
-edlvls &lt;- levels(df_crq$education_de)[-c(1,7)] #don&#39;t do it for obligatorisch and doktorat - not enough cases yet
-
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxwaGFfYnlfZWR1IDwtIG1hcChlZGx2bHMsIGZ1bmN0aW9uKGVkbHZsKSB7XG4gIGRmX2NycSAlPiVcbiAgICBzZWxlY3QoZWR1Y2F0aW9uX2RlLCBvZTFfd29yazpsZWFyM193b3JrKSAlPiUgXG4gICAgZmlsdGVyKGVkdWNhdGlvbl9kZSA9PSBlZGx2bCkgJT4lIFxuICAgIHNjb3JlSXRlbXNNdWx0aShzY2FsZW5hbWVzLCAuLCBleGNsdWRlID0gVFJVRSkgJT4lIFxuICAgIC4kYWxwaGFcbn0pIFxuYWxwaGFfYnlfZWR1IDwtIG1hcChlZGx2bHMsIGZ1bmN0aW9uKGVkbHZsKSB7XG4gIGRmX2NycSAlPiVcbiAgICBzZWxlY3QoZWR1Y2F0aW9uX2RlLCBvZTFfd29yazpsZWFyM193b3JrKSAlPiUgXG4gICAgZmlsdGVyKGVkdWNhdGlvbl9kZSA9PSBlZGx2bCkgJT4lIFxuICAgIHNjb3JlSXRlbXNNdWx0aShzY2FsZW5hbWVzLCAuLCBleGNsdWRlID0gVFJVRSkgJT4lIFxuICAgIC4kYWxwaGFcbn0pIFxuYWxwaGFfYnlfZWR1ICU+JSBtYXAofm1pbigueCkpICMgYWxwaGEgbWlucyBpbmNyZWFzZSBieSBlZHVjYXRpb24sIGJ1dCBpdHMgc3RpbGwgYWRlcXVhdGUgd2l0aCBsb3dlciBsZXZlbC5cblxuYGBgIn0= -->
+<pre class="r"><code>alpha_by_edu &lt;- map(edlvls, function(edlvl) {
+  df_crq %&gt;%
+    select(education_de, oe1_work:lear3_work) %&gt;% 
+    filter(education_de == edlvl) %&gt;% 
+    scoreItemsMulti(scalenames, ., exclude = TRUE) %&gt;% 
+    .$alpha
+}) 
 alpha_by_edu &lt;- map(edlvls, function(edlvl) {
   df_crq %&gt;%
     select(education_de, oe1_work:lear3_work) %&gt;% 
@@ -277,32 +299,70 @@ alpha_by_edu &lt;- map(edlvls, function(edlvl) {
     scoreItemsMulti(scalenames, ., exclude = TRUE) %&gt;% 
     .$alpha
 }) 
-
-
-
 alpha_by_edu %&gt;% map(~min(.x)) # alpha mins increase by education, but its still adequate with lower level.
-alpha_by_edu %&gt;% map(~mean(.x)) </code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiW1sxXV1cblsxXSAwLjcwMjkzNjZcblxuW1syXV1cblsxXSAwLjcyMDg2NjJcblxuW1szXV1cblsxXSAwLjcyMDkyMTNcblxuW1s0XV1cblsxXSAwLjczMjA3NDlcblxuW1s1XV1cblsxXSAwLjcyODk3MzRcbiJ9 -->
+<pre><code>[[1]]
+[1] 0.7029366
 
-&lt;!-- rnb-chunk-end --&gt;
+[[2]]
+[1] 0.7208662
 
+[[3]]
+[1] 0.7209213
 
-&lt;!-- rnb-text-begin --&gt;
+[[4]]
+[1] 0.7320749
 
+[[5]]
+[1] 0.7289734</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxwaGFfYnlfZWR1ICU+JSBtYXAofm1pbigueCkpICMgYWxwaGEgbWlucyBpbmNyZWFzZSBieSBlZHVjYXRpb24sIGJ1dCBpdHMgc3RpbGwgYWRlcXVhdGUgd2l0aCBsb3dlciBsZXZlbC5cbmBgYCJ9 -->
+<pre class="r"><code>alpha_by_edu %&gt;% map(~min(.x)) # alpha mins increase by education, but its still adequate with lower level.</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiW1sxXV1cblsxXSAwLjcwMjkzNjZcblxuW1syXV1cblsxXSAwLjcyMDg2NjJcblxuW1szXV1cblsxXSAwLjcyMDkyMTNcblxuW1s0XV1cblsxXSAwLjczMjA3NDlcblxuW1s1XV1cblsxXSAwLjcyODk3MzRcbiJ9 -->
+<pre><code>[[1]]
+[1] 0.7029366
 
-Korrelation mit B1_AMF
+[[2]]
+[1] 0.7208662
 
-&lt;!-- rnb-text-end --&gt;
+[[3]]
+[1] 0.7209213
 
+[[4]]
+[1] 0.7320749
 
-&lt;!-- rnb-chunk-begin --&gt;
+[[5]]
+[1] 0.7289734</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxwaGFfYnlfZWR1ICU+JSBtYXAofm1lYW4oLngpKSBcbmBgYCJ9 -->
+<pre class="r"><code>alpha_by_edu %&gt;% map(~mean(.x)) </code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiW1sxXV1cblsxXSAwLjgyMjI4MzZcblxuW1syXV1cblsxXSAwLjgwODAxNjNcblxuW1szXV1cblsxXSAwLjgyNzI0MDZcblxuW1s0XV1cblsxXSAwLjgyNzI4MzdcblxuW1s1XV1cblsxXSAwLjgzMTQ3MzRcbiJ9 -->
+<pre><code>[[1]]
+[1] 0.8222836
 
+[[2]]
+[1] 0.8080163
 
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZWRsdmxzIDwtIGxldmVscyhkZl9icm0kQXVzYl9yZWNvZGUpXG50bXAgPC0gbWFwX2RmcihlZGx2bHMsIGZ1bmN0aW9uKGx2bCkge1xuICBkZl9icm0gJT4lIGZpbHRlcihBdXNiX3JlY29kZSA9PSBsdmwpICU+JSBcbiAgICAgICAgbG0oQjFfYW1mIH4gb2UgICsgIGptayAgKyAgc3NrICArICBpbnYgICsgIGNvbiAgKyAgY2wgICsgIGNvcCAgKyAgb3MgICsgIGpjaGEgICsgIHNjcyAgKyAgbmV0ICArICBjZXhwbCAgKyAgbGVhcixcbiAgIC4pICU+JSBnbGFuY2UoKSAlPiUgbXV0YXRlKGVkdSA9IGx2bClcbiAgfSlcblxudG1wICU+JSBtdXRhdGUobWNvcnIgPSBzcXJ0KHIuc3F1YXJlZCkpICU+JSB3cml0ZS50YWJsZSguLCBcXGNsaXBib2FyZFxcLCBzZXA9XFxcXHRcXCwgcm93Lm5hbWVzPUZBTFNFKVxuYGBgXG5gYGAifQ== --&gt;
+[[3]]
+[1] 0.8272406
 
-```r
-```r
+[[4]]
+[1] 0.8272837
+
+[[5]]
+[1] 0.8314734</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Korrelation mit B1_AMF</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZWRsdmxzIDwtIGxldmVscyhkZl9icm0kQXVzYl9yZWNvZGUpXG50bXAgPC0gbWFwX2RmcihlZGx2bHMsIGZ1bmN0aW9uKGx2bCkge1xuICBkZl9icm0gJT4lIGZpbHRlcihBdXNiX3JlY29kZSA9PSBsdmwpICU+JSBcbiAgICAgICAgbG0oQjFfYW1mIH4gb2UgICsgIGptayAgKyAgc3NrICArICBpbnYgICsgIGNvbiAgKyAgY2wgICsgIGNvcCAgKyAgb3MgICsgIGpjaGEgICsgIHNjcyAgKyAgbmV0ICArICBjZXhwbCAgKyAgbGVhcixcbiAgIC4pICU+JSBnbGFuY2UoKSAlPiUgbXV0YXRlKGVkdSA9IGx2bClcbiAgfSlcblxudG1wICU+JSBtdXRhdGUobWNvcnIgPSBzcXJ0KHIuc3F1YXJlZCkpICU+JSB3cml0ZS50YWJsZSguLCBcXGNsaXBib2FyZFxcLCBzZXA9XFxcXHRcXCwgcm93Lm5hbWVzPUZBTFNFKVxuYGBgXG5gYGAifQ== -->
+<pre class="r"><code>```r
 edlvls &lt;- levels(df_brm$Ausb_recode)
 tmp &lt;- map_dfr(edlvls, function(lvl) {
   df_brm %&gt;% filter(Ausb_recode == lvl) %&gt;% 
@@ -311,44 +371,31 @@ tmp &lt;- map_dfr(edlvls, function(lvl) {
   })
 
 tmp %&gt;% mutate(mcorr = sqrt(r.squared)) %&gt;% write.table(., \clipboard\, sep=\\t\, row.names=FALSE)</code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-Z-standardisiert B1_AMF, dann Differenz nach Bildung?
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZfYnJtICU+JSBtdXRhdGUoQjFfYW1mX3ogID0gc2NhbGUoQjFfYW1mKSkgJT4lIGdyb3VwX2J5KEF1c2JfcmVjb2RlMikgJT4lIHN1bW1hcmlzZShhY3Jvc3MoYyhrbnNrLCBtb3QsIGVudiwgYWN0LCBCMV9hbWYpLCB+bWVhbigueCwgbmEucm0gPSBUUlVFKSkpXG5cbmBgYCJ9 --&gt;
-
-```r
-df_brm %&gt;% mutate(B1_amf_z  = scale(B1_amf)) %&gt;% group_by(Ausb_recode2) %&gt;% summarise(across(c(knsk, mot, env, act, B1_amf), ~mean(.x, na.rm = TRUE)))
-</code></pre>
+<p>```</p>
 <!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Z-standardisiert B1_AMF, dann Differenz nach Bildung?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Niwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IHggNiJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJtMVRUV2dUUVJpZEpMc3h1L2xwc0FmTlFWaTA0S1ZaU0ZUVTI3aDZVSUlZTEVnUUpFNTJKOG1Teld6Wm5WVEJDcmtFUWIySmlwVGd3U0tJZXNraHhac2lLRklxNHFVWDhhWW5LVWhwS1JRYlo1T2QxQzdDd0h6ejVyM3ZtM256emVWenBXTnlTUVlBUklBUUNvR0l5RUlRUFZ2TTVVL2tBUkRDYkJVQ0FwQzgrU1pqVFhyYmJFNnlXUnh1QWhBZXlobTc3WW4zaXFJV25zT1d5NkswdCtXakVSYzMvREJjcjNCcWk1amxhdDFmaVRhdFl5ZVFUYlJRQlZ0TWxCNlZibnZnaFRNdHQySmFSb3ZVWEpjaVlpZ1ZiQ29hZGhEZGhXcTQrWDdSZFpVQ29yaG1PeVltaW9FZHBhRE5hTmtaaXFqcFVyTVJyRVpRRS9PamN6QWRyTWF3bmFCUXQ1QWJGRWFyU0tlMk02S0RsRWVEOHNQbXdxSE5JekJoTE54YTI3OEtFNWtESzErTU1veC9UU3Bzd0hnMyt6bDFkSG5NajIyZmVuRnhTb1VTN2twYmgzVW8xUW81c3pzTjVmbWxaVGFnbFBrZ3J4ZTFNVitZRUQ1ZTZYMkR3ck9YdDQzZVR5aWNmSnArOTMwZStpOEZJNysyOUt1L3M3djU0M2Z1WjlRVktIVzBTOGNmSDRUUzYxZUx6L3M5S0U4VU45aUFzYzdkdDdGNzYyTys5T1BhNlg1NEV5WWZUYjM1OUdjVkpoK2NqeXgxU2pEV2oxL3Z4eEZNdEozcEo0MjFrVDNDd0hjazZqdVM4S3dzTzFpM0RaejNNYUZCWE40YWthWk5lWWpKSEErWmpkeFNMVmRHeldyQWZjbXhiNmo4NmJ3K0RYdTNIUXdHMnlPaXlNL0JCYktCS0ZLckRwUDg1ekgzMmJQVXRBbExGcDcwbS81ZmNjZ0pOa2lMZU1XTnJGNXZrVVkybC9jcStEOEYrQ2NLK1lsNEhBMDRKUElMWWxJekNkN2IvYU5GaXQxeWVFbDExakVKZDBSbXFLdFNteUxPazNYYjRzaW85WGIrQXIxU1dLejFBd0FBIn0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Ausb_recode2"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["knsk"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mot"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["env"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["act"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["B1_amf"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"sek","2":"3.322963","3":"3.122667","4":"2.507333","5":"3.005630","6":"3.236994"},{"1":"hb","2":"3.549125","3":"3.174616","4":"2.579917","5":"3.190068","6":"3.698312"},{"1":"uni_fh","2":"3.512252","3":"3.175436","4":"2.527159","5":"3.209802","6":"3.696915"},{"1":"other","2":"3.477564","3":"3.310897","4":"2.562500","5":"3.257479","6":"3.088889"},{"1":"NA","2":"3.451748","3":"3.137585","4":"2.490708","5":"3.065206","6":"3.562718"}],"options":{"columns":{"min":{},"max":[10],"total":[6]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZGZfYnJtICU+JSBmaWx0ZXIoQTFfR3J1ZW5kZVNRMDAyID09IFxcSmFcXCkgJT4lIFxuICAgICAgbG0oQjFfYW1mIH4gb2UgICsgIGptayAgKyAgc3NrICArICBpbnYgICsgIGNvbiAgKyAgY2wgICsgIGNvcCAgKyAgb3MgICsgIGpjaGEgICsgIHNjcyAgKyAgbmV0ICArICBjZXhwbCAgKyAgbGVhcixcbiAuKSAlPiUgZ2xhbmNlKClcblxuZGZfYnJtICU+JSBmaWx0ZXIoQTFfR3J1ZW5kZVNRMDAxID09IFxcSmFcXCkgJT4lIFxuICAgICAgbG0oQjFfYW1mIH4gb2UgICsgIGptayAgKyAgc3NrICArICBpbnYgICsgIGNvbiAgKyAgY2wgICsgIGNvcCAgKyAgb3MgICsgIGpjaGEgICsgIHNjcyAgKyAgbmV0ICArICBjZXhwbCAgKyAgbGVhcixcbiAuKSAlPiUgZ2xhbmNlKClcbmBgYFxuYGBgIn0= -->
-<pre class="r"><code>```r
-df_brm %&gt;% filter(A1_GruendeSQ002 == \Ja\) %&gt;% 
-      lm(B1_amf ~ oe  +  jmk  +  ssk  +  inv  +  con  +  cl  +  cop  +  os  +  jcha  +  scs  +  net  +  cexpl  +  lear,
- .) %&gt;% glance()
-
-df_brm %&gt;% filter(A1_GruendeSQ001 == \Ja\) %&gt;% 
-      lm(B1_amf ~ oe  +  jmk  +  ssk  +  inv  +  con  +  cl  +  cop  +  os  +  jcha  +  scs  +  net  +  cexpl  +  lear,
- .) %&gt;% glance()</code></pre>
-<p>```</p>
-<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6MTIsInN1bW1hcnkiOnsiQSB0aWJibGUiOlsiMSB4IDEyIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQmwxUnYwdkRRQmk5cEVsclkxc0tMazR1QlFXaEtmMDFWMXRCQlNraUNKMlVhNUxXTSttbHpTWFZSUkFjWEFWMUYwUVEwVCtnbXlBT2d2NERybUkzWjdmV1M1b0xOUWRKM252ZnZkeTk3OXRaYXhTbGhnUUFpQUNCNDBCRXBCQkVhOXY1UXJrQWdNQlR4Z0VCeE4zdk1kMDFSMEdDUGlsWHFIeStQdjdVZis4RC9qNzR5SnhVNWdNKzdGMS8xOUVkNHl0Y1ZYL2FXL3dLNmpkRXlKWWVCa0Y5R2JEbDhlZU5URzc0d2k4RTlmM2IvMXc1MjlYZnp0Y0RYc3pWTGk3aEZjVko3K0lBTEUzaGNpaVFpR0ZISXhTa3ZWQVRNVzdKcE9kQVMxTjlJUW5WUXprc2lnUzFPNUJaaUExdFJHeWsrRUtzSy9laDRXZys1ZFdXajZLRzJkNUN1czhpcTVzMUJxc0JuRkcxUG9KWVllNVp0U1ZiR2tHcUF3MWZFckRaSktFd2NjczhrbGtnTnpGL1NsOWp1c0twRlFNU2xwcUprZ3B0S0xjczZxZHNGTExFeks2TlRFeE52RHQvTVdUbXJKQ1FkckI3RXpXckhEaFl6K1pMN2duK0VNRFVRTGdwbkppY3lZLzlmNG1zWlJwdUk4eWFJUnF3cWJFMnBHaGtMN0hjdFJDMldSU3FFdGsyN2FCZGttSWFUUEhDZ2RFZmlrZE9admdDQUFBPSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["r.squared"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["adj.r.squared"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sigma"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["df"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["logLik"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["AIC"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["BIC"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["deviance"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["df.residual"],"name":[11],"type":["int"],"align":["right"]},{"label":["nobs"],"name":[12],"type":["int"],"align":["right"]}],"data":[{"1":"0.4183152","2":"0.2244202","3":"0.7013654","4":"2.157432","5":"0.0321275","6":"13","7":"-48.2749","8":"126.5498","9":"156.1042","10":"19.18462","11":"39","12":"53"}],"options":{"columns":{"min":{},"max":[10],"total":[12]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 
 <div id="rmd-source-code">LS0tDQp0aXRsZTogIlNwZXppZmlzY2hlIFppZWxncnVwcGVuIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KYGBge3J9DQpzb3VyY2UoImh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9mcmFuY2lzY293aWxoZWxtL3ItY29sbGVjdGlvbi9tYXN0ZXIvc2NvcmVJdGVtc011bHRpLlIiKQ0KYGBgDQoNCkVkdWNhdGlvbiBMZXZlbHMgbmFjaCBlY29wbGFuIEJlZnJhZ3VuZyAoZXMgZ2lidCBhdWNoIGRpZSBPVFAgVmVyc2lvbikuDQoNCmBgYHtyfQ0Kc2NhbGVuYW1lcyA8LSBjKCJvZSIsICJqbWsiLCAic3NrIiwgImludiIsICJjb24iLCAiY2wiLCAiY29wIiwgIm9zIiwgImpjaGEiLCAic2NzIiwgIm5ldCIsICJjZXhwbCIsICJsZWFyIikNCmVkbHZscyA8LSBsZXZlbHMoZGZfYnJtJEF1c2JfcmVjb2RlMikNCmFscGhhX2J5X2VkdSA8LSBtYXBfZGZjKGVkbHZscywgZnVuY3Rpb24oZWRsdmwpIHsNCiAgZGZfYnJtICU+JQ0KICAgIHNlbGVjdChBdXNiX3JlY29kZTIsIG9lMV93b3JrOmxlYXIzX3dvcmspICU+JSANCiAgICBmaWx0ZXIoQXVzYl9yZWNvZGUyID09IGVkbHZsKSAlPiUgDQogICAgc2NvcmVJdGVtc011bHRpKHNjYWxlbmFtZXMsIC4sIGV4Y2x1ZGUgPSBUUlVFKSAlPiUgDQogICAgLiRhbHBoYSAlPiUgLlsxLF0gJT4lIGVuZnJhbWUoKQ0KfSkgDQoNCm5hbWVzKGFscGhhX2J5X2VkdSkgPC0gYygiU2thbGEiLCBlZGx2bHMpDQphbHBoYV9ieV9lZHUkU2thbGEgPC0gYygiQmVydWZsaWNoZSBFeHBlcnRpc2UiLCAiQXJiZWl0c21hcmt0d2lzc2VuIiwgIkFsbGdlbWVpbmUgRsOkaGlna2VpdGVuIiwgIldpY2h0aWdrZWl0IGRlciBBcmJlaXQiLA0KICAgICAgICAgICAgICAgICAgICAgICAgIlp1dHJhdWVuIiwgIktsYXJoZWl0IiwgIkVudHdpY2tsdW5nc23DtmdsaWNoa2VpdGVuIiwgIk9yZ2FuaXNhdGlvbmFsZSBVbnRlcnN0w7x0enVuZyIsDQogICAgICAgICAgICAgICAgICAgICAgICAiQXJiZWl0c2hlcmF1c2ZvcmRlcnVuZyIsICJTb3ppYWxlIFVudGVyc3TDvHR6dW5nIiwgIk5ldHp3ZXJrZW4iLCAiSW5mb3JtaWVyZW4gw7xiZXIgTcO2Z2xpY2hrZWl0ZW4iLA0KICAgICAgICAgICAgICAgICAgICAgICAgIktvbnRpbnVpZXJsaWNoZXMgTGVybmVuIikNCmFscGhhX2J5X2VkdSAlPiUgbWFwKH5taW4oLngpKSAjIGFscGhhIG1pbnMgaW5jcmVhc2UgYnkgZWR1Y2F0aW9uLCBidXQgaXRzIHN0aWxsIGFkZXF1YXRlIHdpdGggbG93ZXIgbGV2ZWwuDQphbHBoYV9ieV9lZHUgJT4lIG1hcCh+bWVhbigueCkpIA0KDQphbHBoYV9ieV9lZHUgJT4lIHdyaXRlLnRhYmxlKC4sICJjbGlwYm9hcmQiLCBzZXA9Ilx0Iiwgcm93Lm5hbWVzPUZBTFNFKQ0KYGBgDQpCaWxkdW5nIE5hY2ggT1RQOg0KDQpgYGB7cn0NCmVkbHZscyA8LSBsZXZlbHMoZGZfY3JxJGVkdWNhdGlvbl9kZSlbLWMoMSw3KV0gI2Rvbid0IGRvIGl0IGZvciBvYmxpZ2F0b3Jpc2NoIGFuZCBkb2t0b3JhdCAtIG5vdCBlbm91Z2ggY2FzZXMgeWV0DQoNCmFscGhhX2J5X2VkdSA8LSBtYXAoZWRsdmxzLCBmdW5jdGlvbihlZGx2bCkgew0KICBkZl9jcnEgJT4lDQogICAgc2VsZWN0KGVkdWNhdGlvbl9kZSwgb2UxX3dvcms6bGVhcjNfd29yaykgJT4lIA0KICAgIGZpbHRlcihlZHVjYXRpb25fZGUgPT0gZWRsdmwpICU+JSANCiAgICBzY29yZUl0ZW1zTXVsdGkoc2NhbGVuYW1lcywgLiwgZXhjbHVkZSA9IFRSVUUpICU+JSANCiAgICAuJGFscGhhDQp9KSANCg0KDQoNCmFscGhhX2J5X2VkdSAlPiUgbWFwKH5taW4oLngpKSAjIGFscGhhIG1pbnMgaW5jcmVhc2UgYnkgZWR1Y2F0aW9uLCBidXQgaXRzIHN0aWxsIGFkZXF1YXRlIHdpdGggbG93ZXIgbGV2ZWwuDQphbHBoYV9ieV9lZHUgJT4lIG1hcCh+bWVhbigueCkpIA0KYGBgDQoNCktvcnJlbGF0aW9uIG1pdCBCMV9BTUYNCmBgYHtyfQ0KZWRsdmxzIDwtIGxldmVscyhkZl9icm0kQXVzYl9yZWNvZGUyKQ0KdG1wIDwtIG1hcF9kZnIoZWRsdmxzLCBmdW5jdGlvbihsdmwpIHsNCiAgZGZfYnJtICU+JSBmaWx0ZXIoQXVzYl9yZWNvZGUyID09IGx2bCkgJT4lIA0KICAgICAgICBsbShCMV9hbWYgfiBvZSAgKyAgam1rICArICBzc2sgICsgIGludiAgKyAgY29uICArICBjbCAgKyAgY29wICArICBvcyAgKyAgamNoYSAgKyAgc2NzICArICBuZXQgICsgIGNleHBsICArICBsZWFyLA0KICAgLikgJT4lIGdsYW5jZSgpICU+JSBtdXRhdGUoZWR1ID0gbHZsKQ0KICB9KQ0KDQp0bXAgJT4lIG11dGF0ZShtY29yciA9IHNxcnQoci5zcXVhcmVkKSkgJT4lIHdyaXRlLnRhYmxlKC4sICJjbGlwYm9hcmQiLCBzZXA9Ilx0Iiwgcm93Lm5hbWVzPUZBTFNFKQ0KYGBgDQoNClotc3RhbmRhcmRpc2llcnQgQjFfQU1GLCBkYW5uIERpZmZlcmVueiBuYWNoIEJpbGR1bmc/DQpgYGB7cn0NCmRmX2JybSAlPiUgbXV0YXRlKEIxX2FtZl96ICA9IHNjYWxlKEIxX2FtZikpICU+JSBncm91cF9ieShBdXNiX3JlY29kZTIpICU+JSBzdW1tYXJpc2UoYWNyb3NzKGMoa25zaywgbW90LCBlbnYsIGFjdCwgQjFfYW1mKSwgfm1lYW4oLngsIG5hLnJtID0gVFJVRSkpKQ0KDQpgYGANCg0KDQoNCmBgYHtyfQ0KZGZfYnJtICU+JSBmaWx0ZXIoQTFfR3J1ZW5kZVNRMDAyID09ICJKYSIpICU+JSANCiAgICAgIGxtKEIxX2FtZiB+IG9lICArICBqbWsgICsgIHNzayAgKyAgaW52ICArICBjb24gICsgIGNsICArICBjb3AgICsgIG9zICArICBqY2hhICArICBzY3MgICsgIG5ldCAgKyAgY2V4cGwgICsgIGxlYXIsDQogLikgJT4lIGdsYW5jZSgpDQoNCmRmX2JybSAlPiUgZmlsdGVyKEExX0dydWVuZGVTUTAwMSA9PSAiSmEiKSAlPiUgDQogICAgICBsbShCMV9hbWYgfiBvZSAgKyAgam1rICArICBzc2sgICsgIGludiAgKyAgY29uICArICBjbCAgKyAgY29wICArICBvcyAgKyAgamNoYSAgKyAgc2NzICArICBuZXQgICsgIGNleHBsICArICBsZWFyLA0KIC4pICU+JSBnbGFuY2UoKQ0KYGBg</div>

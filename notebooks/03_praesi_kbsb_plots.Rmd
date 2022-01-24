@@ -1,0 +1,153 @@
+---
+title: "KBSB Plots in grosser Schrift"
+output: html_notebook
+---
+Initialization
+
+```{r}
+library(sjPlot)
+library(brms)
+library(broom.mixed)
+library(ggcharts)
+library(ggthemes)
+library(ggpubr)
+library(sjlabelled)
+source("../lib/likert_labeller.R")
+source("../lib/numeric_conv.R")
+source("https://raw.githubusercontent.com/alanthompsonch/AOP_uni/main/crq_00_palette.R")
+```
+
+```{r}
+theme_set(theme_few(base_size = 11))
+size_geom_text <- 14
+```
+
+
+```{r}
+plotdat <- df_brm %>% mutate(A2_B2SQ001 = sjlabelled::as_factor(A2_B2SQ001),
+                             B1_amf = as_factor(B1_amf)) %>% 
+  group_by(B1_amf) %>% 
+  summarise(fct_count(A2_B2SQ001)) %>% filter(f != is.na(f))
+levels(plotdat$B1_amf) <- get_labels(df_brm$B1_amf)
+levels(plotdat$f) <- get_labels(df_brm$A2_B2SQ001)
+
+plotdat <- plotdat %>% group_by(B1_amf) %>% mutate(total = sum(n)) %>% mutate(proc = (n/total)*100) %>% filter(!is.na(B1_amf))
+
+ggplot(plotdat, aes(y = proc, x = B1_amf, fill = f)) +
+  geom_bar(position="stack", stat="identity") + 
+  scale_fill_brewer(name = "Angabe", labels = function(x) str_wrap(x, width = 10), palette = "YlGn") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  xlab("Arbeitsmarktfähigkeit") +
+  ylab("Prozent der Angaben") +
+  theme(text=element_text(size=size_geom_text))
+
+ggsave("plots_kbsb/zielerreichung_a2_amf.png")
+
+```
+
+# CRQ STichprobenvergleich
+
+```{r}
+
+#load crq dataframe of the "Normstichprobe"
+df_sdbb <- readxl::read_excel("../data/CRQ/SDBB_cleaned_madeleine.xlsx")
+
+#renaming viamia data frame for clarity
+df_viamia <- df_crq
+remove(df_crq)
+
+#renaming cols in the sdbb data frame for more concistency between the two dfs
+colnames(df_viamia)
+colnames(df_sdbb)
+
+df_sdbb <- df_sdbb %>% 
+  rename(
+    "bearbeitung_ab" = "Bearbeitung ab",
+    bis = Bis,
+    oe = OE,
+    jmk = JMK,
+    ssk = SSK,
+    inv = INV,
+    con = CONF,
+    cl = CCL,
+    cop = COP,
+    os = OCS,
+    mot = MOT,
+    jcha = JCHA,
+    scs = SCS,
+    env = ENV,
+    net = NET,
+    cexpl = CEXPL,
+    lear = LEAR,
+    act = ACT,
+    knsk = KNSK,
+    nutzer_id = "Nutzer-ID"
+  )
+
+# # Example of code for comparing the data sets
+# comp_sdbb <- df_sdbb$nutzer_id %in% df_viamia$id
+# ind_sdbb <- which(comp_sdbb)
+# 
+# comp_viamia <- df_viamia$id %in% df_sdbb$nutzer_id
+# ind_viamia <- which(comp_viamia)
+# 
+# df_sdbb[ind_sdbb,]
+# df_viamia[ind_viamia,]
+
+# add source column to each dataframe
+df_sdbb <- mutate(df_sdbb, src = "sdbb")
+df_viamia <- mutate(df_viamia, src = "viamia")
+
+# Descriptive Statistics by group
+# saved as "Table Descriptives Viamia SDBB.xlsx" in vm_public folder.
+df_all <- bind_rows(df_sdbb, df_viamia)
+df_plot <- select(df_all, knsk, mot, env, act, src)
+
+
+df_plot$src[df_plot$src == "sdbb"] <- "BSLB"
+df_plot$src[df_plot$src =="viamia"] <- "Viamia"
+df_plot %>% 
+  rename("Wissen und Kompetenzen" = knsk, "Motivation" = mot, "Umfeld" = env, "Aktivitäten" = act) %>% 
+  pivot_longer(c(`Wissen und Kompetenzen`, Motivation, Umfeld, Aktivitäten)) %>% 
+  ggplot(aes(y = value, fill=src, x = name)) +
+  geom_bar(position="dodge", stat="summary", fun = mean) +
+  scale_fill_manual(values = c(colors_viamia[2],colors_viamia[4])) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  aes(x = fct_inorder(name)) +
+  xlab("CRQ-Dimension") +
+  ylab("Durchschnittlicher Score") +
+  guides(fill=guide_legend(title="Stichprobe")) +
+  coord_cartesian(ylim = c(1,5)) +
+    theme(text=element_text(size=size_geom_text))
+
+ggsave("plots_kbsb/crq_kbsb_vergleich.png")
+```
+
+```{r ressourcenfoerderung_a3_likertplot}
+ressourcennames <- df_brm %>% select(starts_with("A3_A1SQ")) %>% names()
+ressourcenlabels <- c("Ich fühle mich wohler",
+                      "Ich bin selbstbewusster geworden",
+                      "Ich bin positiver eingestellt gegenüber beruflichen Veränderungen",
+"Ich kann künftig berufliche Entscheidungen besser treffen",
+"Ich habe neue Perspektiven erhalten bzw. Entdeckt",
+"Ich habe neues Wissen zu Weiterbildungsmöglichkeiten" ,
+"Ich kenne mehr konkrete Möglichkeiten, mich weiterzuentwickeln",
+"Ich kenne meine beruflichen Perspektiven besser",
+"Ich weiss besser, was meine beruflichen Ziele sind",
+"Ich traue mir besser zu, meine beruflichen Ziele zu erreichen",
+"Ich bin bei der Arbeit motivierter")
+
+plotdat <- df_brm %>% select(starts_with("A3_A1SQ"))
+set_label(plotdat) <- ressourcenlabels     
+plotdat <- set_labels(plotdat, labels = c("Nein", "Eher nein", "Eher ja", "Ja"))
+plotdat %>% plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "first.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = 3.5) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE)) + 
+     theme(axis.text=element_text(size=12))
+
+
+ggsave("plots_kbsb/resourcenfoerderung_a3.png", width = 10, height = 7)
+```
+

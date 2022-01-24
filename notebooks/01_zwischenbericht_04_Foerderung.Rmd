@@ -463,6 +463,15 @@ glm_outc_gruende <- map2_dfr(outcome_gruende_pairs$outcomevarnames, outcome_grue
 
 glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
   filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
+
+# ohne AMF
+glm_outc_gruende <- map2_dfr(outcome_gruende_pairs$outcomevarnames, outcome_gruende_pairs$gruendenames, function(y,x) {
+  glm_formula <- str_c(y, " ~ ", x) 
+  glm(glm_formula, family = gaussian(link = "identity"), data = df_brm) %>% tidy() %>% mutate(outcome = y)
+})
+
+glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% 
+  filter(p.value <= 0.05) %>% arrange(outcome) %>% write.table(., "clipboard", sep="\t", row.names=FALSE)
 ```
 
 
@@ -554,6 +563,7 @@ glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>%
   filter(p.value <= 0.05) %>% arrange(outcome)
 
 glm_outc_gruende %>% filter(term != "(Intercept)" & term != "B1_amf") %>% arrange(outcome) %>% 
+  filter(p.value <= 0.05) %>% 
   write.table(., "clipboard", sep="\t", row.names=FALSE)
   
 ```
@@ -573,28 +583,6 @@ Korrespondenz coden als?
 
 ## Deskriptive Statistiken - Plots
 
-```{r}
-plotdat <- df_brm %>% mutate(A3_C2SQ001 = sjlabelled::as_factor(A3_C2SQ001),
-                             B1_amf = as_factor(B1_amf)) %>% 
-  group_by(B1_amf) %>% 
-  summarise(fct_count(A3_C2SQ001, prop = TRUE)) %>% filter(f != is.na(f))
-levels(plotdat$B1_amf) <- get_labels(df_brm$B1_amf)
-levels(plotdat$f) <- get_labels(df_brm$A3_C2SQ001)
-
-ggplot(plotdat, aes(y = n, x = B1_amf, fill = f)) +
-  geom_bar(position="stack", stat="identity")
-
-
-plotdat <- df_brm %>% mutate(A2_B2SQ001 = sjlabelled::as_factor(A2_B2SQ001),
-                             B1_amf = as_factor(B1_amf)) %>% 
-  group_by(B1_amf) %>% 
-  summarise(fct_count(A2_B2SQ001, prop = TRUE)) %>% filter(f != is.na(f))
-levels(plotdat$B1_amf) <- get_labels(df_brm$B1_amf)
-levels(plotdat$f) <- get_labels(df_brm$A2_B2SQ001)
-
-ggplot(plotdat, aes(y = p, x = B1_amf, fill = f)) +
-  geom_bar(position="stack", stat="identity")
-
-```
+siehe alle plots file
 
 
