@@ -1,6 +1,13 @@
 library(haven)
 library(tidyverse)
+
+
 df_crqs <- read_sav("data/CRQ_Selbststaendige/CRQ Selbstständige_February 3, 2022_12.07.sav")
+
+df_crqs <- read_sav("data/CRQ_Selbstaendige/CRQ Selbstständige_February 3, 2022_10.38.sav") %>%
+  filter(StartDate >= lubridate::as_datetime("2022-02-02 17:20:00", tz = "Europe/Zurich")) %>% 
+  filter(employ == 4 & whours >= 16)
+
 # View(df_crqs)
 
 names(df_crqs)
@@ -48,3 +55,4 @@ df_crqs %>% count(country_recode)
 
 # Streuung Soziodemographisch
 # Gender, Alter
+sjlabelled::get_label(crq_items) %>% enframe() %>% View()
