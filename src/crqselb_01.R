@@ -2,9 +2,7 @@ library(haven)
 library(tidyverse)
 
 
-df_crqs <- read_sav("data/CRQ_Selbststaendige/CRQ Selbstständige_February 3, 2022_12.07.sav")
-
-df_crqs <- read_sav("data/CRQ_Selbstaendige/CRQ Selbstständige_February 3, 2022_10.38.sav") %>%
+df_crqs <- read_sav("data/CRQ_Selbststaendige/CRQ Selbstständige_February 4, 2022_11.02.sav") %>%
   filter(StartDate >= lubridate::as_datetime("2022-02-02 17:20:00", tz = "Europe/Zurich")) %>% 
   filter(employ == 4 & whours >= 16)
 
@@ -51,7 +49,16 @@ df_crqs <- df_crqs %>% filter(timer_test_pass == TRUE & attchk_pass == TRUE)
 # valide CH mind. 80
 df_crqs <- df_crqs[order(df_crqs$country_recode),]
 
-df_crqs %>% count(country_recode)
+anzahl_ch <- df_crqs %>% count(country_recode)
+
+names(anzahl_ch) <- c("Land","Anzahl")
+
+total <- data.frame("total",nrow(df_crqs))
+names(tot)<-c("Land","Anzahl")
+
+anzahl_ch <- rbind(anzahl_ch, total)
+
+anzahl_ch
 
 # Streuung Soziodemographisch
 # Gender, Alter
