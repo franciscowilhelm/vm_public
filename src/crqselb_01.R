@@ -1,16 +1,19 @@
 library(haven)
 library(tidyverse)
 
+setwd("~/GitHub/vm_public")
 
-df_crqs <- read_sav("data/CRQ_Selbststaendige/CRQ Selbstständige_February 4, 2022_11.02.sav") %>%
+df_crqs_prefilter <- read_sav("data/CRQ_Selbststaendige/CRQ Selbstständige_February 4, 2022_12.26.sav")
+
+df_crqs <- read_sav("data/CRQ_Selbststaendige/CRQ Selbstständige_February 4, 2022_12.26.sav") %>%
   filter(StartDate >= lubridate::as_datetime("2022-02-02 17:20:00", tz = "Europe/Zurich")) %>% 
   filter(employ == 4 & whours >= 16)
+
+df_crqs_postfilter <- df_crqs
 
 # View(df_crqs)
 
 names(df_crqs)
-
-raw_df_crqs <- df_crqs
 
 scalenames <- c("oexp", "jmk", "ssk", "inv", "con", "ccl", "jcha", "scs", "net", "cexpl", "lear")
 crq_items <- df_crqs %>% select(starts_with(scalenames)) %>% select(-consent)
@@ -50,13 +53,29 @@ df_crqs <- df_crqs %>% filter(timer_test_pass == TRUE & attchk_pass == TRUE)
 df_crqs <- df_crqs[order(df_crqs$country_recode),]
 
 anzahl_ch <- df_crqs %>% count(country_recode)
+names(anzahl_ch) <- c("Kategorie","Anzahl")
 
-names(anzahl_ch) <- c("Land","Anzahl")
+# Total valider Fragebögen
+total_valid <- data.frame("TOTAL_valid",nrow(df_crqs))
+names(total_valid) <- c("Kategorie","Anzahl")
 
-total <- data.frame("total",nrow(df_crqs))
-names(tot)<-c("Land","Anzahl")
+# Disqualified due to carelessness
+careless <- data.frame("careless",nrow(df_crqs_postfilter)-nrow(df_crqs))
+names(careless) <- c("Kategorie", "Anzahl")
 
-anzahl_ch <- rbind(anzahl_ch, total)
+# Fragebögen, die aufgrund eines zu tiefen Pensums oder != Selbstständig ausgeschieden sind.
+prefilter <- data.frame("<16h_or_not_se",nrow(df_crqs_prefilter)-nrow(df_crqs_postfilter))
+names(prefilter) <- c("Kategorie","Anzahl")
+
+# Total invalider Fragebögen
+total_invalid <- data.frame("TOTAL_invalid",prefilter[1,2]+careless[1,2])
+names(total_invalid) <- c("Kategorie","Anzahl")
+
+# Total aller Fragebögen
+total <- data.frame("TOTAL",total_valid[1,2]+total_invalid[1,2])
+names(total) <- c("Kategorie","Anzahl")
+
+anzahl_ch <- rbind(anzahl_ch, total_valid, careless, prefilter, total_invalid, total)
 
 anzahl_ch
 
