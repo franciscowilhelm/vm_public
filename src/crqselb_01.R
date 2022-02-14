@@ -3,9 +3,12 @@ library(tidyverse)
 
 setwd("~/GitHub/vm_public")
 
-df_crqs_prefilter <- read_sav("data/CRQ_Selbststaendige/CRQ Selbstständige_February 4, 2022_12.26.sav")
+datapath <- "data/CRQ_Selbststaendige/CRQ Selbstständige_February 14, 2022_10.00.sav"
 
-df_crqs <- read_sav("data/CRQ_Selbststaendige/CRQ Selbstständige_February 4, 2022_12.26.sav") %>%
+df_crqs_prefilter <- read_sav(datapath) %>% 
+  filter(StartDate >= lubridate::as_datetime("2022-02-02 17:20:00", tz = "Europe/Zurich"))
+
+df_crqs <- read_sav(datapath) %>%
   filter(StartDate >= lubridate::as_datetime("2022-02-02 17:20:00", tz = "Europe/Zurich")) %>% 
   filter(employ == 4 & whours >= 16)
 
@@ -45,27 +48,27 @@ attchks <- df_crqs %>% select(contains("attchk"))
 attchks <- attchks %>% mutate(attchk_pass = attchk_1 == 2 | attchk_2 == 5)
 df_crqs <- df_crqs %>% mutate(attchk_pass = attchks$attchk_pass)
 
-df_crqs <- df_crqs %>% filter(timer_test_pass == TRUE & attchk_pass == TRUE)
+df_crqs_final <- df_crqs %>% filter(timer_test_pass == TRUE & attchk_pass == TRUE)
 
 
 # wenn beide filter angewendet, dann sortieren nach DE / CH
 # valide CH mind. 80
-df_crqs <- df_crqs[order(df_crqs$country_recode),]
+df_crqs_final <- df_crqs_final[order(df_crqs_final$country_recode),]
 
-anzahl_ch <- df_crqs %>% count(country_recode)
+anzahl_ch <- df_crqs_final %>% count(country_recode)
 names(anzahl_ch) <- c("Kategorie","Anzahl")
 
 # Total valider Fragebögen
-total_valid <- data.frame("TOTAL_valid",nrow(df_crqs))
+total_valid <- data.frame("TOTAL_valid",nrow(df_crqs_final))
 names(total_valid) <- c("Kategorie","Anzahl")
-
-# Disqualified due to carelessness
-careless <- data.frame("careless",nrow(df_crqs_postfilter)-nrow(df_crqs))
-names(careless) <- c("Kategorie", "Anzahl")
 
 # Fragebögen, die aufgrund eines zu tiefen Pensums oder != Selbstständig ausgeschieden sind.
 prefilter <- data.frame("<16h_or_not_se",nrow(df_crqs_prefilter)-nrow(df_crqs_postfilter))
 names(prefilter) <- c("Kategorie","Anzahl")
+
+# Disqualified due to carelessness
+careless <- data.frame("meet_criteria_but_careless",nrow(df_crqs_postfilter)-nrow(df_crqs_final))
+names(careless) <- c("Kategorie", "Anzahl")
 
 # Total invalider Fragebögen
 total_invalid <- data.frame("TOTAL_invalid",prefilter[1,2]+careless[1,2])
@@ -75,9 +78,27 @@ names(total_invalid) <- c("Kategorie","Anzahl")
 total <- data.frame("TOTAL",total_valid[1,2]+total_invalid[1,2])
 names(total) <- c("Kategorie","Anzahl")
 
-anzahl_ch <- rbind(anzahl_ch, total_valid, careless, prefilter, total_invalid, total)
+anzahl_ch <- rbind(anzahl_ch, total_valid, prefilter, careless, total_invalid, total)
 
 anzahl_ch
+
+### Analyse Schweizer
+land <- df_crqs_prefilter %>% count(country)
+land_mit_employ <- df_crqs_prefilter %>% filter(employ == 4) %>% count(country)
+land_mit_employ_und_whours <- df_crqs_prefilter %>% filter(employ == 4) %>% filter(whours > 16) %>% count(country)
+
+land
+land_mit_employ
+land_mit_employ_und_whours
+
+# Ausgeschiedene, weil nicht Selbstständig oder niedriges Pensum
+sum(land[,2])-sum(land_mit_employ[,2])
+sum(land_mit_employ_und_whours[,2])
+
+
+tic_respondi <- as.data.frame(df_crqs_final$tic)
+
+write_excel_csv2(tic_respondi, file = "data/tic_selbststaendige.csv")
 
 # Streuung Soziodemographisch
 # Gender, Alter
