@@ -5,7 +5,7 @@ source("https://raw.githubusercontent.com/franciscowilhelm/r-collection/master/s
 
 setwd("~/GitHub/vm_public")
 
-datapath <- "data/CRQ_Selbstaendige/CRQ Selbstständige_March 1, 2022_12.53.sav"
+datapath <- "data/CRQ_Selbststaendige/CRQ Selbststaendige_February 14, 2022_10.00.sav"
 
 df_crqs_prefilter <- read_sav(datapath) %>% 
   filter(StartDate >= lubridate::as_datetime("2022-02-02 17:20:00", tz = "Europe/Zurich"))
@@ -52,6 +52,15 @@ df_crqs <- df_crqs %>% mutate(attchk_pass = attchks$attchk_pass)
 
 df_crqs_final <- df_crqs %>% filter(timer_test_pass == TRUE & attchk_pass == TRUE)
 
+
+#### Rekodieren Field_other ----------------------------------------------------
+df_recode <- df_crqs_final %>% filter(str_length(field_other) > 0)
+
+new_fields <- c(24,24,18,24,18,18,6,24,18,18,19,23,13,23,6,18,18,18,23,21,11,18,18)
+
+df_recode <- df_recode %>% mutate(field_new = new_fields)
+
+df_recode <- df_recode %>% relocate(field_new, .after = field_other)
 
 # # wenn beide filter angewendet, dann sortieren nach DE / CH
 # # valide CH mind. 80
