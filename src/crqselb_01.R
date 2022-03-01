@@ -134,7 +134,7 @@ df_crq_scores <- bind_cols(df_crq_scores,
                            crq_scales_h$scores %>% as.data.frame())
 df_crq_scores <- bind_cols(df_crq_scores, df %>% select(age, gender))
 
-# 5. demographic description
+# 5. demographic description ---------------------------------------------------
 hist(df$age)
 sjmisc::frq(df$gender)
 sjmisc::frq(df$edu_ch)
