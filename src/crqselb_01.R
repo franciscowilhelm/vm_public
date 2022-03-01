@@ -5,7 +5,7 @@ source("https://raw.githubusercontent.com/franciscowilhelm/r-collection/master/s
 
 setwd("~/GitHub/vm_public")
 
-datapath <- "data/CRQ_Selbststaendige/CRQ Selbstständige_February 14, 2022_10.00.sav"
+datapath <- "data/CRQ_Selbstaendige/CRQ Selbstständige_March 1, 2022_12.53.sav"
 
 df_crqs_prefilter <- read_sav(datapath) %>% 
   filter(StartDate >= lubridate::as_datetime("2022-02-02 17:20:00", tz = "Europe/Zurich"))
@@ -96,7 +96,7 @@ df_crqs_final <- df_crqs %>% filter(timer_test_pass == TRUE & attchk_pass == TRU
 
 # Streuung Soziodemographisch
 # Gender, Alter
-sjlabelled::get_label(crq_items) %>% enframe() %>% View()
+# sjlabelled::get_label(crq_items) %>% enframe() %>% View()
 
 
 #### Datenauswertung -----------------------------------------------------------
@@ -147,3 +147,8 @@ df %>% filter(age > 49 & age < 61) %>% nrow()/nrow(df)
 
 sjmisc::frq(df_ch$gender)
 sjmisc::frq(df_ch$edu_ch)
+
+sjmisc::frq(df$employees)
+hist(df$whours)
+sjmisc::frq(df$field)
+sjmisc::frq(df$field_other) # einordnen wo möglich.

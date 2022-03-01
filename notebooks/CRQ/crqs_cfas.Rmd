@@ -1,6 +1,8 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r}
@@ -29,8 +31,9 @@ summary(res_4factor, estimates = FALSE, fit.measures = TRUE)
 ```
 
 ```{r}
-lav_get_fits(res11)
-lav_get_fits(res_4factor)
-lav_get_fits(res_1factor)
+rbind(lav_get_fits(res11),
+      lav_get_fits(res_4factor),
+      lav_get_fits(res_1factor)) %>% 
+  mutate(Model = c("11 Factor", "4 Factor", "1 Factor"))
 ```
 
