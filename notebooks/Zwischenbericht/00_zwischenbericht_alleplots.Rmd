@@ -10,8 +10,8 @@ library(broom.mixed)
 library(ggcharts)
 library(ggthemes)
 library(ggpubr)
-source("../lib/likert_labeller.R")
-source("../lib/numeric_conv.R")
+source("../../lib/likert_labeller.R")
+source("../../lib/numeric_conv.R")
 source("https://raw.githubusercontent.com/alanthompsonch/AOP_uni/main/crq_00_palette.R")
 ```
 

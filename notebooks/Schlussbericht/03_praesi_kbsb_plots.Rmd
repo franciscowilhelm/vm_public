@@ -12,8 +12,8 @@ library(ggcharts)
 library(ggthemes)
 library(ggpubr)
 library(sjlabelled)
-source("../lib/likert_labeller.R")
-source("../lib/numeric_conv.R")
+source("../../lib/likert_labeller.R")
+source("../../lib/numeric_conv.R")
 source("https://raw.githubusercontent.com/alanthompsonch/AOP_uni/main/crq_00_palette.R")
 ```
 
@@ -33,7 +33,7 @@ levels(plotdat$f) <- get_labels(df_brm$A2_B2SQ001)
 
 plotdat <- plotdat %>% group_by(B1_amf) %>% mutate(total = sum(n)) %>% mutate(proc = (n/total)*100) %>% filter(!is.na(B1_amf))
 
-ggplot(plotdat, aes(y = proc, x = B1_amf, fill = f)) +
+p1 <- ggplot(plotdat, aes(y = proc, x = B1_amf, fill = f)) +
   geom_bar(position="stack", stat="identity") + 
   scale_fill_brewer(name = "Angabe", labels = function(x) str_wrap(x, width = 10), palette = "YlGn") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
@@ -41,6 +41,7 @@ ggplot(plotdat, aes(y = proc, x = B1_amf, fill = f)) +
   ylab("Prozent der Angaben") +
   theme(text=element_text(size=size_geom_text))
 
+p1
 ggsave("plots_kbsb/zielerreichung_a2_amf.png")
 
 ```
@@ -140,14 +141,32 @@ ressourcenlabels <- c("Ich fühle mich wohler",
 plotdat <- df_brm %>% select(starts_with("A3_A1SQ"))
 set_label(plotdat) <- ressourcenlabels     
 plotdat <- set_labels(plotdat, labels = c("Nein", "Eher nein", "Eher ja", "Ja"))
-plotdat %>% plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "first.desc") +
+p2 <- plotdat %>% plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "first.desc") +
       geom_text(
       aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = 3.5) +
     theme(legend.position = "bottom") +
   guides(fill=guide_legend(nrow=2,byrow=TRUE)) + 
      theme(axis.text=element_text(size=12))
 
-
+p2
 ggsave("plots_kbsb/resourcenfoerderung_a3.png", width = 10, height = 7)
+```
+
+## Extract Titles etc. for Translation
+
+```{r}
+tmp<- ggplot_build(p1)
+p1_strings <- c(tmp$plot$labels$y,
+tmp$plot$labels$x,
+as.character(unique(tmp[["plot"]][["data"]][["B1_amf"]])),
+"Angabe",
+as.character(unique(tmp[["plot"]][["data"]][["f"]])))
+
+tmp <- ggplot_build(p2)
+p2_strings <- c(as.character(unique(tmp[["plot"]][["data"]][["label"]])),
+as.character(tmp[["plot"]][["plot_env"]][["axis.labels"]]))
+
+writexl::write_xlsx(list(data.frame(p1_strings), data.frame(p2_strings)), path = "plot_text_kbsb.xlsx",
+                    col_names = FALSE)
 ```
 

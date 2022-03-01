@@ -196,11 +196,19 @@ df_crq_scores <-df_crq_scores %>%  mutate(agebin = as_factor(agebin) %>% fct_rel
 crq_age_meansd <- df_crq_scores %>% group_by(agebin) %>% 
   summarize(across(oexp:act, list(mean = ~mean(.x, na.rm = TRUE), sd = ~sd(.x, na.rm = TRUE)), .names = "{.col}.{.fn}"))
 
+
+# Compute Stanines: 1) Where they begin in terms of CRQ raw scores, and transformed scores.
+
+# updated 2022/02/14: classify into ranges of 0.5 z width.
+
+
+
 # we need to take mean = 5, sd/2 = 1, and compute values for each.
 compute_stanine <- function(mean, sd) {
   x <- as.double(mean)
-  y <- as.double(sd)/2
-  out <- c(x-4*y, x-3*y, x-2*y, x-y, x, x+y, x+2*y, x+3*y, x+4*y)
+  y <- as.double(sd)
+  # S1 begins at -2.25z, ends at -1.75z and so on (0.5z width) and so on.
+  out <- c(x-2.25*y, x-1.75*y, x-1.25*y, x-0.75*y, x-0.25*y, x+0.25*y, x+0.75*y, x+1.25*y, x+1.75*y)
   return(out)
 }
 
@@ -212,6 +220,12 @@ set_to_bounds <- function(x) {
 }
 # vectorize it
 vset_to_bounds <- Vectorize(set_to_bounds)
+
+# stanine rescaled values. Not really needed because in diagnostics stanines are always binned.
+stanine_rescale <- function(x) {
+  psych::rescale(x, mean = 5, sd = 2, df = TRUE)
+}
+
 
 stanines_by_age <- map(levels(df_crq_scores$agebin), function(age) {
   x <- crq_age_meansd %>% filter(agebin == age)
@@ -231,12 +245,9 @@ names(stanines_by_age) <- levels(df_crq_scores$agebin)
 writexl::write_xlsx(stanines_by_age, "outputs/normwerte.xlsx")
 
 
-# stanine rescaled values of dataframe
-stanine_rescale <- function(x) {
-  psych::rescale(x, mean = 5, sd = 2, df = TRUE)
-}
-tmp <- map(levels(df_crq_scores$agebin),
-        ~stanine_rescale(df_crq_scores %>% filter(agebin == .x) %>% select(oexp:act)))
+# rescaled df with stanines (as continuous stanines)
+# tmp <- map(levels(df_crq_scores$agebin),
+#         ~stanine_rescale(df_crq_scores %>% filter(agebin == .x) %>% select(oexp:act)))
 
 
 # correlation table
