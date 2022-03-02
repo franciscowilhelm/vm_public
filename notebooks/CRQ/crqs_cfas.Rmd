@@ -6,7 +6,7 @@ output:
 ---
 
 ```{r}
-load("../../data/Output crqselb_01.RData")
+load("../../data/df_crqs_final.Rdata")
 ```
 
 ```{r}
@@ -17,18 +17,35 @@ source("../../src/crqs_cfa.R")
 source("../../lib/lav_get_fits.R")
 ```
 
+## Modell mit 11 Faktoren: Fit, Estimates, und Korrelationstabelle der Faktoren.
 
 ```{r}
-summary(res11, estimates = FALSE, fit.measures = TRUE)
+summary(res11, estimates = TRUE, standardized = TRUE, fit.measures = TRUE)
 ```
+```{r}
+lavInspect(res11, "cor.lv")
+```
+## Modell mit hierarchischen 4 Faktoren
+
+```{r}
+# summary(res4h, estimates = FALSE, fit.measures = TRUE)
+```
+
+not positive-definitive wegen der kleinen Stichprobe, nicht berichten.
+
+## Modell mit 4 Faktoren
+
+```{r}
+summary(res_4factor, estimates = FALSE, fit.measures = TRUE)
+```
+
+## Modell mit nur einem Faktor
 
 ```{r}
 summary(res_1factor, estimates = FALSE, fit.measures = TRUE)
 ```
 
-```{r}
-summary(res_4factor, estimates = FALSE, fit.measures = TRUE)
-```
+## Übersicht Fits der Modelle
 
 ```{r}
 rbind(lav_get_fits(res11),
