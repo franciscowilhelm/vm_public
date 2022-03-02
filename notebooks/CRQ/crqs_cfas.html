@@ -182,6 +182,9 @@ pre code {
 <pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre><code>## Warning in lav_object_post_check(object): lavaan WARNING: covariance matrix of latent variables
+##                 is not positive definite;
+##                 use lavInspect(fit, &quot;cov.lv&quot;) to investigate.</code></pre>
 <pre class="r"><code>source(&quot;../../lib/lav_get_fits.R&quot;)</code></pre>
 <div id="modell-mit-11-faktoren-fit-estimates-und-korrelationstabelle-der-faktoren." class="section level2">
 <h2>Modell mit 11 Faktoren: Fit, Estimates, und Korrelationstabelle der Faktoren.</h2>
@@ -429,68 +432,10 @@ pre code {
 ## cexpl 0.245 0.815 0.172 0.404 0.403 0.409 0.492 0.336 0.545 1.000      
 ## lear  0.661 0.391 0.376 0.573 0.569 0.633 0.378 0.754 0.444 0.503 1.000</code></pre>
 </div>
-<div id="modell-mit-nur-einem-faktor" class="section level2">
-<h2>Modell mit nur einem Faktor</h2>
-<pre class="r"><code>summary(res_1factor, estimates = FALSE, fit.measures = TRUE)</code></pre>
-<pre><code>## lavaan 0.6-9 ended normally after 25 iterations
-## 
-##   Estimator                                         ML
-##   Optimization method                           NLMINB
-##   Number of model parameters                        68
-##                                                       
-##                                                   Used       Total
-##   Number of observations                           242         251
-##                                                                   
-## Model Test User Model:
-##                                                Standard      Robust
-##   Test Statistic                               3285.800    2864.781
-##   Degrees of freedom                                527         527
-##   P-value (Chi-square)                            0.000       0.000
-##   Scaling correction factor                                   1.147
-##        Yuan-Bentler correction (Mplus variant)                     
-## 
-## Model Test Baseline Model:
-## 
-##   Test statistic                              6300.008    5372.457
-##   Degrees of freedom                               561         561
-##   P-value                                        0.000       0.000
-##   Scaling correction factor                                  1.173
-## 
-## User Model versus Baseline Model:
-## 
-##   Comparative Fit Index (CFI)                    0.519       0.514
-##   Tucker-Lewis Index (TLI)                       0.488       0.483
-##                                                                   
-##   Robust Comparative Fit Index (CFI)                         0.525
-##   Robust Tucker-Lewis Index (TLI)                            0.494
-## 
-## Loglikelihood and Information Criteria:
-## 
-##   Loglikelihood user model (H0)              -9897.406   -9897.406
-##   Scaling correction factor                                  1.317
-##       for the MLR correction                                      
-##   Loglikelihood unrestricted model (H1)             NA          NA
-##   Scaling correction factor                                  1.166
-##       for the MLR correction                                      
-##                                                                   
-##   Akaike (AIC)                               19930.813   19930.813
-##   Bayesian (BIC)                             20168.061   20168.061
-##   Sample-size adjusted Bayesian (BIC)        19952.513   19952.513
-## 
-## Root Mean Square Error of Approximation:
-## 
-##   RMSEA                                          0.147       0.135
-##   90 Percent confidence interval - lower         0.142       0.131
-##   90 Percent confidence interval - upper         0.152       0.140
-##   P-value RMSEA &lt;= 0.05                          0.000       0.000
-##                                                                   
-##   Robust RMSEA                                               0.145
-##   90 Percent confidence interval - lower                     0.140
-##   90 Percent confidence interval - upper                     0.150
-## 
-## Standardized Root Mean Square Residual:
-## 
-##   SRMR                                           0.118       0.118</code></pre>
+<div id="modell-mit-hierarchischen-4-faktoren" class="section level2">
+<h2>Modell mit hierarchischen 4 Faktoren</h2>
+<pre class="r"><code># summary(res4h, estimates = FALSE, fit.measures = TRUE)</code></pre>
+<p>not positive-definitive wegen der kleinen Stichprobe, nicht berichten.</p>
 </div>
 <div id="modell-mit-4-faktoren" class="section level2">
 <h2>Modell mit 4 Faktoren</h2>
@@ -550,6 +495,69 @@ pre code {
 ##   Robust RMSEA                                               0.135
 ##   90 Percent confidence interval - lower                     0.129
 ##   90 Percent confidence interval - upper                     0.140
+## 
+## Standardized Root Mean Square Residual:
+## 
+##   SRMR                                           0.118       0.118</code></pre>
+</div>
+<div id="modell-mit-nur-einem-faktor" class="section level2">
+<h2>Modell mit nur einem Faktor</h2>
+<pre class="r"><code>summary(res_1factor, estimates = FALSE, fit.measures = TRUE)</code></pre>
+<pre><code>## lavaan 0.6-9 ended normally after 25 iterations
+## 
+##   Estimator                                         ML
+##   Optimization method                           NLMINB
+##   Number of model parameters                        68
+##                                                       
+##                                                   Used       Total
+##   Number of observations                           242         251
+##                                                                   
+## Model Test User Model:
+##                                                Standard      Robust
+##   Test Statistic                               3285.800    2864.781
+##   Degrees of freedom                                527         527
+##   P-value (Chi-square)                            0.000       0.000
+##   Scaling correction factor                                   1.147
+##        Yuan-Bentler correction (Mplus variant)                     
+## 
+## Model Test Baseline Model:
+## 
+##   Test statistic                              6300.008    5372.457
+##   Degrees of freedom                               561         561
+##   P-value                                        0.000       0.000
+##   Scaling correction factor                                  1.173
+## 
+## User Model versus Baseline Model:
+## 
+##   Comparative Fit Index (CFI)                    0.519       0.514
+##   Tucker-Lewis Index (TLI)                       0.488       0.483
+##                                                                   
+##   Robust Comparative Fit Index (CFI)                         0.525
+##   Robust Tucker-Lewis Index (TLI)                            0.494
+## 
+## Loglikelihood and Information Criteria:
+## 
+##   Loglikelihood user model (H0)              -9897.406   -9897.406
+##   Scaling correction factor                                  1.317
+##       for the MLR correction                                      
+##   Loglikelihood unrestricted model (H1)             NA          NA
+##   Scaling correction factor                                  1.166
+##       for the MLR correction                                      
+##                                                                   
+##   Akaike (AIC)                               19930.813   19930.813
+##   Bayesian (BIC)                             20168.061   20168.061
+##   Sample-size adjusted Bayesian (BIC)        19952.513   19952.513
+## 
+## Root Mean Square Error of Approximation:
+## 
+##   RMSEA                                          0.147       0.135
+##   90 Percent confidence interval - lower         0.142       0.131
+##   90 Percent confidence interval - upper         0.152       0.140
+##   P-value RMSEA &lt;= 0.05                          0.000       0.000
+##                                                                   
+##   Robust RMSEA                                               0.145
+##   90 Percent confidence interval - lower                     0.140
+##   90 Percent confidence interval - upper                     0.150
 ## 
 ## Standardized Root Mean Square Residual:
 ## 
