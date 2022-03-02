@@ -56,11 +56,13 @@ df_crqs_final <- df_crqs %>% filter(timer_test_pass == TRUE & attchk_pass == TRU
 #### Rekodieren Field_other ----------------------------------------------------
 df_recode <- df_crqs_final %>% filter(str_length(field_other) > 0)
 
-new_fields <- c(24,24,18,24,18,18,6,24,18,18,19,23,13,23,6,18,18,18,23,21,11,18,18)
+new_fields <- c(24,24,18,24,11,18,6,24,18,11,19,4,14,23,6,18,18,18,23,21,11,18,18)
 
 df_recode <- df_recode %>% mutate(field_new = new_fields)
 
 df_recode <- df_recode %>% relocate(field_new, .after = field_other)
+
+df_crqs_final[str_length(df_crqs_final$field_other) > 0, "field"] <- new_fields
 
 # # wenn beide filter angewendet, dann sortieren nach DE / CH
 # # valide CH mind. 80
