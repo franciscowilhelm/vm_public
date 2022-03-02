@@ -163,3 +163,5 @@ sjmisc::frq(df$employees)
 hist(df$whours)
 sjmisc::frq(df$field)
 sjmisc::frq(df$field_other) # einordnen wo möglich.
+
+save(df_crqs_final, file = "data/df_crqs_final.Rdata")
