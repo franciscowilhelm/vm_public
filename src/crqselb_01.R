@@ -165,5 +165,26 @@ sjmisc::frq(df$field)
 sjmisc::frq(df$field_other) # einordnen wo möglich.
 
 
-# Speichern des finalen Datensatzes
+# Speichern des finalen Datensatzes --------------------------------------------
 save(df_crqs_final, file = "data/df_crqs_final.Rdata")
+
+
+# 4. Normwerte -----------------------------------------------------------------
+lm(knsk ~ age + gender, data = df_crq_scores) %>% summary()
+lm(mot ~ age + gender, data = df_crq_scores) %>% summary()
+lm(act ~ age + gender, data = df_crq_scores) %>% summary()
+lm(env ~ age + gender, data = df_crq_scores) %>% summary()
+# effect of age on env.
+
+
+# Correlation of CRQ w/ Correlates --------------------------------------------- 
+# (Work engagement, job satisfaciton & Career Satisfaction)
+
+# Creating total scores for each correlate
+df_correlates <- df_crqs_final %>% mutate(jsat_score = (jsat_1+jsat_2+jsat_3+jsat_4+jsat_5)/5,
+                                          weng_score = (weng_1+weng_2+weng_3+weng_4+weng_5+weng_6+weng_7+weng_8)/8,
+                                          csat_score = (csat_1+csat_2+csat_3+csat_4+csat_5)/5)
+
+df_crqs_final %>% select(num_range("jsat_", 1:5),
+                         num_range("weng_", 1:8),
+                         num_range("csat_", 1:5)) %>% is.na() %>% which()

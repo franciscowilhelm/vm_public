@@ -54,3 +54,4 @@ rbind(lav_get_fits(res11),
   mutate(Model = c("11 Factor", "4 Factor", "1 Factor"))
 ```
 
+
