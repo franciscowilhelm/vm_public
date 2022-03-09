@@ -188,3 +188,73 @@ df_correlates <- df_crqs_final %>% mutate(jsat_score = (jsat_1+jsat_2+jsat_3+jsa
 df_crqs_final %>% select(num_range("jsat_", 1:5),
                          num_range("weng_", 1:8),
                          num_range("csat_", 1:5)) %>% is.na() %>% which()
+
+
+library(ggplot2)
+ggplot(df_crq_scores, aes(x = age, y = env)) +
+  geom_jitter() +
+  geom_smooth(method = "lm")
+
+agebin <- map_chr(seq_len(nrow(df_crq_scores)), function(i) {
+  age <- df_crq_scores$age[i]
+  if((age < 40)) {
+    x <- "unter 40"
+  } else if((age >= 40 & age < 50)) {
+    x <- "40-49"
+  } else if((age >= 50)) {
+    x <- "50+"
+  }
+})
+df_crq_scores <-df_crq_scores %>%  mutate(agebin = as_factor(agebin) %>% fct_relevel(., "u39", "40-49", "50+"))
+
+# mean / sd grouped by age bin
+crq_age_meansd <- df_crq_scores %>% group_by(agebin) %>% 
+  summarize(across(oexp:act, list(mean = ~mean(.x, na.rm = TRUE), sd = ~sd(.x, na.rm = TRUE)), .names = "{.col}.{.fn}"))
+
+
+# Compute Stanines: 1) Where they begin in terms of CRQ raw scores, and transformed scores.
+
+# updated 2022/02/14: classify into ranges of 0.5 z width.
+
+
+
+# we need to take mean = 5, sd/2 = 1, and compute values for each.
+compute_stanine <- function(mean, sd) {
+  x <- as.double(mean)
+  y <- as.double(sd)
+  # S1 begins at -2.25z, ends at -1.75z and so on (0.5z width) and so on.
+  out <- c(x-2.25*y, x-1.75*y, x-1.25*y, x-0.75*y, x-0.25*y, x+0.25*y, x+0.75*y, x+1.25*y, x+1.75*y)
+  return(out)
+}
+
+# set values out of bounds to upper and lower minimum (1, 5)
+set_to_bounds <- function(x) {
+  if(x < 1) x <- 1
+  else if(x > 5) x <- 5
+  x
+}
+# vectorize it
+vset_to_bounds <- Vectorize(set_to_bounds)
+
+# stanine rescaled values. Not really needed because in diagnostics stanines are always binned.
+stanine_rescale <- function(x) {
+  psych::rescale(x, mean = 5, sd = 2, df = TRUE)
+}
+
+
+stanines_by_age <- map(levels(df_crq_scores$agebin), function(age) {
+  x <- crq_age_meansd %>% filter(agebin == age)
+  map_dfc(c(scalenames, "knsk", "mot", "act", "env"), function(scale) {
+    mean <- x[1, str_c(scale, ".mean")]
+    sd <- x[1, str_c(scale, ".sd")]
+    stanines <- compute_stanine(mean = mean,
+                                sd = sd)
+    out <- enframe(stanines) %>% select(value)
+    names(out) <- scale
+    return(out)
+  })
+})
+
+stanines_by_age <- map(stanines_by_age, ~mutate_each(.x, vset_to_bounds)) #tidy implementation
+names(stanines_by_age) <- levels(df_crq_scores$agebin)
+writexl::write_xlsx(stanines_by_age, "outputs/normwerte.xlsx")
