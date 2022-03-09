@@ -197,6 +197,12 @@ print(crq_scales, short = F)
 # Korrelation zwischen Korrelaten und CRQ
 correlates_x_crq <- cor(df_crq_scores, df_corr_scores)
 
+cor_probs <- psych::corr.test(df_crq_scores, df_corr_scores)
+
+
+correlates_x_crq
+
+cor_probs$p.adj
 
 # Rest von Francisco -----------------------------------------------------------
 
