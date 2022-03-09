@@ -181,12 +181,24 @@ lm(env ~ age + gender, data = df_crq_scores) %>% summary()
 # (Work engagement, job satisfaciton & Career Satisfaction)
 
 # Creating total scores for each correlate
-scalenames <- c("jsat","weng","csat")
+scalenames_corr <- c("jsat","weng","csat")
 
-df_crqs_final %>% select(num_range("jsat_", 1:5),
-                         num_range("weng_", 1:8),
-                         num_range("csat_", 1:5)) %>% is.na() %>% which()
+# dataframe with only the relevant items
+y <- df %>% select(contains(scalenames_corr) & !contains("timer"))
 
+corr_scales <- scoreItemsMulti(scalenames_corr, y, exclude = TRUE)
+corr_scales$alpha
+df_corr_scores <- corr_scales$scores %>% as.data.frame()
+df_corr_scores
+
+print(crq_scales, short = F)
+
+
+# Korrelation zwischen Korrelaten und CRQ
+correlates_x_crq <- cor(df_crq_scores, df_corr_scores)
+
+
+# Rest von Francisco -----------------------------------------------------------
 
 library(ggplot2)
 ggplot(df_crq_scores, aes(x = age, y = env)) +
@@ -213,6 +225,9 @@ crq_age_meansd <- df_crq_scores %>% group_by(agebin) %>%
 # Compute Stanines: 1) Where they begin in terms of CRQ raw scores, and transformed scores.
 
 # updated 2022/02/14: classify into ranges of 0.5 z width.
+
+
+##### Normen erstellen, aber nur für gesamtstichprobe, nicht über das Alter aufteilen.
 
 
 
