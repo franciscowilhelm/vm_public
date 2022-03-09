@@ -181,10 +181,10 @@ lm(env ~ age + gender, data = df_crq_scores) %>% summary()
 # (Work engagement, job satisfaciton & Career Satisfaction)
 
 # Creating total scores for each correlate
-df_correlates <- df_crqs_final %>% mutate(jsat_score = (jsat_1+jsat_2+jsat_3+jsat_4+jsat_5)/5,
-                                          weng_score = (weng_1+weng_2+weng_3+weng_4+weng_5+weng_6+weng_7+weng_8)/8,
-                                          csat_score = (csat_1+csat_2+csat_3+csat_4+csat_5)/5)
+scalenames <- c("jsat","weng","csat")
 
-df_crqs_final %>% select(num_range("jsat_", 1:5),
-                         num_range("weng_", 1:8),
-                         num_range("csat_", 1:5)) %>% is.na() %>% which()
+x <- map_dfc(scalenames, function(scl) df %>% select(starts_with(scl)))
+
+crq_scales <- scoreItemsMulti(scalenames, df, exclude = TRUE)
+crq_scales$alpha
+df_crq_scores <- crq_scales$scores %>% as.data.frame()
