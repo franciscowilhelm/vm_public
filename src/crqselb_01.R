@@ -202,7 +202,32 @@ cor_probs <- psych::corr.test(df_crq_scores, df_corr_scores)
 
 correlates_x_crq
 
-cor_probs$p.adj
+cor_probs$p
+
+# Multiple regression ----------------------------------------------------------
+
+# Creating DF containing all Scores (Correlates and CRQ Dimensions)
+df_all_scores <- bind_cols(crq_scales$scores,df_corr_scores)
+
+# Calculating linear models predicting each of the correlates based on the CRQ scores
+
+# Job Satisfaction
+lm_jsat <- lm(jsat ~ oexp + jmk + ssk + inv + conf + ccl + jcha + scs + net + cexpl + lear,
+   data = df_all_scores)
+
+summary(lm_jsat)
+
+# Work engagement
+lm_weng <- lm(weng ~ oexp + jmk + ssk + inv + conf + ccl + jcha + scs + net + cexpl + lear,
+   data = df_all_scores)
+
+summary(lm_weng)
+
+# Career Satisfaction
+lm_csat <- lm(csat ~ oexp + jmk + ssk + inv + conf + ccl + jcha + scs + net + cexpl + lear,
+   data = df_all_scores)
+
+summary(lm_csat)
 
 # Rest von Francisco -----------------------------------------------------------
 
@@ -211,31 +236,12 @@ ggplot(df_crq_scores, aes(x = age, y = env)) +
   geom_jitter() +
   geom_smooth(method = "lm")
 
-agebin <- map_chr(seq_len(nrow(df_crq_scores)), function(i) {
-  age <- df_crq_scores$age[i]
-  if((age < 40)) {
-    x <- "unter 40"
-  } else if((age >= 40 & age < 50)) {
-    x <- "40-49"
-  } else if((age >= 50)) {
-    x <- "50+"
-  }
-})
-df_crq_scores <-df_crq_scores %>%  mutate(agebin = as_factor(agebin) %>% fct_relevel(., "u39", "40-49", "50+"))
-
 # mean / sd grouped by age bin
-crq_age_meansd <- df_crq_scores %>% group_by(agebin) %>% 
+crq_age_meansd <- df_crq_scores %>%
   summarize(across(oexp:act, list(mean = ~mean(.x, na.rm = TRUE), sd = ~sd(.x, na.rm = TRUE)), .names = "{.col}.{.fn}"))
 
 
 # Compute Stanines: 1) Where they begin in terms of CRQ raw scores, and transformed scores.
-
-# updated 2022/02/14: classify into ranges of 0.5 z width.
-
-
-##### Normen erstellen, aber nur für gesamtstichprobe, nicht über das Alter aufteilen.
-
-
 
 # we need to take mean = 5, sd/2 = 1, and compute values for each.
 compute_stanine <- function(mean, sd) {
@@ -261,8 +267,8 @@ stanine_rescale <- function(x) {
 }
 
 
-stanines_by_age <- map(levels(df_crq_scores$agebin), function(age) {
-  x <- crq_age_meansd %>% filter(agebin == age)
+stanines_by_age <- map(df_crq_scores$age, function(age) {
+  x <- crq_age_meansd %>%
   map_dfc(c(scalenames, "knsk", "mot", "act", "env"), function(scale) {
     mean <- x[1, str_c(scale, ".mean")]
     sd <- x[1, str_c(scale, ".sd")]
@@ -277,11 +283,3 @@ stanines_by_age <- map(levels(df_crq_scores$agebin), function(age) {
 stanines_by_age <- map(stanines_by_age, ~mutate_each(.x, vset_to_bounds)) #tidy implementation
 names(stanines_by_age) <- levels(df_crq_scores$agebin)
 writexl::write_xlsx(stanines_by_age, "outputs/normwerte.xlsx")
-
-
-
-x <- map_dfc(scalenames, function(scl) df %>% select(starts_with(scl)))
-
-crq_scales <- scoreItemsMulti(scalenames, df, exclude = TRUE)
-crq_scales$alpha
-df_crq_scores <- crq_scales$scores %>% as.data.frame()
