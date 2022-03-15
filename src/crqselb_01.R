@@ -274,7 +274,7 @@ stanine_rescale <- function(x) {
 
 names_for_stanines <- c(scalenames,"knsk","mot","env","act")
 
-stanines_alan <- map_dfc(names_for_stanines, function(scale){
+stanines_df <- map_dfc(names_for_stanines, function(scale){
     mean <- crq_meansd[1, str_c(scale, ".mean")]
     sd <- crq_meansd[1, str_c(scale, ".sd")]
     stanines <- compute_stanine(mean = mean,
@@ -286,12 +286,12 @@ stanines_alan <- map_dfc(names_for_stanines, function(scale){
 
 # Applying vset_to_bounds Function to each element of the dataframe, setting values
 # below 1 to 1 and above 5 to 5
-stanines_alan <- modify(stanines_alan, vset_to_bounds)
+stanines_df <- modify(stanines_df, vset_to_bounds)
 
 # Creating new Column, numbering the Stanine values
-stanines_alan <- stanines_alan %>% mutate(Stanines = c(1:9), .before = "oexp")
+stanines_df <- stanines_df %>% mutate(Stanines = c(1:9), .before = "oexp")
 
-stanines_alan
+stanines_df
 
 # Cleaning up the Dataframe with the means and standard deviations of the CRQ scales
 crq_mean <- crq_meansd %>% select(contains(".mean"))
@@ -305,5 +305,5 @@ names(crq_sd) <- names_for_stanines
 crq_meansd <- rbind(crq_mean,crq_sd) %>% mutate("measure" = c("mean","sd"), .before = "oexp")
 
 
-writexl::write_xlsx(stanines_alan, "outputs/normwerte.xlsx")
+writexl::write_xlsx(stanines_df, "outputs/normwerte.xlsx")
 writexl::write_xlsx(crq_meansd, "outputs/means_sd.xlsx")
