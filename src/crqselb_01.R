@@ -170,10 +170,15 @@ save(df_crqs_final, file = "data/df_crqs_final.Rdata")
 
 
 # 4. Normwerte -----------------------------------------------------------------
-lm(knsk ~ age + gender, data = df_crq_scores) %>% summary()
-lm(mot ~ age + gender, data = df_crq_scores) %>% summary()
-lm(act ~ age + gender, data = df_crq_scores) %>% summary()
-lm(env ~ age + gender, data = df_crq_scores) %>% summary()
+linear_test_age_gender <- function(x) {
+  x <- get(x,df_crq_scores)
+  lm(x ~ age + gender, data = df_crq_scores) %>% summary()
+}
+
+linear_test_age_gender("knsk")
+linear_test_age_gender("mot")
+linear_test_age_gender("act")
+linear_test_age_gender("env")
 # effect of age on env.
 
 
@@ -211,23 +216,23 @@ df_all_scores <- bind_cols(crq_scales$scores,df_corr_scores)
 
 # Calculating linear models predicting each of the correlates based on the CRQ scores
 
+# Relevant Function
+linear_model_CRQ_corrs <- function(x){
+  if (is.character(x) == FALSE){
+    print("ERROR: please enter name as a character string")
+  } else {
+    x <- get(x,df_all_scores)
+    lm(x ~ oexp + jmk + ssk + inv + conf + ccl + jcha + scs + net + cexpl + lear,
+       data = df_all_scores) %>% summary()
+  }
+}
+
 # Job Satisfaction
-lm_jsat <- lm(jsat ~ oexp + jmk + ssk + inv + conf + ccl + jcha + scs + net + cexpl + lear,
-   data = df_all_scores)
-
-summary(lm_jsat)
-
+linear_model_CRQ_corrs("jsat")
 # Work engagement
-lm_weng <- lm(weng ~ oexp + jmk + ssk + inv + conf + ccl + jcha + scs + net + cexpl + lear,
-   data = df_all_scores)
-
-summary(lm_weng)
-
+linear_model_CRQ_corrs("weng")
 # Career Satisfaction
-lm_csat <- lm(csat ~ oexp + jmk + ssk + inv + conf + ccl + jcha + scs + net + cexpl + lear,
-   data = df_all_scores)
-
-summary(lm_csat)
+linear_model_CRQ_corrs("csat")
 
 # Rest von Francisco -----------------------------------------------------------
 
@@ -236,8 +241,9 @@ ggplot(df_crq_scores, aes(x = age, y = env)) +
   geom_jitter() +
   geom_smooth(method = "lm")
 
-# mean / sd grouped by age bin
-crq_age_meansd <- df_crq_scores %>%
+
+# mean / sd
+crq_meansd <- df_crq_scores %>%
   summarize(across(oexp:act, list(mean = ~mean(.x, na.rm = TRUE), sd = ~sd(.x, na.rm = TRUE)), .names = "{.col}.{.fn}"))
 
 
@@ -266,20 +272,38 @@ stanine_rescale <- function(x) {
   psych::rescale(x, mean = 5, sd = 2, df = TRUE)
 }
 
+names_for_stanines <- c(scalenames,"knsk","mot","env","act")
 
-stanines_by_age <- map(df_crq_scores$age, function(age) {
-  x <- crq_age_meansd %>%
-  map_dfc(c(scalenames, "knsk", "mot", "act", "env"), function(scale) {
-    mean <- x[1, str_c(scale, ".mean")]
-    sd <- x[1, str_c(scale, ".sd")]
+stanines_alan <- map_dfc(names_for_stanines, function(scale){
+    mean <- crq_meansd[1, str_c(scale, ".mean")]
+    sd <- crq_meansd[1, str_c(scale, ".sd")]
     stanines <- compute_stanine(mean = mean,
                                 sd = sd)
-    out <- enframe(stanines) %>% select(value)
+    out <- enframe(stanines) %>% select(value) 
     names(out) <- scale
     return(out)
-  })
-})
+  }) 
 
-stanines_by_age <- map(stanines_by_age, ~mutate_each(.x, vset_to_bounds)) #tidy implementation
-names(stanines_by_age) <- levels(df_crq_scores$agebin)
-writexl::write_xlsx(stanines_by_age, "outputs/normwerte.xlsx")
+# Applying vset_to_bounds Function to each element of the dataframe, setting values
+# below 1 to 1 and above 5 to 5
+stanines_alan <- modify(stanines_alan, vset_to_bounds)
+
+# Creating new Column, numbering the Stanine values
+stanines_alan <- stanines_alan %>% mutate(Stanines = c(1:9), .before = "oexp")
+
+stanines_alan
+
+# Cleaning up the Dataframe with the means and standard deviations of the CRQ scales
+crq_mean <- crq_meansd %>% select(contains(".mean"))
+crq_sd <- crq_meansd %>% select(contains(".sd"))
+
+# Set Column names to be the same, for merging
+names(crq_mean) <- names_for_stanines
+names(crq_sd) <- names_for_stanines
+
+# Merging the Dataframes
+crq_meansd <- rbind(crq_mean,crq_sd) %>% mutate("measure" = c("mean","sd"), .before = "oexp")
+
+
+writexl::write_xlsx(stanines_alan, "outputs/normwerte.xlsx")
+writexl::write_xlsx(crq_meansd, "outputs/means_sd.xlsx")
