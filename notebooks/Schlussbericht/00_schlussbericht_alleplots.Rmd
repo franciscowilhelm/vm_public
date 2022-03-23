@@ -112,7 +112,7 @@ p1 <- df_plot %>%
 
 p1
 
-ggsave("plots/plot_vergleich_sdbb_viamia.png", width = 6.27, height = 5)
+ggsave("../plots/plot_vergleich_sdbb_viamia.png", width = 6.27, height = 5)
 ```
 
 
@@ -175,7 +175,7 @@ p2 <- plotdat %>%
 
 
 p2
-ggsave("plots/01_plot_gruende.png", width = 6.27, height = 5)
+# ggsave("plots/01_plot_gruende.png", width = 6.27, height = 5)
 ```
 
 
@@ -370,6 +370,7 @@ ggsave("plots/beratungsergebnis_kbsb.png", width = 6.27, height = 5)
 
 ```{r}
 ecoplan_1221 %>% group_by(Kanton) %>% summarise(sum_B2 = sum(B2_ausgefüllt, na.rm = TRUE))
+fokus <- df_brm %>% select(B2_A1SQ001 :B2_A1SQ005) %>% mutate(across(.fns = ~ifelse(.x == 4, 1, 0)))
 
 inhaltsvergleich <- cbind(df_brm %>% select(Kanton), fokus) %>% 
     group_by(Kanton) %>% 
@@ -473,6 +474,8 @@ tmp$plot$labels$x,
 as.character(unique(tmp[["plot"]][["data"]][["name"]])),
 tmp$plot$guides$fill$title,
 as.character(unique(tmp[["plot"]][["data"]][["src"]])))
+
+
 ```
 P2: Abbildung 4.
 ```{r}
@@ -535,5 +538,242 @@ writexl::write_xlsx(list(data.frame(p1_strings), data.frame(p2_strings), data.fr
                          data.frame(p4_strings), data.frame(p5_strings), data.frame(p6_strings), 
                          data.frame(p7_strings), data.frame(p8_strings)), path = "plot_text.xlsx",
                     col_names = FALSE)
+```
+## French Versions
+
+```{r}
+lbl_frz <- map(1:10, function(x) {
+  read_xlsx("Abbildungen Beschriftungen_FR.xlsx", x, col_names = "Label") %>% as_vector(.type = "character")
+})
+lbl_de <- map(1:10, function(x) {
+  read_xlsx("Abbildungen Beschriftungen_DE.xlsx", x, col_names = "Label") %>% as_vector(.type = "character")
+})
+
+```
+
+
+```{r}
+p1_frz<- ggplot_build(p1)
+p1_frz$plot$labels$y <- lbl_frz[[1]][[2]]
+p1_frz$plot$labels$x <- lbl_frz[[1]][[3]]
+p1_frz[["plot"]][["data"]][["name"]] <- recode(p1_frz[["plot"]][["data"]][["name"]],
+                                               "Wissen und Kompetenzen" = "Connaissances et\ncompétences",
+                                               "Motivation" = lbl_frz[[1]][[5]],
+                                               "Umfeld" = lbl_frz[[1]][[6]],
+                                               "Aktivitäten" = lbl_frz[[1]][[7]])
+
+#lbl_frz[[1]][[4]]
+
+p1_frz$plot$guides$fill$title <- lbl_frz[[1]][[1]]
+# as.character(unique(tmp[["plot"]][["data"]][["src"]]))
+p1_frz[["plot"]][["data"]][["src"]] <- recode(p1_frz[["plot"]][["data"]][["src"]],
+                                              "BSLB" = lbl_frz[[1]][[8]],
+                                              "Viamia" = lbl_frz[[1]][[9]])
+p1_frz
+```
+
+```{r}
+gruende_mutate <- function(x) {
+    as.numeric(x) %>% recode(`1` = 0, `2` = 1)
+}
+gruende <- df %>% select(viamiaID, starts_with("A1_Gruende"), A1_ausgefüllt, A1_WBe) %>% mutate(across(starts_with("A1_Gruende"), .fns = gruende_mutate))
+names(gruende) <- c("viamiaID", "Ausweg aus Arbeitslosigkeit",
+                    "Beruflicher Wiedereinstieg (nach freiwilliger Erwerbspause)",
+                    "Berufliche Weiterentwicklung",
+                    "Berufliche Umorientierung",
+                    "Erhöhung des Arbeitspensums",
+                    "Unsicherheiten in Bezug auf künftige Arbeitssituation",
+                    "Bessere gesellschaftliche Integration",
+                    "Finanzielle Besserstellung",
+                    "Grössere Zufriedenheit mit Arbeit",
+                    "Generelle Wunsch nach Veränderung",
+                    "Gesundheitliche Probleme",
+                    "A1_ausgefüllt",
+                    "A1_WBe")
+
+
+total_weiter <- df %>% filter(A1_WBe == "Ja") %>% nrow()
+total_nichtweiter <- df %>% filter(A1_WBe == "Nein") %>% nrow()
+
+plotdat <- gruende  %>% group_by(A1_WBe) %>% summarise(across(-c(viamiaID, A1_ausgefüllt), .fns = sum, na.rm = TRUE)) %>%
+    pivot_longer(-A1_WBe) %>%
+  mutate(proc = (value/ifelse(A1_WBe == "Ja", total_weiter, total_nichtweiter))*100) %>% filter(!is.na(A1_WBe))
+
+# frenchify
+tmp <- list(lbl_frz[[2]][3:14])
+names(tmp[[1]]) <- lbl_de[[2]][3:14]
+# manual levels
+plotdat$name <- recode(plotdat$name, !!!tmp[[1]])
+levels_gruende <- plotdat$name[1:11]
+levels(plotdat$A1_WBe) <- c("Non", "Oui")
+
+# plotten    
+# plotten    
+plotdat <- plotdat %>% 
+  mutate(label = proc_convert(proc),
+         name = factor(name, levels = levels_gruende),
+         name = fct_reorder(name, value, .desc = FALSE))
+
+
+p2_frz <- plotdat %>%
+  ggplot(aes(y = name, x = proc, fill = A1_WBe)) +
+  geom_col(position = "dodge") +
+  labs(x = lbl_frz[[2]][[2]], y = lbl_frz[[2]][[1]]) +
+  geom_text(aes(label = label), hjust = -0.1, size = size_geom_text, position = position_dodge(width = 1)) +
+  scale_y_discrete(labels = function(y) str_wrap(y, width = 30)
+  ) +
+  scale_x_continuous(labels = function(y) paste0(y, '%'), limits = c(0,80)) +
+  scale_fill_discrete(name = str_wrap(lbl_frz[[2]][[14]], 10), type = c(colors_viamia[4],colors_viamia[2]))
+```
+
+```{r}
+library(sjlabelled)
+n_per_lvl <- df_brm %>% select(A1_WBe, B1_amf) %>%
+  mutate(B1_amf = num_to_fact(B1_amf)) %>% 
+    filter(A1_WBe != is.na(A1_WBe) & B1_amf != is.na(B1_amf))
+n_per_lvl <- fct_count(n_per_lvl$B1_amf)
+
+amf_levels <- num_to_fact(df_brm$B1_amf)
+amf_levels <- factor(levels(amf_levels), levels = levels(amf_levels), ordered = TRUE) 
+
+plotdat <- df_brm %>% select(A1_WBe, B1_amf) %>%
+  mutate(B1_amf = num_to_fact(B1_amf)) %>% 
+    filter(A1_WBe != is.na(A1_WBe) & B1_amf != is.na(B1_amf)) %>%
+    group_by(A1_WBe) %>% 
+    summarise(perc = (fct_count(B1_amf)$n/n_per_lvl$n)*100) %>% 
+    mutate(amf_lvl = amf_levels)
+
+# frenchify
+tmp <- lbl_frz[[3]][3:7]
+names(tmp) <- lbl_de[[3]][3:7]
+plotdat$amf_lvl <- recode(plotdat$amf_lvl, !!!tmp)
+tmp <- lbl_frz[[3]][8:9]
+names(tmp) <- lbl_de[[3]][8:9]
+plotdat$A1_WBe <- recode(plotdat$A1_WBe, !!!tmp)
+
+
+p3_frz <- ggplot(plotdat, aes(y = perc, x = amf_lvl, fill = A1_WBe)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    scale_x_discrete(limits = levels(df_brm$B1_amf), labels = function(x) str_wrap(x, width = 20)) +
+        labs(y = lbl_frz[[3]][1], x = lbl_frz[[3]][2]) +
+    scale_y_continuous(labels = function(x) paste0(x, '%'), limits = c(0,80)) +
+  scale_fill_brewer(name = str_wrap(lbl_frz[[3]][10],10), palette = "Set1")
+
+p3_frz
+# ggsave("plots/04_weitermachen_byamf.png", width = 6.27, height = 4)
+```
+
+P4
+
+```{r}
+tmp <- lbl_frz[[4]][1:4]
+names(tmp) <- NULL
+plotdat <- df_brm %>% select(B2_A1SQ001 :B2_A1SQ005) %>% 
+  set_label(c(lbl_frz[[4]][[7]], lbl_frz[[4]][[8]],
+                lbl_frz[[4]][[6]], lbl_frz[[4]][[9]],
+                lbl_frz[[4]][[5]])) %>% 
+  set_labels(labels = tmp)
+
+
+
+p4_frz <- plotdat %>%
+    plot_stackfrq(show.total = FALSE, show.prc = FALSE, sort.frq = "last.desc") + 
+    geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+  theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+p4_frz
+ggsave("plots/beratungsinhalte.png", width = 6.27, height = 5)
+```
+
+P5 
+
+```{r}
+p5_frz <- ggplot_build(p5)
+p5_frz$plot$labels$y <- lbl_frz[[5]][1]
+p5_frz$plot$labels$x<- lbl_frz[[5]][2]
+tmp <- lbl_frz[[5]][3:22]
+names(tmp) <- lbl_de[[5]][3:22]
+p5_frz[["plot"]][["data"]][["name"]] <- recode(p5_frz[["plot"]][["data"]][["name"]], !!!tmp)
+
+p5_frz
+```
+
+```{r}
+p6_frz <- ggplot_build(p6)
+p6_frz$plot$labels$y <- lbl_frz[[6]][1]
+p6_frz$plot$labels$x <- lbl_frz[[6]][2]
+as.character(unique(p6_frz[["plot"]][["data"]][["val"]]))
+tmp <- lbl_frz[[6]][3:16]
+names(tmp) <- lbl_de[[6]][3:16]
+p6_frz[["plot"]][["data"]][["val"]] <- recode(p6_frz[["plot"]][["data"]][["val"]], !!!tmp)
+
+p6_frz
+```
+
+```{r}
+p7_frz <- ggplot_build(p7)
+p7_frz$plot$labels$y <- lbl_frz[[7]][1]
+p7_frz$plot$labels$x <- lbl_frz[[7]][2]
+p7_frz$plot$labels$fill <- "Canton"
+
+tmp <- lbl_frz[[7]][3:7]
+names(tmp) <- lbl_de[[7]][3:7]
+p7_frz[["plot"]][["data"]][["name"]] <- recode(p7_frz[["plot"]][["data"]][["name"]], !!!tmp)
+
+tmp <- lbl_frz[[7]][8:11]
+names(tmp) <- lbl_de[[7]][8:11]
+p7_frz[["plot"]][["data"]][["Kanton"]] <- recode(p7_frz[["plot"]][["data"]][["Kanton"]], !!!tmp)
+
+p7_frz
+```
+P8 - Abbildung 10
+```{r}
+# p8_frz <- ggplot_build(p8)
+# tmp <- lbl_frz[[8]][1:4]
+# names(tmp) <- lbl_de[[8]][1:4]
+# p8_frz[["plot"]][["data"]][["label"]] <- recode(p8_frz[["plot"]][["data"]][["label"]], !!!tmp)
+# 
+# p8_frz[["plot"]][["plot_env"]][["axis.labels"]] <- lbl_frz[[8]][5:14]
+# 
+# p8_frz
+
+plotdat <- ziele_erreicht
+names(plotdat) <-  c("Compétences générales","Prestation de travail",
+                     "Connaissance du marché du travail","Expertise professionnelle",
+                     "Possibilités de développement auprès de l’employeur actuel","Clarté",
+                     "Réseaux","Autre", "Soutien de l'environnement social", "Confiance") 
+
+tmp <- lbl_frz[[8]][1:4]
+names(tmp) <- c(1,2,3,4)
+
+plotdat <- set_labels(plotdat, labels = tmp)
+p8_frz <- plotdat %>% plot_stackfrq(show.prc = FALSE, sort.frq = "last.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = size_geom_text) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
+
+```
+
+```{r}
+p1_frz
+ggsave("plots_frz/p1.png", width = 6.27, height = 5)
+p2_frz
+ggsave("plots_frz/p2.png", width = 6.27, height = 5)
+p3_frz
+ggsave("plots_frz/p3.png", width = 6.27, height = 5)
+p4_frz
+ggsave("plots_frz/p4.png", width = 6.27, height = 5)
+p5_frz
+ggsave("plots_frz/p5.png", width = 6.27, height = 7)
+p6_frz
+ggsave("plots_frz/p6.png", width = 6.27, height = 5)
+p7_frz
+ggsave("plots_frz/p7.png", width = 6.27, height = 5)
+p8_frz
+ggsave("plots_frz/p8.png", width = 6.27, height = 5)
+
 ```
 
