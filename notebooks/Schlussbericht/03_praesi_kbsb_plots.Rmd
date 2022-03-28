@@ -42,7 +42,7 @@ p1 <- ggplot(plotdat, aes(y = proc, x = B1_amf, fill = f)) +
   theme(text=element_text(size=size_geom_text))
 
 p1
-ggsave("plots_kbsb/zielerreichung_a2_amf.png")
+#ggsave("plots_kbsb/zielerreichung_a2_amf.png")
 
 ```
 
@@ -149,7 +149,7 @@ p2 <- plotdat %>% plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = F
      theme(axis.text=element_text(size=12))
 
 p2
-ggsave("plots_kbsb/resourcenfoerderung_a3.png", width = 10, height = 7)
+# ggsave("plots_kbsb/resourcenfoerderung_a3.png", width = 10, height = 7)
 ```
 
 ## Extract Titles etc. for Translation
@@ -168,5 +168,89 @@ as.character(tmp[["plot"]][["plot_env"]][["axis.labels"]]))
 
 writexl::write_xlsx(list(data.frame(p1_strings), data.frame(p2_strings)), path = "plot_text_kbsb.xlsx",
                     col_names = FALSE)
+```
+
+## French Versions
+
+```{r}
+lbl_frz <- map(1:10, function(x) {
+  read_xlsx("Abbildungen Beschriftungen_FR.xlsx", x, col_names = "Label") %>% as_vector(.type = "character")
+})
+lbl_de <- map(1:10, function(x) {
+  read_xlsx("Abbildungen Beschriftungen_DE.xlsx", x, col_names = "Label") %>% as_vector(.type = "character")
+})
+```
+
+
+```{r}
+plotdat <- df_brm %>% mutate(A2_B2SQ001 = sjlabelled::as_factor(A2_B2SQ001),
+                             B1_amf = as_factor(B1_amf)) %>% 
+  group_by(B1_amf) %>% 
+  summarise(fct_count(A2_B2SQ001)) %>% filter(f != is.na(f))
+levels(plotdat$B1_amf) <- get_labels(df_brm$B1_amf)
+levels(plotdat$f) <- get_labels(df_brm$A2_B2SQ001)
+
+plotdat <- plotdat %>% group_by(B1_amf) %>% mutate(total = sum(n)) %>% mutate(proc = (n/total)*100) %>% filter(!is.na(B1_amf))
+
+tmp <- lbl_de[[9]][3:7]
+names(tmp) <- lbl_frz[[9]][3:7]
+plotdat$B1_amf <- fct_recode(plotdat$B1_amf, !!!tmp)
+
+tmp <- lbl_de[[9]][9:12]
+names(tmp) <- lbl_frz[[9]][9:12]
+plotdat$f <- fct_recode(plotdat$f, !!!tmp)
+
+p1_frz <- ggplot(plotdat, aes(y = proc, x = B1_amf, fill = f)) +
+  geom_bar(position="stack", stat="identity") + 
+  scale_fill_brewer(name = lbl_frz[[9]][8], labels = function(x) str_wrap(x, width = 10), palette = "YlGn") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  xlab(lbl_frz[[9]][2]) +
+  ylab(lbl_frz[[9]][1]) +
+  theme(text=element_text(size=size_geom_text))
+
+p1_frz
+```
+
+```{r}
+ressourcennames <- df_brm %>% select(starts_with("A3_A1SQ")) %>% names()
+ressourcenlabels <- c("Je me sens mieux",
+                      "J’ai plus confiance en moi",
+                      "J’ai une approche plus positive face aux changements professionnels",
+"Je suis plus en mesure de prendre des décisions professionnelles",
+"Je dispose de nouvelles perspectives",
+"J’ai appris de nouvelles choses sur les possibilités de formation continue" ,
+"Je dispose de plus de possibilités concrètes pour continuer à me former",
+"Je connais mieux mes perspectives professionnelles",
+"Je cerne mieux mes objectifs professionnels",
+"Je me fais plus confiance pour atteindre mes objectifs professionnels",
+"Je suis plus motivé·e au travail")
+
+plotdat <- df_brm %>% select(starts_with("A3_A1SQ"))
+set_label(plotdat) <- ressourcenlabels     
+plotdat <- set_labels(plotdat, labels = c("Nein", "Eher nein", "Eher ja", "Ja"))
+
+tmp <- lbl_frz[[10]][1:4]
+#names(tmp) <- lbl_de[[10]][1:4]
+names(tmp) <- NULL
+
+plotdat <- set_labels(plotdat, labels = tmp)
+
+# names(plotdat) <- get_label(plotdat)
+# var_labels(plotdat, !!!tmp)
+
+p2 <- plotdat %>% plot_stackfrq(show.total = FALSE, show.n = FALSE, show.prc = FALSE, sort.frq = "first.desc") +
+      geom_text(
+      aes(y = .data$ypos, label = likert_labeller(.data$prc)), size = 3.5) +
+    theme(legend.position = "bottom") +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE)) + 
+     theme(axis.text=element_text(size=12))
+
+p2
+```
+```{r}
+p1_frz
+ggsave("plots_kbsb/p1_frz.png")
+p2
+ggsave("plots_kbsb/p2_frz.png", width = 10, height = 7)
 ```
 

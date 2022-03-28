@@ -305,5 +305,9 @@ names(crq_sd) <- names_for_stanines
 crq_meansd <- rbind(crq_mean,crq_sd) %>% mutate("measure" = c("mean","sd"), .before = "oexp")
 
 
-writexl::write_xlsx(stanines_df, "outputs/normwerte.xlsx")
-writexl::write_xlsx(crq_meansd, "outputs/means_sd.xlsx")
+# output complete df with raw items and scores for CRQ and correlates.
+df_crqs <- bind_cols(df_crqs_final, df_crq_scores %>% select(-c(age,gender)), df_corr_scores)
+save(df_crqs, file = "data/df_crqs.RData")
+
+# writexl::write_xlsx(stanines_df, "outputs/normwerte.xlsx")
+# writexl::write_xlsx(crq_meansd, "outputs/means_sd.xlsx")
